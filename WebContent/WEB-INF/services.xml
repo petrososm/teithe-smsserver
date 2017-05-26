@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<servicesRoot>
+<service>
+	<type>MobileOriginated</type>
+    <keywords>
+    	<keyword>BA</keyword>
+		<keyword>ΒΑ</keyword>
+    	<keyword>ΒΑΘΜΟΣ</keyword>
+    	<keyword>BATHMOS</keyword>
+    </keywords>
+    <query>SELECT  username , mobile FROM  v_SMS_GetPithiaCreds WHERE  (mobile = ?)</query>
+    <extraKeyword>
+    	<keyword>ΤΕΛΕΥΤΑΙΟΙ</keyword>
+    	<query>SELECT * FROM BLABLABLA</query>
+    	<message>secondMessage</message>
+    	<numberOfReplacements> 3</numberOfReplacements>
+    </extraKeyword>
+	<numberOfReplacements>2</numberOfReplacements>
+	<serviceId>gradeService</serviceId>
+	<messages>
+		<defaultMessage>testMessage</defaultMessage>
+		<errorMessage>errorMessage</errorMessage>
+	</messages>	
+	<preSharedKey>123789</preSharedKey>
+    <database>pithia</database>
+</service>
+
+<service>
+	<type>MobileOriginated</type>
+    <keywords>
+    	<keyword>DLR</keyword>
+    </keywords>
+    <query>SELECT * FROM DLRS</query>
+	<numberOfReplacements>2</numberOfReplacements>
+	<serviceId>gradeService</serviceId>
+	<messages>
+		<defaultMessage>testMessage</defaultMessage>
+		<errorMessage>errorMessage</errorMessage>
+	</messages>	
+	<preSharedKey>123789</preSharedKey>
+    <database>localdb</database>
+</service>
+
+<service>
+	<type>MobileOriginated</type>
+    <keywords>
+    	<keyword>LOGIN</keyword>
+    </keywords>
+    <query>SELECT  username , password FROM  v_SMS_GetPithiaCreds WHERE  (mobile = ?)</query>
+	<numberOfReplacements>2</numberOfReplacements>
+	<serviceId>gradeService</serviceId>
+	<messages>
+		<defaultMessage>testMessage</defaultMessage>
+		<errorMessage>errorMessage</errorMessage>
+	</messages>	
+	<extraKeyword>
+    	<keyword>password</keyword>
+    	<query>SELECT  password FROM  v_SMS_GetPithiaCreds WHERE  (mobile = ?)</query>
+    	<message>secondMessage</message>
+    	<numberOfReplacements> 1</numberOfReplacements>
+    </extraKeyword>
+	<preSharedKey>123789</preSharedKey>
+    <database>pithia</database>
+</service>
+
+</servicesRoot>
