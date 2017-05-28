@@ -22,8 +22,9 @@ public class Start implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent event) {
 		ServicesOnLoad.loadQuestions();
 		
-		scheduler = Executors.newScheduledThreadPool(2); 
-		scheduler.scheduleAtFixedRate(new ScheduledBackupLogs(), 0, 5, TimeUnit.MINUTES);
+		System.out.println("server started");
+		//scheduler = Executors.newScheduledThreadPool(2); 
+		//scheduler.scheduleAtFixedRate(new ScheduledBackupLogs(), 0, 5, TimeUnit.MINUTES);
 //		scheduler.scheduleAtFixedRate(new ScheduledSendNewGrades(), calculateDelay(),
 //                24*60*60, TimeUnit.SECONDS);
 

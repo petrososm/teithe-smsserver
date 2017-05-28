@@ -45,7 +45,8 @@ public class AuthorizationFilter implements ContainerRequestFilter {
             // Check if the user is allowed to execute the method
             // The method annotations override the class annotations
             if (methodRoles.isEmpty()) {
-                checkPermissions(classRoles,requestContext.getSecurityContext().getUserPrincipal().getName());
+            	if(!classRoles.isEmpty())
+            		checkPermissions(classRoles,requestContext.getSecurityContext().getUserPrincipal().getName());
             } else {
                 checkPermissions(methodRoles,requestContext.getSecurityContext().getUserPrincipal().getName());
             }
@@ -73,7 +74,6 @@ public class AuthorizationFilter implements ContainerRequestFilter {
 
 
     private void checkPermissions(List<Role> allowedRoles, String username) throws Exception {
-    	
     	User user=AuthenticatedUsers.get(username);
     	for(Role r:allowedRoles)
     		if(user.getRole().equalsIgnoreCase(r.name()))

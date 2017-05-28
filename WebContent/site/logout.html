@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head></head>
+  <body onload="logout()">
+   
+    <script>
+	 function logout(){
+	     createCookie('token',"",-1);
+		 createCookie('role',"",-1);
+		 window.location = "index.html";
+
+
+ }
+ 	function createCookie(cname,cvalue,exdays) {
+	
+		var d = new Date();
+		d.setTime(d.getTime() + (exdays*24*60*60*1000));
+		var expires = "expires=" + d.toGMTString();
+		document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+	}
+	</script>
+	
+  </body>
+</html>

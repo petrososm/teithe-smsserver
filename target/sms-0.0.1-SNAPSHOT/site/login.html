@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+   
+
+    <title>All Template Needs</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/image-effects.css" rel="stylesheet">
+    <link href="css/custom-styles.css" rel="stylesheet">
+    <link href="css/font-awesome.css" rel="stylesheet">
+    <link href="css/font-awesome-ie7.css" rel="stylesheet">
+    </head>
+
+  <body>
+    
+      <div class="container">
+     
+        <div class="row">
+          <div class="site-header spacing-t">
+            <div class="col-md-3 ">
+              <div class="site-name spacing-b">
+                <h1> Υπηρεσία αποστολής SMS ΑΤΕΙΘ</h1>
+              </div>
+            </div>
+          <div class="col-md-9">
+            <nav class="navbar pull-right " role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                      
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse"><h3 class="hide">Menu</h3>
+            <span class="fw-icon-th-list "></span>
+            
+          </button>
+         
+        </div>
+            
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                  <li><a href="#">Home</a></li>
+                  <li><a href="#" >Υπηρεσίες</a></li>
+                   <li><a href="#">Αλλαγή κινητού</a></li>
+                  <li class="active"><a href="#" >Εισοδος</a></li>
+                  
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </nav>
+        
+          </div>
+          </div>
+        </div>
+     
+
+    </div>
+    
+      <div class="container">
+          <div class="main-title">
+            <div class="row">
+              <div class="col-sm-12 col-md-9">
+			  <h1>Κάντε login με τα credentials της Πυθίας</h1><br>
+			  <h2>
+                  Username  &nbsp;   <input id="username" type="text"/><br><br>
+				  Password   &nbsp;  <input id="password" type="password" /><br>
+				</h2>
+				<button class="btn pull-left" onclick="login()">Login</button>
+				<h4><br><br><center><label id="loginLabel" ></label></center></h4>
+				
+              </div>
+
+            </div>
+            
+          </div>
+
+
+
+      
+      <div class="ruler"></div>
+    </div>
+
+
+    <div class="container">
+          <div class="site-footer">
+            <div class="row">
+              <div class="col-sm-6 col-md-3">
+                <div class="block">
+                  <h2>Designed By</h2>
+                  <a href="http://alltemplateneeds.com">www.alltemplateneeds.com</a>
+                                  </div>
+              </div>
+              <div class="col-sm-6 col-md-3">
+                <div class="block">
+                  <h2>Photos From</h2>
+                  <a href="http://wallpaperswide.com">www.wallpaperswide.com</a>
+                                  </div>
+              </div>
+              <div class="col-sm-6 col-md-3">
+                <div class="block">
+                  <h2>copyrights</h2>
+                  <a href="#">@2013. All rights reserved</a>
+                  
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-3">
+                <div class="block">
+                  <h2>follow us</h2>
+                  <a href="#"><i class="fw-icon-twitter "></i> Twitter</a>
+                  <a href="#"><i class="fw-icon-facebook"></i> Facebook</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>    
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    
+
+     <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+     <script src="js/html5shiv.js"></script>
+      <script src="js/respond.min.js"></script>
+ 	<script src="js/jquery-1.9.1.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+	<script>
+    function login(){
+        var data={};
+
+        data.username=document.getElementById("username").value;
+        data.password=document.getElementById("password").value;
+		$.ajax({
+			url: 'http://localhost:8080/sms/service/authentication',
+			type: 'POST',
+			data: JSON.stringify(data),
+			contentType: 'application/json',
+			dataType: 'json',
+			success: function(response) {
+				setCookie('token',response['token'],2);
+				setCookie('role',response['role'],2);
+				$(location).attr('href',response['role'].toLowerCase()+".html");
+			},
+			error: function () {
+				document.getElementById("loginLabel").innerHTML = "Login Failed";
+				document.getElementById("loginLabel").set
+			}
+		});
+    }
+	function setCookie(cname,cvalue,exdays) {
+	
+		var d = new Date();
+		d.setTime(d.getTime() + (exdays*24*60*60*1000));
+		var expires = "expires=" + d.toGMTString();
+		document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+	}
+    
+	</script>
+	
+       
+  </body>
+</html>

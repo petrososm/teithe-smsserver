@@ -1,5 +1,6 @@
 com\smsserver\models\logs\MobileOriginatedLogs.class
 com\smsserver\gunetservices\ClientHelper$1.class
+com\smsserver\models\NocSite\ServiceDescription.class
 com\smsserver\resources\Gunet.class
 com\smsserver\auth\security\AuthorizationFilter.class
 com\smsserver\models\services\ExtraKeyword.class

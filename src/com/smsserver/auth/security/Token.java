@@ -64,7 +64,6 @@ public class Token {
 		// This line will throw an exception if it is not a signed JWS (as
 		// expected)
 		Claims claims = Jwts.parser().setSigningKey("secr3tkey").parseClaimsJws(jwt).getBody();
-
 		return claims.getSubject();
 
 	}

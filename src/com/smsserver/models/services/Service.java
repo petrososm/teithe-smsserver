@@ -17,9 +17,8 @@ public class Service {
 	public String preSharedKey;
 	public int numberOfReplacements;
 	public ExtraKeyword[] extraKeyword;
-	
-	
-	
+	public String description;
+	public String userInput;
 	public int queryParams;
 
 	public Service(){

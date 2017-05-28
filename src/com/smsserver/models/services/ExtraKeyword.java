@@ -8,6 +8,7 @@ public class ExtraKeyword {
 	public int numberOfReplacements;
 	public String message;
 	public int queryParams;
+	public String description;
 	
 	ExtraKeyword(){};
 	

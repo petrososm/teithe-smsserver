@@ -25,7 +25,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     public void filter(ContainerRequestContext requestContext) throws IOException {
 
     	
-    	System.out.println("bike");
+    	
         // Get the HTTP Authorization header from the request
         String authorizationHeader = 
             requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
@@ -39,9 +39,9 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         String token = authorizationHeader.substring("Bearer".length()).trim();
 
         try {
-
+        	
             String username=Token.validateToken(token);
-
+            System.out.println(username);
             requestContext.setSecurityContext(new MySecurityContext(username));
 
 

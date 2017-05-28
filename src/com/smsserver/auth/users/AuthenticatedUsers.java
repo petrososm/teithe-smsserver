@@ -9,6 +9,7 @@ public class AuthenticatedUsers {
 
 	static {
 		authUsers = createLRUMap(100);
+		put(new User("it123853","STAFF"));
 	}
 
 	public static void put(User u) {
