@@ -4,6 +4,8 @@ var array = url.split('/');
 var path = array[array.length-1];
 var inputs;
 var message;
+var baseurl="http://195.251.120.230:8080";
+//var baseurl=http://localhost:8080
 
 
 
@@ -127,7 +129,7 @@ function loadIndexDiv(){
     }
 	
 	function populateDocumentation(){
-		urlBuilder = "http://http://localhost:8080/sms/service/site/moservices";
+		urlBuilder = baseurl+"/sms/service/site/moservices";
 								$.ajax({
 									url : urlBuilder,
 									type : "GET",
@@ -153,7 +155,7 @@ function loadIndexDiv(){
         data.username=document.getElementById("username").value;
         data.password=document.getElementById("password").value;
 		$.ajax({
-			url: 'http://localhost:8080/sms/service/authentication',
+			url: baseurl+'/sms/service/authentication',
 			type: 'POST',
 			data: JSON.stringify(data),
 			contentType: 'application/json',
@@ -177,7 +179,7 @@ function loadIndexDiv(){
        
     function loadMobileDiv(){
     	$.ajax({
-			url : 'http://localhost:8080/sms/service/site/mobile',
+			url : baseurl+'/sms/service/site/mobile',
 			type : 'GET',
 			dataType : 'text',
 			success : function(response) {
@@ -190,7 +192,7 @@ function loadIndexDiv(){
 	
     function loadSendSms(){
     	$.ajax({
-			url : 'http://localhost:8080/sms/service/site/mtservices',
+			url : baseurl+'/sms/service/site/mtservices',
 			type : 'GET',
 			dataType : 'json',
 			success : function(json) {
@@ -246,7 +248,7 @@ function loadIndexDiv(){
     	if (r == true) {
     		$.ajax({
         	    type: 'POST',
-        	    url: 'http://localhost:8080/sms/service/site/send/aimodosia',
+        	    url: baseurl+'/sms/service/site/send/aimodosia',
         	    data: date,
         	    success: function(msg){
         	    	$('#mainDiv').html("<h1>ΤΟ ΜΗΝΥΜΑ ΣΤΑΛΘΗΚΕ ΜΕ ΕΠΙΤΥΧΙΑ</h1>");
