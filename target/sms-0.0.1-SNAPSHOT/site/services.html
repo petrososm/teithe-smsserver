@@ -7,49 +7,17 @@
     <meta name="author" content="">
    
 
-    <title>All Template Needs</title>
+    <title>Υπηρεσία SMS Αλεξάνδρειου ΤΕΙ Θεσσαλονίκης</title>
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="css/image-effects.css" rel="stylesheet">
     <link href="css/custom-styles.css" rel="stylesheet">
-    <link href="css/font-awesome.css" rel="stylesheet">
-    <link href="css/font-awesome-ie7.css" rel="stylesheet">
     </head>
-	<style>
-	#records_table {
-	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-	border-collapse: collapse;
-	width: 80%;
-	margin-top: 10px;
-	}
-
-	#records_table td, #records_table th {
-		border: 1px solid #ddd;
-		padding: 8px;
-	}
-
-	#records_table tr:nth-child(even) {
-		background-color: #f2f2f2;
-	}
-
-	#records_table tr:hover {
-		background-color: #ddd;
-	}
-
-	#records_table th {
-		padding-top: 12px;
-		padding-bottom: 12px;
-		text-align: left;
-		background-color:#DC143C;
-		color: white;
-}
-</style>
 
   <body>
     
       <div class="container">
-     
         <div class="row">
           <div class="site-header spacing-t">
             <div class="col-md-3 ">
@@ -72,14 +40,7 @@
             
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-				  <li><a href="#" >Home</a></li>
-                  <li class="active"><a href="services.html" >Υπηρεσίες</a></li>
-                   <li><a href="sendSms.html">Μαζική αποστολή</a></li>
-                  <li><a href="mobileChange.html" >Αλλαγή κινητού</a></li>
-				  <li><a href="#" >Αποσύνδεση</a></li>
-                  
-                </ul>
+                <ul id="navbar" class="nav navbar-nav" ></ul>
             </div><!-- /.navbar-collapse -->
         </nav>
         
@@ -89,8 +50,15 @@
      
 
     </div>
-    
+
       <div class="container">
+      <h2>Για να στείλετε γραπτό μήνυμα στην υπηρεσία πρεπει να εγγραφειτε στην ιστοσελιδα του 
+      <a id=href target="_blank" href="http://sms.gunet.gr">Gunet</a><br>
+      Yστερα, μπορειτε να στειλετε ενα απο τα παρακατω προκαθορισμενα μηνυματα στο 54584</h2>
+      <i>ΠΡΟΣΟΧΗ!
+       <a id=href href="login.html">Επιπεβαιώστε</a>
+       οτι το κινητό τηλέφωνο που έχετε δηλώσει είναι το τρέχον σας
+      </i>
 		<table id="records_table" border='1'>
 			<thead>
 				<tr>
@@ -100,10 +68,6 @@
 			</thead>
 		</table>
 
-
-
-      
-      <div class="ruler"></div>
     </div>
 
 
@@ -112,28 +76,28 @@
             <div class="row">
               <div class="col-sm-6 col-md-3">
                 <div class="block">
-                  <h2>Designed By</h2>
+                  <h2>SMS Aggregator by Gunet</h2>
+                  <a href="http://sms.gunet.gr">sms.gunet.gr</a>
+                                  </div>
+              </div>
+              <div class="col-sm-6 col-md-3">
+                <div class="block">
+                  <h2>Powered by NOC</h2>
+                  <a href="http://www.noc.teithe.gr/">Noc.teithe.gr</a>
+                                  </div>
+              </div>
+              <div class="col-sm-6 col-md-3">
+                <div class="block">
+                  <h2>Template By</h2>
                   <a href="http://alltemplateneeds.com">www.alltemplateneeds.com</a>
-                                  </div>
-              </div>
-              <div class="col-sm-6 col-md-3">
-                <div class="block">
-                  <h2>Photos From</h2>
-                  <a href="http://wallpaperswide.com">www.wallpaperswide.com</a>
-                                  </div>
-              </div>
-              <div class="col-sm-6 col-md-3">
-                <div class="block">
-                  <h2>copyrights</h2>
-                  <a href="#">@2013. All rights reserved</a>
                   
                 </div>
               </div>
               <div class="col-sm-6 col-md-3">
                 <div class="block">
-                  <h2>follow us</h2>
-                  <a href="#"><i class="fw-icon-twitter "></i> Twitter</a>
-                  <a href="#"><i class="fw-icon-facebook"></i> Facebook</a>
+                  <h2>Πτυχιακή Εργασία</h2>
+                  <a href="#">Πέτρου Οσμαντσικίδη</a>
+                  
                 </div>
               </div>
             </div>
@@ -153,61 +117,9 @@
  	<script src="js/jquery-1.9.1.js"></script>
     <script src="js/bootstrap.js"></script>
     <script src="js/modernizr-2.6.2-respond-1.1.0.min.js"></script>
-	<script>
-			$( document ).ready(function() {
-									urlBuilder = "http://localhost:8080/sms/service/site";
+	<script src="js/myjs.js"></script>
 
 
-								$.ajax({
-									url : urlBuilder,
-									type : "GET",
-									dataType : "json",
-									success : function(response) {
-										var trHTML = '';
-										$.each(response, function(key, value) {
-											trHTML += '<tr><td>'
-													+ value.keyword
-													+ '</td><td>'
-													+ value.description
-													+ '</td></tr>';
-										});
-										$('#records_table > tr').empty();
-										$('#records_table').append(trHTML);
-									}
-								});
-							});
-
-			$(document)
-					.ready(
-							function() {
-								$
-										.ajax({
-											url : 'http://localhost:8080/SMS_Server/service/logs/statusSelect',
-											type : 'GET',
-											dataType : 'json',
-											success : function(json) {
-												$
-														.each(
-																json,
-																function(i,
-																		value) {
-																	$(
-																			'#statusSelect')
-																			.append(
-																					$(
-																							'<option>')
-																							.text(
-																									value)
-																							.attr(
-																									'value',
-																									value));
-																});
-											}
-										});
-							});
-    
-	</script>
-	
        
   </body>
 </html>

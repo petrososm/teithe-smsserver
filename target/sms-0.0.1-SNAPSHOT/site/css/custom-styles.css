@@ -5,9 +5,9 @@
 -----------------------------------------*/
 
 body{background:#ffffff;}
-h1, h2, h3, h4, h5, h6{margin: 0;font-family: 'fjalla_oneregular'; color: #5c5c5c;  text-transform: uppercase; padding-bottom: 15px;}
-h1{ font-size: 30px; }
+h1, h2, h3, h4, h5, h6{margin: 0;font-family: 'fjalla_oneregular'; color: #5c5c5c;  padding-bottom: 10px;}
 h2{ font-size: 20px;}
+h1{ font-size: 30px; }
 h3{ font-size: 18px;}
 h4{ font-size: 16px;}
 h5{ font-size: 14px;}
@@ -292,6 +292,10 @@ border-color: #fff;
 .navbar-toggle {width: 100%;  padding: 8px 10px !important; outline: none;}
 
 .site-footer{
+	position: absolute;
+	bottom: 0;
+	left:10%;
+	right:10%;
 	overflow:hidden;
 	padding: 60px 0;
 	border-top: 1px solid #dfdfdf;
@@ -415,6 +419,48 @@ border-bottom-color: #eee;
 	background: #e24f43 !important;
 	transition:all 1s;
 	
+}
+
+	#records_table {
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	border-collapse: collapse;
+	width: 80%;
+	margin-top: 10px;
+	}
+
+	#records_table td, #records_table th {
+		border: 1px solid #ddd;
+		padding: 8px;
+	}
+
+	#records_table tr:nth-child(even) {
+		background-color: #f2f2f2;
+	}
+
+	#records_table tr:hover {
+		background-color: #ddd;
+	}
+
+	#records_table th {
+		padding-top: 12px;
+		padding-bottom: 12px;
+		text-align: left;
+		background-color:#DC143C;
+		color: white;
+}
+
+	#href{
+		color: #e24f43 !important;
+	}
+	.button {
+	background-color:#DC143C;
+	border: none;
+	color: white;
+	padding: 12px 40px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 14px;
 }
 
 

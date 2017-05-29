@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Root>
+<service>
+    <keywords>
+    	<keyword>BA</keyword>
+		<keyword>ΒΑ</keyword>
+    	<keyword>ΒΑΘΜΟΣ</keyword>
+    	<keyword>BATHMOS</keyword>
+    </keywords>
+	<description>ΕΠΙΣΤΡΕΦΕΙ ΤΟΝ ΒΑΘΜΟ ΤΟΥ ΧΡΗΣΤΗ ΣΤΟ ΣΥΓΚΕΚΡΙΜΕΝΟ ΜΑΘΗΜΑ</description>
+	<userInput>ΚΩΔΙΚΟΣ ΜΑΘΗΜΑΤΟΣ</userInput>
+    <query>SELECT  username , mobile FROM  v_SMS_GetPithiaCreds WHERE  (mobile = ?)</query>
+	<numberOfReplacements>2</numberOfReplacements>
+	<serviceId>gradeService</serviceId>
+	<messages>
+		<defaultMessage>testMessage</defaultMessage>
+		<errorMessage>errorMessage</errorMessage>
+	</messages>	
+	<extraKeyword>
+    	<keyword>ΤΕΛΕΥΤΑΙΟΙ</keyword>
+		<description>ΕΠΙΣΤΡΕΦΕΙ ΤΟΥΣ 4 ΤΕΛΕΥΤΑΙΟΥΣ ΒΑΘΜΟΥΣ</description>
+    	<query>SELECT * FROM BLABLABLA</query>
+    	<message>secondMessage</message>
+    	<numberOfReplacements> 3</numberOfReplacements>
+    </extraKeyword>
+	<preSharedKey>123789</preSharedKey>
+    <database>pithia</database>
+</service>
+
+<service>
+    <keywords>
+    	<keyword>LOGIN</keyword>
+    </keywords>
+	<description>ΕΠΙΣΤΡΕΦΕΙ ΤΑ CREDENTIALS ΤΟΥ ΧΡΗΣΤΗ</description>
+    <query>SELECT  username , password FROM  v_SMS_GetPithiaCreds WHERE  (mobile = ?)</query>
+	<numberOfReplacements>2</numberOfReplacements>
+	<serviceId>gradeService</serviceId>
+	<messages>
+		<defaultMessage>testMessage</defaultMessage>
+		<errorMessage>errorMessage</errorMessage>
+	</messages>	
+	<extraKeyword>
+    	<keyword>password</keyword>
+		<description>ΕΠΙΣΤΡΕΦΕΙ ΤΟ ΣΥΝΘΗΜΑΤΙΚΟ ΤΟΥ ΧΡΗΣΤΗ</description>
+    	<query>SELECT  password FROM  v_SMS_GetPithiaCreds WHERE  (mobile = ?)</query>
+    	<message>secondMessage</message>
+    	<numberOfReplacements> 1</numberOfReplacements>
+    </extraKeyword>
+	<preSharedKey>123789</preSharedKey>
+    <database>pithia</database>
+</service>
+
+<service>
+    <keywords>
+    	<keyword>ΔΜ</keyword>
+    </keywords>
+	<description>ΕΠΙΣΤΡΕΦΕΙ ΤΙΣ ΔΙΔΑΚΤΙΚΕΣ ΜΟΝΑΔΕΣ ΤΟΥ ΧΡΗΣΤΗ</description>
+    <query>SELECT  username , password FROM  v_SMS_GetPithiaCreds WHERE  (mobile = ?)</query>
+	<numberOfReplacements>1</numberOfReplacements>
+	<serviceId>gradeService</serviceId>
+	<messages>
+		<defaultMessage>testMessage</defaultMessage>
+		<errorMessage>errorMessage</errorMessage>
+	</messages>	
+	<extraKeyword>
+    	<keyword>ΠΤΥΧΙΟ</keyword>
+		<description>ΕΠΙΣΤΡΕΦΕΙ ΤΙΣ ΔΙΔΑΚΤΙΚΕΣ ΜΟΝΑΔΕΣ ΠΟΥ ΥΠΟΛΟΙΠΟΝΤΑΙ ΓΙΑ ΠΤΥΧΙΟ</description>
+    	<query>SELECT  password FROM  v_SMS_GetPithiaCreds WHERE  (mobile = ?)</query>
+    	<message>secondMessage</message>
+    	<numberOfReplacements> 1</numberOfReplacements>
+    </extraKeyword>
+	<preSharedKey>123789</preSharedKey>
+    <database>pithia</database>
+</service>
+
+<service>
+    <keywords>
+    	<keyword>ΑΙΜΟΔΟΣΙΑ</keyword>
+    </keywords>
+	<description>ΕΠΙΣΤΡΕΦΕΙ ΤΗΝ ΗΜΕΡΟΜΗΝΙΑ ΤΗΣ ΕΠΟΜΕΝΗΣ ΔΥΝΑΤΗΣ ΑΙΜΟΔΟΣΙΑΣ ΣΤΟΝ ΧΡΗΣΤΗ</description>
+    <query>SELECT * FROM DLRS where id = ?</query>
+	<numberOfReplacements>2</numberOfReplacements>
+	<serviceId>gradeService</serviceId>
+	<messages>
+		<defaultMessage>testMessage</defaultMessage>
+		<errorMessage>errorMessage</errorMessage>
+	</messages>	
+	<extraKeyword>
+    	<keyword>ΣΤΟΠ</keyword>
+		<description>ΔΙΑΚΟΠΗ ΑΥΤΟΜΑΤΩΝ ΜΗΝΥΜΑΤΩΝ ΑΠΟ ΤΗΝ ΥΠΗΡΕΣΙΑ ΤΗΣ ΑΙΜΟΔΟΣΙΑΣ</description>
+    	<query>SELECT * FROM DLRS where id = ?</query>
+    </extraKeyword>
+	<preSharedKey>123789</preSharedKey>
+    <database>localdb</database>
+</service>
+
+<service>
+    <keywords>
+    	<keyword>ΦΙΑΛΕΣ</keyword>
+    </keywords>
+	<description>ΕΠΙΣΤΡΕΦΕΙ ΤΙΣ ΦΙΑΛΕΣ ΠΟΥ ΔΙΚΑΙΩΤΑΙ Ο ΑΙΜΟΔΟΤΗΣ</description>
+    <query>SELECT * FROM DLRS</query>
+	<numberOfReplacements>1</numberOfReplacements>
+	<serviceId>gradeService</serviceId>
+	<messages>
+		<defaultMessage>testMessage</defaultMessage>
+		<errorMessage>errorMessage</errorMessage>
+	</messages>	
+	<extraKeyword>
+    	<keyword>ΚΑΤΑΝΑΛΩΘΗΚΑΝ</keyword>
+		<description>ΕΠΙΣΤΡΕΦΕΙ ΤΙΣ ΦΙΑΛΕΣ ΠΟΥ ΕΧΕΙ ΠΑΡΕΙ ΗΔΗ Ο ΧΡΗΣΤΗΣ</description>
+    	<query>SELECT * FROM BLABLABLA</query>
+    	<message>secondMessage</message>
+    	<numberOfReplacements> 1</numberOfReplacements>
+    </extraKeyword>
+	<preSharedKey>123789</preSharedKey>
+    <database>localdb</database>
+</service>
+
+</Root>

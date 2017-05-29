@@ -20,7 +20,8 @@ public class Start implements ServletContextListener {
 	private ScheduledExecutorService scheduler;
 	
 	public void contextInitialized(ServletContextEvent event) {
-		ServicesOnLoad.loadQuestions();
+		ServicesOnLoad.loadMobileOriginated();
+		ServicesOnLoad.loadMobileTerminated();
 		
 		System.out.println("server started");
 		//scheduler = Executors.newScheduledThreadPool(2); 

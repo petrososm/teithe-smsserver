@@ -20,7 +20,7 @@ import com.smsserver.auth.security.Ldap;
 import com.smsserver.auth.security.Secured;
 import com.smsserver.auth.security.Token;
 import com.smsserver.auth.users.Role;
-import com.smsserver.models.NocSite.User;
+import com.smsserver.models.site.User;
 
 
 
@@ -35,9 +35,9 @@ public class Authentication {
 
         try {
         	System.out.println("Ok");
-            // Authenticate the user using the credentials provided
-            //String access=Ldap.performAuthentication(u.getUsername(), u.getPassword());
-        	String access="stud";
+            
+            String access=Ldap.performAuthentication(u.getUsername(), u.getPassword());
+        	//String access="staff";
             String token = Token.issueToken(u.getUsername(),access);
             
             User returnUser=new User(u.getUsername(),token,access.toLowerCase());

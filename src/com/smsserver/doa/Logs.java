@@ -2,13 +2,13 @@ package com.smsserver.doa;
 
 import java.util.ArrayList;
 
-import com.smsserver.models.NocSite.SendSmsRequest;
 import com.smsserver.models.gunetapi.DlrRequestModel;
 import com.smsserver.models.gunetapi.SendSmsModel;
 import com.smsserver.models.gunetapi.SmsForwardModel;
 import com.smsserver.models.gunetapi.SmsResponseModel;
 import com.smsserver.models.logs.MobileOriginatedLogs;
 import com.smsserver.models.logs.MobileTerminatedLogs;
+import com.smsserver.models.site.SendSmsRequest;
 
 public class Logs {
 
