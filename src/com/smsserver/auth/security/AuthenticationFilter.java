@@ -41,7 +41,6 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         try {
         	
             String username=Token.validateToken(token);
-            System.out.println(username);
             requestContext.setSecurityContext(new MySecurityContext(username));
 
 

@@ -81,8 +81,8 @@ public class MobileDiscovery {
 					.prepareStatement("select mobNumber from mobilenumbers where username=?");
 			stmt.setString(1, username);
 			ResultSet rs=stmt.executeQuery();
-			if(rs.next())
-				mobile=rs.getString(1);
+			rs.next();
+			mobile=rs.getString(1);
 			
 			conn.close();
 			return mobile;
@@ -92,13 +92,13 @@ public class MobileDiscovery {
 	private static String findMobilePithia(String username) throws SQLException {
 		try (Connection conn = Pithia.getSqlConnections().getConnection();){
 			PreparedStatement stmt = conn
-					.prepareStatement("SELECT username FROM  v_SMS_GetPithiaCreds WHERE  RIGHT(mobile,10) = ?)");
+					.prepareStatement("SELECT RIGHT(mobile,10) FROM  v_SMS_GetPithiaCreds WHERE   username= ?");
 			
 			stmt.setString(1, username);
 			ResultSet rs=stmt.executeQuery();
 			String mobile=null;
-			if(rs.next())
-				mobile=rs.getString(1);
+			rs.next();
+			mobile=rs.getString(1);
 			stmt.close();
 			conn.close();
 			return mobile;
