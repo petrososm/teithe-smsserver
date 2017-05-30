@@ -4,18 +4,22 @@ var array = url.split('/');
 var path = array[array.length-1];
 var inputs;
 var message;
-
+var baseurl="http://195.251.120.230:8080";
+//var baseurl="http://localhost:8080";
+//var baseurl=location.host;
 
 
 (function () {
+
 		if(path=='sendsms.html'){		
 			if(role!='staff')
 				redirectLogin();
 			loadSendSms();
 		}
-		if(path=='aimodosia.html')
-			//if(role!='aimodosia')
-			//redirectLogin();
+		if(path=='aimodosia.html'){
+			if(role!='admin')
+				redirectLogin();
+		}
 		if(path=='services.html')
 			populateDocumentation();
 		if(path==""||path=="index.html")
@@ -23,19 +27,28 @@ var message;
 		if(path=='mobile.html')
 			loadMobileDiv();
 
+
 		loadNavBar(); 
 })();
+
+
+
+
  
 function redirectLogin(){
+	if(role.length!=0){
+		setCookie('role',"",-1);
+		setCookie('token',"",-1);
+	}
 	setCookie('redirect',path,0.5);
 	location.replace("login.html");
 }
  
 
-function setCookie(cname,cvalue,exdays) {
+function setCookie(cname,cvalue,hours) {
 	
 		var d = new Date();
-		d.setTime(d.getTime() + (exdays*24*60*60*1000));
+		d.setTime(d.getTime() + (hours*60*60*1000));
 		var expires = "expires=" + d.toGMTString();
 		document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 	}
@@ -56,6 +69,7 @@ function getCookie(cname) {
     return "";
 }
 
+
 function loadIndexDiv(){
 	
 	var html;
@@ -68,8 +82,8 @@ function loadIndexDiv(){
 	else if(role=='stud'){
 		html="<h1>Καλωσήρθες χρήστη.Τσέκαρε αν το τηλεφωνό σου είναι σωστο</h1>"
 	}
-	else if(role=='aimodosia'){
-		window.replace("aimodosia.html");
+	else if(role=='admin'){
+		html="<h1>Καλωσήρθατε κυριε Διαχειριστα.</h1>"
 	}
 	$("#indexDiv").html(html);
 	
@@ -91,8 +105,8 @@ function loadIndexDiv(){
 			links[2]={link:"sendsms.html",value:'ΑΠΟΣΤΟΛΗ SMS'};
 			links[3]={link:"logout.html",value:'ΑΠΟΣΥΝΔΕΣΗ'};
 		}
-		else if(role=='aimodosia'){
-			links[2]={link:"aimodosia.html",value:'ΑΠΟΣΤΟΛΗ SMS'};
+		else if(role=='admin'){
+			links[2]={link:"aimodosia.html",value:'ΑΙΜΟΔΟΣΙΑ '};
 			links[3]={link:"logout.html",value:'ΑΠΟΣΥΝΔΕΣΗ'};
 		}
 		else if(role=='stud'){
@@ -127,7 +141,10 @@ function loadIndexDiv(){
     }
 	
 	function populateDocumentation(){
-		urlBuilder = "http://http://localhost:8080/sms/service/site/moservices";
+		if(role=='staff')
+			$('#verifyPhoneLabel').hide();
+
+		urlBuilder = baseurl+"/sms/service/site/moservices";
 								$.ajax({
 									url : urlBuilder,
 									type : "GET",
@@ -149,11 +166,10 @@ function loadIndexDiv(){
    
        function login(){
         var data={};
-
         data.username=document.getElementById("username").value;
         data.password=document.getElementById("password").value;
 		$.ajax({
-			url: 'http://localhost:8080/sms/service/authentication',
+			url: baseurl+'/sms/service/authentication',
 			type: 'POST',
 			data: JSON.stringify(data),
 			contentType: 'application/json',
@@ -170,18 +186,22 @@ function loadIndexDiv(){
 					location.replace("./");
 			},
 			error: function () {
-				document.getElementById("loginLabel").innerHTML = "Login Failed";
+				alert("Login Failed");
+				
 			}
 		});
     }
        
     function loadMobileDiv(){
     	$.ajax({
-			url : 'http://localhost:8080/sms/service/site/mobile',
+			url : baseurl+'/sms/service/site/mobile',
 			type : 'GET',
 			dataType : 'text',
 			success : function(response) {
 		    	$('#mobile').html("Το νουμερό σου είναι "+ response);
+			},
+			error: function(){
+				$('#mobile').html("Δεν έχεις κάποιο κινητό τηλέφωνο καταχωρημένο");
 			},
 			beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' +getCookie('token')); }
 		});
@@ -189,8 +209,12 @@ function loadIndexDiv(){
     }
 	
     function loadSendSms(){
+    	$('#templateSelect').append($(
+		'<option>')
+		.text('Επιλέξτε μήνυμα')
+		.attr('value','null'));
     	$.ajax({
-			url : 'http://localhost:8080/sms/service/site/mtservices',
+			url : baseurl+'/sms/service/site/mtservices',
 			type : 'GET',
 			dataType : 'json',
 			success : function(json) {
@@ -246,7 +270,7 @@ function loadIndexDiv(){
     	if (r == true) {
     		$.ajax({
         	    type: 'POST',
-        	    url: 'http://localhost:8080/sms/service/site/send/aimodosia',
+        	    url: baseurl+'/sms/service/site/send/aimodosia',
         	    data: date,
         	    success: function(msg){
         	    	$('#mainDiv').html("<h1>ΤΟ ΜΗΝΥΜΑ ΣΤΑΛΘΗΚΕ ΜΕ ΕΠΙΤΥΧΙΑ</h1>");
@@ -255,6 +279,40 @@ function loadIndexDiv(){
     		
 
     	} 
+    }
+    
+    function sendMobileConfirmation(){
+		var e = document.getElementById('mobileNumber');
+		var mobile=e.value;
+		if(mobile.length!=10)
+			return;
+
+    	$.ajax({
+			url : baseurl+'/sms/service/site/mobile/sendConfirmation/'+mobile,
+			type : 'GET',
+			dataType : 'text',
+			success : function(response) {
+		    	$('#mobileDiv').html("<h2>Εισάγετε τον κωδικο που λάβατε στο τηλεφωνό σας<br>" +
+		    			"<input maxlength='50' id='verificationCode'></input></h2>" +
+		    			"<button class='button' onclick='changeMobile()'>ΑΛΛΑΓΗ</button>");			
+			},
+			beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' +getCookie('token')); }
+		});
+    	
+    }
+    
+    function changeMobile(){
+    	var e=document.getElementById('verificationCode');
+    	var verificationCode=e.value;
+    	$.ajax({
+    	    type: 'PUT',
+    	    url: baseurl+'/sms/service/site/mobile',
+    	    data: verificationCode,
+    	    success: function(msg){
+    	    	$('#mobileDiv').html("<h1>Το νούμερο του κινητού σας άλλαξε</h1>");
+    	    },beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' +getCookie('token')); }
+    	});
+    	
     }
     
     

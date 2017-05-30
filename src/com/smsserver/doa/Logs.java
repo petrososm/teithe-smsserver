@@ -29,8 +29,8 @@ public class Logs {
 				sms.messageId, String.join(", ", sms.replacements), response.error));
 	}
 	
-	public static void logMobileTerminated(SendSmsRequest smsRequest,SendSmsModel sms,int sentTo,int received){
-		_MTLogs.add(new MobileTerminatedLogs(smsRequest.course,smsRequest.professor,sms.serviceId,sms.messageId,String.join(", ", sms.replacements),sentTo,received));
+	public static void logMobileTerminated(String recipientGroup,String sender,SendSmsModel sms,int sentTo,int received){
+		_MTLogs.add(new MobileTerminatedLogs(recipientGroup,sender,sms.serviceId,sms.messageId,String.join(", ", sms.replacements),sentTo,received));
 	}
 
 }

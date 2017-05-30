@@ -34,6 +34,31 @@ public class SendSmsModel {
 		this.recipient = recipient;
 		this.smsForwardId = smsForwardId;
 	}
+    public SendSmsModel(String serverId, String messageId, String[] replacements, String recipient) {
+		super();
+		this.serviceId = serverId;
+		this.messageId = messageId;
+		this.replacements = replacements;
+		this.recipient = recipient;
+
+	}
+    public SendSmsModel(String serverId, String messageId, String[] replacements) {
+		super();
+		this.serviceId = serverId;
+		this.messageId = messageId;
+		this.replacements = replacements;
+
+	}
+    
+    public SendSmsModel(SendSmsModel sms) {
+		super();
+		this.serviceId = sms.serviceId;
+		this.messageId = sms.messageId;
+		this.replacements = sms.replacements;
+
+	}
+    
+    
     public SendSmsModel(){}
 
 	

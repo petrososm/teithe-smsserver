@@ -54,7 +54,7 @@ public class Ldap {
 				// get the users DN (distinguishedName) from the result
 				SearchResult result = results.next();
 				String distinguishedName = result.getNameInNamespace();
-				System.out.println(distinguishedName);
+				
 
 				// attempt another authentication, now with the user
 				Properties authEnv = new Properties();

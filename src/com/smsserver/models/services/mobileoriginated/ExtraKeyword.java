@@ -9,6 +9,7 @@ public class ExtraKeyword {
 	public String message;
 	public int queryParams;
 	public String description;
+	public String database;
 	
 	ExtraKeyword(){};
 	

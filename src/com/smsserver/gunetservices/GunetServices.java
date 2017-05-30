@@ -15,19 +15,26 @@ import com.smsserver.models.gunetapi.*;
 
 public class GunetServices {
 
-	public static SmsResponseModel sendSms (SendSmsModel sendSms) {
-		  try {
-		        Client client = ClientHelper.IgnoreSSLClient();
 
-		        WebTarget webTarget = client.target("https://sms-services.gunet.gr:9999/sendSMS");
+	public static SmsResponseModel testSend(SendSmsModel sendSms){
+		System.out.println(sendSms);
+       SmsResponseModel s= new SmsResponseModel();
+       s.error="";
+       return s;
+
+	}
+	
+	public static SmsResponseModel sendSingleSms (SendSmsModel sendSms) {
+		  try {
 		        
-		        
+				Client client = ClientHelper.IgnoreSSLClient();
+			    WebTarget webTarget = client.target("https://sms-services.gunet.gr:9999/sendSMS");
+			  
 		        String json= new ObjectMapper().writeValueAsString(sendSms);
 		        System.out.println(json);
 
 		        // POST method
 		        Response response = webTarget.request().accept(MediaType.APPLICATION_JSON).post(Entity.entity(json, MediaType.APPLICATION_JSON), Response.class);
-
 
 		        // check response status code
 		        if (response.getStatus() != 200) {
@@ -39,14 +46,14 @@ public class GunetServices {
 		        SmsResponseModel smsResponse = response.readEntity(SmsResponseModel.class);
 		        System.out.println(smsResponse);
 		        
+		        client.close();
 		        return smsResponse;
 		        
 		    } catch (Exception e) {
 		        e.printStackTrace();
 		        return null;//prp na girnaei smsresponse 
 		    }
-
-
 	}
+	
 
 }

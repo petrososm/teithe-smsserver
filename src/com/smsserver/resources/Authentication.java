@@ -34,10 +34,8 @@ public class Authentication {
     public Response authenticateUser(User u) throws URISyntaxException {
 
         try {
-        	System.out.println("Ok");
-            
-            String access=Ldap.performAuthentication(u.getUsername(), u.getPassword());
-        	//String access="staff";
+            //String access=Ldap.performAuthentication(u.getUsername(), u.getPassword());
+        	String access="stud";
             String token = Token.issueToken(u.getUsername(),access);
             
             User returnUser=new User(u.getUsername(),token,access.toLowerCase());

@@ -10,11 +10,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.SecurityContext;
 
 import com.smsserver.auth.security.Secured;
 import com.smsserver.auth.security.Token;
 import com.smsserver.auth.users.Role;
+import com.smsserver.doa.MobileTerminated;
 import com.smsserver.models.site.SendSmsRequest;
 import com.smsserver.models.site.User;
 
@@ -28,10 +30,13 @@ public class SendMessages {
     @Produces(MediaType.TEXT_PLAIN)
 	@Consumes(MediaType.TEXT_PLAIN)
 	//@Secured(Role.AIMODOSIA)
-    public String sendAimodosia(String date) throws URISyntaxException {
-    	//stelnei minima gia aimodosia stin imera
-		return date;
-
+    public Response sendAimodosia(String date) throws URISyntaxException {
+    	try {
+			MobileTerminated.sendAimodosia(date);
+			return Response.ok().build();
+		} catch (Exception e) {
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		}
     }
 	
     @POST

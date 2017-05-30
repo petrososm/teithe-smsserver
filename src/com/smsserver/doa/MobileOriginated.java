@@ -3,13 +3,18 @@ package com.smsserver.doa;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import javax.sql.DataSource;
 import com.smsserver.configuration.ServicesOnLoad;
 import com.smsserver.models.gunetapi.*;
 import com.smsserver.models.services.mobileoriginated.ExtraKeyword;
 import com.smsserver.models.services.mobileoriginated.MobileOriginatedService;
 import com.smsserver.sql.LocalDb;
+import com.smsserver.sql.Nireas;
 import com.smsserver.sql.Pithia;
+
+import javassist.NotFoundException;
 
 public class MobileOriginated {
 
@@ -30,7 +35,11 @@ public class MobileOriginated {
 			//SmsResponseModel response=GunetServices.sendSms(sms);
 			//Logs.logMobileOriginated(smsRequest,sms,response);
 			return new SmsForwardResponseModel(true);
-		} catch (Exception e) {
+		}catch(NotFoundException ex){
+			userNotFound();
+			return new SmsForwardResponseModel(true);
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 			return new SmsForwardResponseModel(false, e.getMessage(), "0");
 		}
@@ -39,54 +48,53 @@ public class MobileOriginated {
 
 	private static SendSmsModel prepareReply(SmsForwardModel smsRequest,MobileOriginatedService mobileOriginatedService) throws Exception {
 
-		DataSource ds=null;
-		if(mobileOriginatedService.database.equalsIgnoreCase("pithia")){
-			ds=Pithia.getSqlConnections();
-		}
-		else if(mobileOriginatedService.database.equalsIgnoreCase("localDb")){//paradeigma
-			ds=LocalDb.getSqlConnections();
-		}
-		
-		if(mobileOriginatedService.keywords.keywordList.get(0).equalsIgnoreCase(("ΑΙΜΟΔΟΣΙΑ")))
-				if(mobileOriginatedService.extraKeyword[0].keyword.equalsIgnoreCase("STOP")||mobileOriginatedService.extraKeyword[0].keyword.equalsIgnoreCase("START"))
-					ds=LocalDb.getSqlConnections(); //eidiki periptwsi, epeidh einai to mono erwtima poy xrisimopoiei 2 vaseis
-		
-		
 		String messageId = mobileOriginatedService.messages.defaultMessage;
 		int numberOfReplacements=mobileOriginatedService.numberOfReplacements;
 		String serviceId = mobileOriginatedService.serviceId;
 		String query=mobileOriginatedService.query;
 		String[] replacements = null;
 		int queryParams=mobileOriginatedService.queryParams;
+		String database=mobileOriginatedService.database;
 		PreparedStatement stmt ;
+		String[] userParameters=null;
+		String authenticator=smsRequest.msisdn;
+		int extra=0;
 		
-		
-		try (Connection conn = ds.getConnection();) {
-	
-			if(smsRequest.body.equalsIgnoreCase("")){
-				stmt=conn.prepareStatement(query);//ena preparedstatement xwris parametrous
-				stmt.setString(1, smsRequest.msisdn);
-			}
-			else{
-				String[] userParameters = smsRequest.body.split("\\s+");//diaxwrizei to body
-				int extra=0;//an xriastei na paei sto epomeno
-					if(mobileOriginatedService.extraKeyword != null){
-						for(ExtraKeyword ek:mobileOriginatedService.extraKeyword){//an yparxoyn k alla query
-							if(userParameters[0].equalsIgnoreCase(ek.keyword)){
-								messageId=ek.message;
-								numberOfReplacements=ek.numberOfReplacements;//allazei tis parametrous tou erwtimatos
-								query=ek.query;
-								queryParams=ek.queryParams;	
-								extra++;//gia na ksekinisei apo tin epomeni leksi
-							}
+		if(!smsRequest.body.equalsIgnoreCase("")){
+			userParameters = smsRequest.body.split("\\s+");//diaxwrizei to body
+				if(mobileOriginatedService.extraKeyword != null){
+					for(ExtraKeyword ek:mobileOriginatedService.extraKeyword){//an yparxoyn k alla query
+						if(userParameters[0].equalsIgnoreCase(ek.keyword)){
+							messageId=ek.message;
+							numberOfReplacements=ek.numberOfReplacements;//allazei tis parametrous tou erwtimatos
+							query=ek.query;
+							queryParams=ek.queryParams;
+							if(ek.database!=null)
+								database=ek.database;
+							extra++;//gia na ksekinisei apo tin epomeni leksi
 						}
-				}
-				stmt=conn.prepareStatement(query);//kanei ena geniko prepare
-												  //ean den bei edw, to kanei sto allo if
-				stmt.setString(1, smsRequest.msisdn);
-				for(int i=1;i<queryParams;i++)//ksekinaei apo 1 giati mia parametros einai standard
-					stmt.setString(i+1, userParameters[i-1+extra]);//-1 gia na paei sto 0 . extra an iparxei secondary
+					}
 			}
+
+		}
+		DataSource ds=null;
+		if(mobileOriginatedService.database.equalsIgnoreCase("pithia")){
+			ds=Pithia.getSqlConnections();
+			authenticator=MobileDiscovery.getUsername(smsRequest.msisdn);
+		}
+		else if(mobileOriginatedService.database.equalsIgnoreCase("localDb")){//paradeigma
+			ds=LocalDb.getSqlConnections();
+		}	
+		else if(mobileOriginatedService.database.equalsIgnoreCase("nireas")){//paradeigma
+			ds=Nireas.getSqlConnections();
+		}
+		try (Connection conn = ds.getConnection();) {
+			stmt=conn.prepareStatement(query);//ena preparedstatement xwris parametrous
+			stmt.setString(1, smsRequest.msisdn);
+			for(int i=1;i<queryParams;i++)//ksekinaei apo 1 giati mia parametros einai standard
+				stmt.setString(i+1, userParameters[i-1+extra]);//-1 gia na paei sto 0 . extra an iparxei secondary
+
+			
 
 
 			try (ResultSet rs = stmt.executeQuery();) {
@@ -109,6 +117,10 @@ public class MobileOriginated {
 			return sms;
 		} 
 	}
+	
+
+
+
 
 	private static SmsForwardResponseModel keyWordNotExisting() {
 
@@ -116,6 +128,10 @@ public class MobileOriginated {
 		// send SMS
 		return new SmsForwardResponseModel(false, "keyword not existing", "15");
 
+	}
+	private static void userNotFound() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
