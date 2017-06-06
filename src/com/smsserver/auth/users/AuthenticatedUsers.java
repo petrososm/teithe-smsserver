@@ -1,6 +1,5 @@
 package com.smsserver.auth.users;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -12,7 +11,7 @@ public class AuthenticatedUsers {
 
 	static {
 		authUsers = ExpiringMap.builder()
-				  .maxSize(123)
+				  .maxSize(300)
 				  .expiration(2, TimeUnit.DAYS)
 				  .build();
 		put(new User("it123853","STAFF"));

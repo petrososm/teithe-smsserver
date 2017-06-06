@@ -7,10 +7,10 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.glassfish.jersey.client.ClientResponse;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.smsserver.models.gunetapi.*;
+import com.smsserver.configuration.GetPropertyValues;
+import com.smsserver.models.gunetapi.SendSmsModel;
+import com.smsserver.models.gunetapi.SmsResponseModel;
 
 
 public class GunetServices {
@@ -18,6 +18,12 @@ public class GunetServices {
 
 	public static SmsResponseModel testSend(SendSmsModel sendSms){
 		System.out.println(sendSms);
+		try {
+			Thread.sleep(10000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
        SmsResponseModel s= new SmsResponseModel();
        s.error="";
        return s;
@@ -28,7 +34,7 @@ public class GunetServices {
 		  try {
 		        
 				Client client = ClientHelper.IgnoreSSLClient();
-			    WebTarget webTarget = client.target("https://sms-services.gunet.gr:9999/sendSMS");
+			    WebTarget webTarget = client.target(GetPropertyValues.getProperties().getProperty("gunetUrl"));
 			  
 		        String json= new ObjectMapper().writeValueAsString(sendSms);
 		        System.out.println(json);

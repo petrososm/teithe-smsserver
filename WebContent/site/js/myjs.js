@@ -4,16 +4,18 @@ var array = url.split('/');
 var path = array[array.length-1];
 var inputs;
 var message;
-var baseurl="http://195.251.120.230:8080";
-//var baseurl="http://localhost:8080";
+//var baseurl="http://195.251.120.230:8080";
+ var baseurl="http://localhost:8080";
 //var baseurl=location.host;
+//alert(baseurl);
+
 
 
 (function () {
 
 		if(path=='sendsms.html'){		
-			if(role!='staff')
-				redirectLogin();
+			//if(role!='staff')
+				//redirectLogin();
 			loadSendSms();
 		}
 		if(path=='aimodosia.html'){
@@ -214,7 +216,7 @@ function loadIndexDiv(){
     	$('#templateSelect').append($(
 		'<option>')
 		.text('Επιλέξτε μήνυμα')
-		.attr('value','null'));
+		.attr('value',0));
     	$.ajax({
 			url : baseurl+'/sms/service/site/mtservices',
 			type : 'GET',
@@ -259,9 +261,47 @@ function loadIndexDiv(){
     	}
     	var r = confirm(message+'\nΑΠΟΣΤΟΛΗ  ?');
     	if (r == true) {
-    	    alert('ok');
-    	} else {
-    		alert('not ok');
+            	
+    	    	var tem = document.getElementById("templateSelect");
+    	    	if(tem.options[tem.selectedIndex].value==0){
+    	    		alert("Επέλεξε μήνυμα");
+    	    		return;
+    	    	}
+    	    	
+    	    	$("#ajax_loader").show();
+            	$("body").find("*").attr("disabled", "disabled");
+            	$("body").find("a").click(function (e) { e.preventDefault(); });
+            	var data={};
+    	    	data.messageId=tem.options[tem.selectedIndex].value;
+    	    	var replacements=[];
+    	    	for(i=0;i<inputs;i++){
+    	    		var e = document.getElementById("input"+i);
+    	    		replacements[i]=e.value;
+    	    	}
+    	    	data.replacements=replacements;
+    	    	data.course='testCourse'; 		
+
+    	    	$.ajax({
+    				url: baseurl+'/sms/service/send',
+    				type: 'POST',
+    				data: JSON.stringify(data),
+    				contentType: 'application/json',
+    				dataType: 'json',
+    				success: function(response) {
+    		            $("#ajax_loader").hide();
+    					$("body").find("*").removeAttr("disabled");
+    					$("body").find("a").unbind("click");
+            	    	$('#mainDiv').html('<h2>Το μήνυμα στάλθηκε σε '+response['sent']+' παραλήπτες και παραδόθηκε επιτυχώς σε '+response['delivered']+' </h2>');
+    				},
+    				error: function () {
+    		            $("#ajax_loader").hide();
+    					$("body").find("*").removeAttr("disabled");
+    					$("body").find("a").unbind("click");
+    					alert("Send Sms Failed");
+    				}
+
+    			});	
+    		
     	}	
     }
     
@@ -286,8 +326,10 @@ function loadIndexDiv(){
     function sendMobileConfirmation(){
 		var e = document.getElementById('mobileNumber');
 		var mobile=e.value;
-		if(mobile.length!=10)
+		if(mobile.length!=10){
+			alert("Το νουμερο πρεπει να ειναι 10 ψηφια")
 			return;
+		}
 
     	$.ajax({
 			url : baseurl+'/sms/service/site/mobile/sendConfirmation/'+mobile,

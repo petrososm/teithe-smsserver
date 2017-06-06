@@ -1,7 +1,5 @@
 package com.smsserver.auth.users;
 
-import java.lang.annotation.Annotation;
-
 public class User  {
 	
 	String username;

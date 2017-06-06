@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head></head>
-  <body onload="logout()">
-   
-    <script>
+<head></head>
+<body onload="logout()">
+
+	<script>
 	 function logout(){
 	     createCookie('token',"",-1);
 		 createCookie('role',"",-1);
@@ -19,6 +19,6 @@
 		document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 	}
 	</script>
-	
-  </body>
+
+</body>
 </html>

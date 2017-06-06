@@ -4,8 +4,8 @@ var array = url.split('/');
 var path = array[array.length-1];
 var inputs;
 var message;
-var baseurl="http://195.251.120.230:8080";
-//var baseurl="http://localhost:8080";
+//var baseurl="http://195.251.120.230:8080";
+ var baseurl="http://localhost:8080";
 //var baseurl=location.host;
 
 
@@ -24,9 +24,11 @@ var baseurl="http://195.251.120.230:8080";
 			populateDocumentation();
 		if(path==""||path=="index.html")
 			loadIndexDiv();
-		if(path=='mobile.html')
+		if(path=='mobile.html'){
+			if(role.length==0)
+				redirectLogin();
 			loadMobileDiv();
-
+		}
 
 		loadNavBar(); 
 })();
@@ -284,8 +286,10 @@ function loadIndexDiv(){
     function sendMobileConfirmation(){
 		var e = document.getElementById('mobileNumber');
 		var mobile=e.value;
-		if(mobile.length!=10)
+		if(mobile.length!=10){
+			alert("Το νουμερο πρεπει να ειναι 10 ψηφια")
 			return;
+		}
 
     	$.ajax({
 			url : baseurl+'/sms/service/site/mobile/sendConfirmation/'+mobile,

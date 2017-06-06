@@ -1,8 +1,7 @@
 package com.smsserver.models.services.mobileoriginated;
 
-import java.util.ArrayList;
-
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class MobileOriginatedService {
@@ -33,6 +32,17 @@ public class MobileOriginatedService {
 		this.serviceId = serviceId;
 		queryParams = query.length() - query.replace("?", "").length();
 
+	}
+
+
+	public MobileOriginatedService(MobileOriginatedService mobileOriginatedService) {
+		super();
+		this.query = mobileOriginatedService.query;
+		this.database = mobileOriginatedService.database;
+		this.messages = mobileOriginatedService.messages;
+		this.serviceId = mobileOriginatedService.serviceId;
+		this.queryParams=mobileOriginatedService.queryParams;
+		this.numberOfReplacements=mobileOriginatedService.numberOfReplacements;
 	}
 
 

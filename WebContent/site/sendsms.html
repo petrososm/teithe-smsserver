@@ -1,116 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-   
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
 
-    <title>Υπηρεσία SMS Αλεξάνδρειου ΤΕΙ Θεσσαλονίκης</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <link href="css/image-effects.css" rel="stylesheet">
-    <link href="css/custom-styles.css" rel="stylesheet">
-    </head>
+<title>Υπηρεσία SMS Αλεξάνδρειου ΤΕΙ Θεσσαλονίκης</title>
 
-  <body>
-    
-      <div class="container">
-        <div class="row">
-          <div class="site-header spacing-t">
-            <div class="col-md-3 ">
-              <div class="site-name spacing-b">
-                <h1> ΥΠΗΡΕΣΙΑ ΑΠΟΣΤΟΛΗΣ SMS</h1>
+<!-- Bootstrap core CSS -->
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/image-effects.css" rel="stylesheet">
+<link href="css/custom-styles.css" rel="stylesheet">
+</head>
 
-              </div>
-            </div>
-          <div class="col-md-9">
-            <nav class="navbar pull-right " role="navigation">
-            <!-- Brand and toggle get grouped for better mobile display -->
-                    <div class="navbar-header">
-                      
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse"><h3 class="hide">Menu</h3>
-            <span class="fw-icon-th-list "></span>
-            
-          </button>
-         
-        </div>
-            
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul id="navbar" class="nav navbar-nav" ></ul>
-            </div><!-- /.navbar-collapse -->
-        </nav>
-        
-          </div>
-          </div>
-        </div>
-     
+<body>
 
-    </div>
+	<div class="container">
+		<div class="row">
+			<div class="site-header spacing-t">
+				<div class="col-md-3 ">
+					<div class="site-name spacing-b">
+						<h1>ΥΠΗΡΕΣΙΑ ΑΠΟΣΤΟΛΗΣ SMS</h1>
 
-      <div class="container">
-			<div style='display: inline-block; vertical-align: top; margin-right: 20px'>
-				<h3><label for="templateSelect">Μήνυμα</label> 
-				<select id="templateSelect" onchange="leaveChange()"></select></h3>
+					</div>
+				</div>
+				<div class="col-md-9">
+					<nav class="navbar pull-right " role="navigation">
+						<!-- Brand and toggle get grouped for better mobile display -->
+						<div class="navbar-header">
+
+							<button type="button" class="navbar-toggle collapsed"
+								data-toggle="collapse" data-target=".navbar-collapse">
+								<h3 class="hide">Menu</h3>
+								<span class="fw-icon-th-list "></span>
+
+							</button>
+
+						</div>
+
+						<!-- Collect the nav links, forms, and other content for toggling -->
+						<div class="collapse navbar-collapse"
+							id="bs-example-navbar-collapse-1">
+							<ul id="navbar" class="nav navbar-nav"></ul>
+						</div>
+						<!-- /.navbar-collapse -->
+					</nav>
+
+				</div>
 			</div>
-			<div id="message">
-			
+		</div>
+
+
+	</div>
+
+	<div class="container">
+		<div id='mainDiv'
+			style='display: inline-block; vertical-align: top; margin-right: 20px'>
+			<h3>
+				<label for="templateSelect">Μήνυμα</label> <select
+					id="templateSelect" onchange="leaveChange()"></select>
+			</h3>
+			<div id='ajax_loader'
+				style="position: fixed; left: 50%; top: 20%; display: none;">
+				<img src="images/25.gif"></img>
+				
 			</div>
-    </div>
+			<div id="message"></div>
+		</div>
+
+	</div>
 
 
-    <div class="container">
-          <div class="site-footer">
-            <div class="row">
-              <div class="col-sm-6 col-md-3">
-                <div class="block">
-                  <h2>SMS Aggregator by Gunet</h2>
-                  <a href="http://sms.gunet.gr">sms.gunet.gr</a>
-                                  </div>
-              </div>
-              <div class="col-sm-6 col-md-3">
-                <div class="block">
-                  <h2>Powered by NOC</h2>
-                  <a href="http://www.noc.teithe.gr/">Noc.teithe.gr</a>
-                                  </div>
-              </div>
-              <div class="col-sm-6 col-md-3">
-                <div class="block">
-                  <h2>Template By</h2>
-                  <a href="http://alltemplateneeds.com">www.alltemplateneeds.com</a>
-                  
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-3">
-                <div class="block">
-                  <h2>Πτυχιακή Εργασία του</h2>
-                  <a href="#">Πέτρου Οσμαντσικίδη</a>
-                  
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>    
-    <!-- Main jumbotron for a primary marketing message or call to action -->
-    
+	<div class="container">
+		<div class="site-footer">
+			<div class="row">
+				<div class="col-sm-6 col-md-3">
+					<div class="block">
+						<h2>SMS Aggregator by Gunet</h2>
+						<a href="http://sms.gunet.gr">sms.gunet.gr</a>
+					</div>
+				</div>
+				<div class="col-sm-6 col-md-3">
+					<div class="block">
+						<h2>Powered by NOC</h2>
+						<a href="http://www.noc.teithe.gr/">Noc.teithe.gr</a>
+					</div>
+				</div>
+				<div class="col-sm-6 col-md-3">
+					<div class="block">
+						<h2>Template By</h2>
+						<a href="http://alltemplateneeds.com">www.alltemplateneeds.com</a>
 
-     <!-- /container -->
+					</div>
+				</div>
+				<div class="col-sm-6 col-md-3">
+					<div class="block">
+						<h2>Πτυχιακή Εργασία του</h2>
+						<a href="#">Πέτρου Οσμαντσικίδη</a>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Main jumbotron for a primary marketing message or call to action -->
 
 
-    <!-- Bootstrap core JavaScript
+	<!-- /container -->
+
+
+	<!-- Bootstrap core JavaScript
     ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-     <script src="js/html5shiv.js"></script>
-      <script src="js/respond.min.js"></script>
- 	<script src="js/jquery-1.9.1.js"></script>
-    <script src="js/bootstrap.js"></script>
-    <script src="js/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="js/html5shiv.js"></script>
+	<script src="js/respond.min.js"></script>
+	<script src="js/jquery-1.9.1.js"></script>
+	<script src="js/bootstrap.js"></script>
+	<script src="js/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 	<script src="js/myjs.js"></script>
 
 
-       
-  </body>
+
+</body>
 </html>

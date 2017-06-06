@@ -5,16 +5,14 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.concurrent.Executors;
-
-import com.smsserver.doa.MobileTerminated;
-import com.smsserver.doa.ScheduledBackupLogs;
-import com.smsserver.doa.ScheduledSendNewGrades;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
+
+import com.smsserver.doa.ScheduledBackupLogs;
 
 @WebListener
 public class Start implements ServletContextListener {
@@ -24,10 +22,14 @@ public class Start implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent event) {
 		ServicesOnLoad.loadMobileOriginated();
 		ServicesOnLoad.loadMobileTerminated();
+		GetPropertyValues.loadConfig();
+
+
 
 
 		scheduler = Executors.newScheduledThreadPool(1); 
-		scheduler.scheduleAtFixedRate(new ScheduledBackupLogs(), 0, 5, TimeUnit.MINUTES);
+		scheduler.scheduleAtFixedRate(new ScheduledBackupLogs(), 0, 
+				Integer.parseInt(GetPropertyValues.getProperties().getProperty("backupInterval")), TimeUnit.MINUTES);
 //		scheduler.scheduleAtFixedRate(new ScheduledSendNewGrades(), calculateDelay(),
 //                24*60*60, TimeUnit.SECONDS);
 		System.out.println("server started");
@@ -49,8 +51,7 @@ public class Start implements ServletContextListener {
             zonedNext5 = zonedNext5.plusDays(1);
 
         Duration duration = Duration.between(zonedNow, zonedNext5);
-        long initialDelay = duration.getSeconds();
-        return initialDelay;
+        return  duration.getSeconds();
 
 	}
 }

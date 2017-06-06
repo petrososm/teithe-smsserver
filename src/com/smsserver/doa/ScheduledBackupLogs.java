@@ -23,9 +23,10 @@ public class ScheduledBackupLogs implements Runnable {
 		if (Logs._MTLogs.isEmpty())
 			return;
 
-		try (Connection conn = LocalDb.getSqlConnections().getConnection();){
-			PreparedStatement stmt = conn
-					.prepareStatement("INSERT INTO mobile_terminated(list,user,serviceId,messageId,replacements,sentTo,received) values (?,?,?,?,?,?,?)");
+		try (Connection conn = LocalDb.getSqlConnections().getConnection();
+				PreparedStatement stmt = conn
+				.prepareStatement("INSERT INTO mobile_terminated(list,user,serviceId,messageId,replacements,sentTo,received) values (?,?,?,?,?,?,?)");){
+			
 			for ( MobileTerminatedLogs mt : Logs._MTLogs) {
 				stmt.setString(1, mt.list);
 				stmt.setString(2, mt.user);
@@ -43,7 +44,7 @@ public class ScheduledBackupLogs implements Runnable {
 			System.out.println("MobileTerminated Logs Backup Interrupted");
 		}
 
-		Logs._MOLogs.clear();
+		Logs._MTLogs.clear();
 
 	}
 
@@ -51,9 +52,10 @@ public class ScheduledBackupLogs implements Runnable {
 		if (Logs._MOLogs.isEmpty())
 			return;
 
-		try (Connection conn = LocalDb.getSqlConnections().getConnection();){
-			PreparedStatement stmt = conn
-					.prepareStatement("INSERT INTO mobile_originated(mobile,keyword,body,serviceId,messageId,replacements,smsstatus) values (?,?,?,?,?,?,?)");
+		try (Connection conn = LocalDb.getSqlConnections().getConnection();
+				PreparedStatement stmt = conn
+						.prepareStatement("INSERT INTO mobile_originated(mobile,keyword,body,serviceId,messageId,replacements,smsstatus) values (?,?,?,?,?,?,?)");){
+			
 			for ( MobileOriginatedLogs mo : Logs._MOLogs) {
 				stmt.setString(1, mo.mobile);
 				stmt.setString(2, mo.keyword);
@@ -65,7 +67,6 @@ public class ScheduledBackupLogs implements Runnable {
 				stmt.executeUpdate();
 			}
 			System.out.println("Mobile OriginatedLogs Backed Up");
-			conn.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Mobile OriginatedLogs Backup Interrupted");
@@ -79,9 +80,10 @@ public class ScheduledBackupLogs implements Runnable {
 		if (Logs.deliveryReports.isEmpty())
 			return;
 
-		try (Connection conn = LocalDb.getSqlConnections().getConnection();){
-			PreparedStatement stmt = conn
-					.prepareStatement("INSERT INTO DLRS(serviceId,recipient,status,error) values (?,?,?,?)");
+		try (Connection conn = LocalDb.getSqlConnections().getConnection();
+				PreparedStatement stmt = conn
+						.prepareStatement("INSERT INTO DLRS(serviceId,recipient,status,error) values (?,?,?,?)");){
+			
 			for (DlrRequestModel dlr : Logs.deliveryReports) {
 				stmt.setString(1, dlr.getServiceId());
 				stmt.setString(2, dlr.getRecipient());
@@ -89,7 +91,6 @@ public class ScheduledBackupLogs implements Runnable {
 				stmt.setString(4, dlr.getError());
 				stmt.executeUpdate();
 			}
-			conn.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

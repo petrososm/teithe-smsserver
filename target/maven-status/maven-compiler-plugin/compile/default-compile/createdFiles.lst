@@ -1,7 +1,9 @@
 com\smsserver\resources\Data.class
+com\smsserver\configuration\GetPropertyValues.class
 com\smsserver\gunetservices\ClientHelper$1.class
 com\smsserver\resources\Gunet.class
 com\smsserver\models\services\mobileterminated\Root.class
+com\smsserver\models\site\SendReport.class
 com\smsserver\models\gunetapi\SendSmsModel.class
 com\smsserver\models\services\mobileoriginated\Root.class
 com\smsserver\auth\security\MySecurityContext.class

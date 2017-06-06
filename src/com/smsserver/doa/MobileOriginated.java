@@ -3,15 +3,15 @@ package com.smsserver.doa;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import javax.sql.DataSource;
+
 import com.smsserver.configuration.ServicesOnLoad;
-import com.smsserver.models.gunetapi.*;
+import com.smsserver.models.gunetapi.SendSmsModel;
+import com.smsserver.models.gunetapi.SmsForwardModel;
+import com.smsserver.models.gunetapi.SmsForwardResponseModel;
 import com.smsserver.models.services.mobileoriginated.ExtraKeyword;
 import com.smsserver.models.services.mobileoriginated.MobileOriginatedService;
-import com.smsserver.sql.LocalDb;
-import com.smsserver.sql.Nireas;
 import com.smsserver.sql.Pithia;
 
 import javassist.NotFoundException;
@@ -31,7 +31,11 @@ public class MobileOriginated {
 
 		
 		try {
-			SendSmsModel sms = prepareReply(smsRequest, mobileOriginatedService);//an petaksei exception to pianei katw k leitourgei antistoixa
+			SendSmsModel sms=null;
+			if(smsRequest.keyword.equalsIgnoreCase("ΑΙΜΟΔΟΣΙΑ"))
+				sms=prepareReplyAimodosia(smsRequest);
+			else
+				sms=prepareReplyPithia(smsRequest, mobileOriginatedService);//an petaksei exception to pianei katw k leitourgei antistoixa
 			//SmsResponseModel response=GunetServices.sendSms(sms);
 			//Logs.logMobileOriginated(smsRequest,sms,response);
 			return new SmsForwardResponseModel(true);
@@ -46,18 +50,16 @@ public class MobileOriginated {
 
 	}
 
-	private static SendSmsModel prepareReply(SmsForwardModel smsRequest,MobileOriginatedService mobileOriginatedService) throws Exception {
+	private static SendSmsModel prepareReplyAimodosia(SmsForwardModel smsRequest) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-		String messageId = mobileOriginatedService.messages.defaultMessage;
-		int numberOfReplacements=mobileOriginatedService.numberOfReplacements;
-		String serviceId = mobileOriginatedService.serviceId;
-		String query=mobileOriginatedService.query;
-		String[] replacements = null;
-		int queryParams=mobileOriginatedService.queryParams;
-		String database=mobileOriginatedService.database;
-		PreparedStatement stmt ;
+	private static SendSmsModel prepareReplyPithia(SmsForwardModel smsRequest,MobileOriginatedService mobileOriginatedService) throws Exception {
+
+		MobileOriginatedService service=new MobileOriginatedService(mobileOriginatedService);
+
 		String[] userParameters=null;
-		String authenticator=smsRequest.msisdn;
 		int extra=0;
 		
 		if(!smsRequest.body.equalsIgnoreCase("")){
@@ -65,54 +67,52 @@ public class MobileOriginated {
 				if(mobileOriginatedService.extraKeyword != null){
 					for(ExtraKeyword ek:mobileOriginatedService.extraKeyword){//an yparxoyn k alla query
 						if(userParameters[0].equalsIgnoreCase(ek.keyword)){
-							messageId=ek.message;
-							numberOfReplacements=ek.numberOfReplacements;//allazei tis parametrous tou erwtimatos
-							query=ek.query;
-							queryParams=ek.queryParams;
-							if(ek.database!=null)
-								database=ek.database;
+							service.messages.defaultMessage=ek.message;
+							service.numberOfReplacements=ek.numberOfReplacements;//allazei tis parametrous tou erwtimatos
+							service.query=ek.query;
+							service.queryParams=ek.queryParams;
 							extra++;//gia na ksekinisei apo tin epomeni leksi
 						}
 					}
 			}
 
 		}
-		DataSource ds=null;
-		if(mobileOriginatedService.database.equalsIgnoreCase("pithia")){
-			ds=Pithia.getSqlConnections();
-			authenticator=MobileDiscovery.getUsername(smsRequest.msisdn);
-		}
-		else if(mobileOriginatedService.database.equalsIgnoreCase("localDb")){//paradeigma
-			ds=LocalDb.getSqlConnections();
-		}	
-		else if(mobileOriginatedService.database.equalsIgnoreCase("nireas")){//paradeigma
-			ds=Nireas.getSqlConnections();
-		}
-		try (Connection conn = ds.getConnection();) {
-			stmt=conn.prepareStatement(query);//ena preparedstatement xwris parametrous
-			stmt.setString(1, smsRequest.msisdn);
-			for(int i=1;i<queryParams;i++)//ksekinaei apo 1 giati mia parametros einai standard
+		
+		
+		String authenticator=MobileDiscovery.getUsername(smsRequest.msisdn);
+		
+		DataSource ds = Pithia.getSqlConnections();
+		if(ds==null)
+			throw new Exception("Database not specified in service");
+		
+		try (Connection conn = ds.getConnection();
+				PreparedStatement stmt=conn.prepareStatement(service.query);) {
+			
+			stmt.setString(1, authenticator);
+			for(int i=1;i<service.queryParams;i++)//ksekinaei apo 1 giati mia parametros einai standard
 				stmt.setString(i+1, userParameters[i-1+extra]);//-1 gia na paei sto 0 . extra an iparxei secondary
 
 			
-
+			String messageToSend="";
+			String[] replacements=null;
 
 			try (ResultSet rs = stmt.executeQuery();) {
-				if(messageId==null)
+				if(service.messages.defaultMessage==null)
 					throw new Exception("NO REPLY");//na min stilei minima
 				if (!rs.next()) {
-					messageId = mobileOriginatedService.messages.errorMessage;// ypothetontas oti dn xreiazetai replacement kai oti einai panta to 2o minima
+					messageToSend = mobileOriginatedService.messages.errorMessage;// ypothetontas oti dn xreiazetai replacement kai oti einai panta to 2o minima
 				} else {					
-					replacements=new String[numberOfReplacements];
-					for(int i=0;i<numberOfReplacements;i++)
+					replacements=new String[service.numberOfReplacements];
+					for(int i=0;i<service.numberOfReplacements;i++)
 						replacements[i]=rs.getString(i+1);
 				}
 			}
 
-			stmt.close();
-			SendSmsModel sms = new SendSmsModel(serviceId, messageId, replacements, smsRequest.msisdn,
+			
+			SendSmsModel sms = new SendSmsModel(service.serviceId, messageToSend, replacements, smsRequest.msisdn,
 					smsRequest.smsForwardId);
 			
+			service=null;
 			System.out.println(sms);
 			return sms;
 		} 

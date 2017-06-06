@@ -1,22 +1,15 @@
 package com.smsserver.resources;
 
-import java.net.URI;
 import java.net.URISyntaxException;
 
-import javax.annotation.security.PermitAll;
-import javax.servlet.http.Cookie;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 
-import com.smsserver.auth.security.Ldap;
 import com.smsserver.auth.security.Secured;
 import com.smsserver.auth.security.Token;
 import com.smsserver.auth.users.Role;
@@ -34,14 +27,15 @@ public class Authentication {
     public Response authenticateUser(User u) throws URISyntaxException {
 
         try {
-            String access=Ldap.performAuthentication(u.getUsername(), u.getPassword());
-        	//String access="stud";
+            //String access=Ldap.performAuthentication(u.getUsername(), u.getPassword());
+        	String access="staff";
             String token = Token.issueToken(u.getUsername(),access);
             
             User returnUser=new User(u.getUsername(),token,access.toLowerCase());
             return Response.ok(returnUser).build();
             
         } catch (Exception e) {
+        	e.printStackTrace();
             return Response.status(Response.Status.UNAUTHORIZED).build();
            
 

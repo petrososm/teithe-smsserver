@@ -3,6 +3,7 @@ package com.smsserver.configuration;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
@@ -36,36 +37,35 @@ public class ServicesOnLoad {
 		try {
 			JAXBContext jc = JAXBContext.newInstance(com.smsserver.models.services.mobileoriginated.Root.class);
 			Unmarshaller unmarshaller = jc.createUnmarshaller();
-			File questionXML = new File("/usr/share/tomcat/webapps/sms/WEB-INF/mobileoriginated.xml");
-			if (!questionXML.exists())
-				questionXML = new File("D:/Documents/GitHub/teithe-smsserver/target/sms-0.0.1-SNAPSHOT/WEB-INF/mobileoriginated.xml");
+			ClassLoader classLoader = ServicesOnLoad.class.getClassLoader();
+			File questionXML = new File(classLoader.getResource("mobileoriginated.xml").getFile());
+
 			com.smsserver.models.services.mobileoriginated.Root moRoot = (com.smsserver.models.services.mobileoriginated.Root) unmarshaller.unmarshal(questionXML);
 
 			for (MobileOriginatedService s : moRoot.mobileOriginatedService) {
 				if(s!=null){//se periptwsi poy ginei lathos parsing min paralisei to simpan
 					s.queryParams = s.query.length() - s.query.replace("?", "").length();//metraei ta ? sto query gia na vgalei arithmo parametrwn
-					if(s.extraKeyword != null)
+					if(s.extraKeyword != null){
 						for(ExtraKeyword ek:s.extraKeyword)
 							ek.queryParams=ek.query.length() - ek.query.replace("?", "").length();
-
-						if(s.userInput==null)
-							descriptions.add(new ServiceDescription("TEITHE "+ s.keywords.keywordList.get(0),s.description));
-						else
+					}
+					
+					if(s.userInput!=null)
 							descriptions.add(new ServiceDescription("TEITHE "+ s.keywords.keywordList.get(0)+" <"+s.userInput+">",s.description));
+					else
+						descriptions.add(new ServiceDescription("TEITHE "+ s.keywords.keywordList.get(0),s.description));
 						
-						for(String k:s.keywords.keywordList)
+					for(String k:s.keywords.keywordList)
 							mobileOriginatedServices.put(k, s); // fortwnei sto hastmap ola ta	
-						if(s.extraKeyword != null)
+					if(s.extraKeyword != null)
 							for(ExtraKeyword ek:s.extraKeyword)
 								descriptions.add(new ServiceDescription("TEITHE "+s.keywords.keywordList.get(0)+" "+ ek.keyword ,ek.description));
 
 													// questions me index ta keyword
 					mobileOriginatedServices.put(s.serviceId, s);//vazei sto hashmap kai to serviceId gia na xrisimopoieitai kai se MO k MT
 					System.out.println(s);
-					
 				}
 			}
-			System.out.println(descriptions);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -75,9 +75,8 @@ public class ServicesOnLoad {
 		try {
 			JAXBContext jc = JAXBContext.newInstance(com.smsserver.models.services.mobileterminated.Root.class);
 			Unmarshaller unmarshaller = jc.createUnmarshaller();
-			File mtxml = new File("/usr/share/tomcat/webapps/sms/WEB-INF/mobileterminated.xml");
-			if (!mtxml.exists())
-				mtxml = new File("D:/Documents/GitHub/teithe-smsserver/target/sms-0.0.1-SNAPSHOT/WEB-INF/mobileterminated.xml");
+			ClassLoader classLoader = ServicesOnLoad.class.getClassLoader();
+			File mtxml = new File(classLoader.getResource("mobileterminated.xml").getFile());
 			com.smsserver.models.services.mobileterminated.Root mtRoot = (com.smsserver.models.services.mobileterminated.Root) unmarshaller.unmarshal(mtxml);
 
 			for (MobileTerminatedService s : mtRoot.mobileTerminatedService) {

@@ -2,16 +2,12 @@ package com.smsserver.doa;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-import com.smsserver.models.logs.MobileTerminatedLogs;
 import com.smsserver.sql.LocalDb;
-import com.smsserver.sql.Pithia;
 
 import net.jodah.expiringmap.ExpiringMap;
 
@@ -28,7 +24,7 @@ public class MobileChanger {
 	
 	public static void sendVerificationCode(String username,String mobile){
 		Random rand = new Random();
-		int  n = rand.nextInt(9000) + 1000;
+		int  n = rand.nextInt(90000) + 10000;
 		mobileVerification.put(n,mobile);
 		sendCodeSms(mobile,n);
 	}
@@ -50,14 +46,14 @@ public class MobileChanger {
 	}
 
 	private static void insertMobile(String username,String mobile) throws SQLException{
-		try (Connection conn = LocalDb.getSqlConnections().getConnection();){
-			PreparedStatement stmt = conn
-					.prepareStatement("insert into mobilenumbers(mobNumber,username) values(?,?)ON DUPLICATE KEY UPDATE mobNumber = ?");
+		try (Connection conn = LocalDb.getSqlConnections().getConnection();
+				PreparedStatement stmt = conn
+				.prepareStatement("insert into mobilenumbers(mobNumber,username) values(?,?)ON DUPLICATE KEY UPDATE mobNumber = ?");){
+			
 			stmt.setString(1, mobile);
 			stmt.setString(2, username);
 			stmt.setString(3, mobile);
-			stmt.execute();		
-			conn.close();
+			stmt.execute();	
 		}
 	}
 

@@ -1,0 +1,21 @@
+SonarQube plugins:
+  - C# 5.10.1.1411 (csharp)
+  - Python 1.7.0.1195 (python)
+  - SonarJava 4.9.0.9858 (java)
+  - Flex 2.3 (flex)
+  - Git 1.2 (scmgit)
+  - SonarXML 1.4.2.885 (xml)
+  - SonarPHP 2.10.0.2087 (php)
+  - SVN 1.4.0.522 (scmsvn)
+  - SonarJS 3.0.0.4962 (javascript)
+Global properties:
+  - sonar.core.id=AVxpWsaVJu8mtuXLB1DR
+  - sonar.core.startTime=2017-06-02T18:09:35+0300
+Settings for module: my:project
+  - sonar.projectBaseDir=D:\Documents\GitHub\teithe-smsserver\src
+  - sonar.projectKey=my:project
+  - sonar.projectName=My project
+  - sonar.projectVersion=1.0
+  - sonar.sourceEncoding=windows-1252
+  - sonar.sources=.
+  - sonar.working.directory=D:\Documents\GitHub\teithe-smsserver\src\.scannerwork

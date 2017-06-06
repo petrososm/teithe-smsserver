@@ -4,25 +4,19 @@ import java.util.Properties;
 
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
-import javax.naming.NamingException;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
 import com.smsserver.auth.users.Role;
-import com.unboundid.ldap.sdk.Control;
-import com.unboundid.ldap.sdk.Filter;
-import com.unboundid.ldap.sdk.LDAPConnection;
-import com.unboundid.ldap.sdk.LDAPException;
-import com.unboundid.ldap.sdk.SearchRequest;
-import com.unboundid.ldap.sdk.SearchScope;
+import com.smsserver.configuration.GetPropertyValues;
 
 public class Ldap {
 
-	static String serviceUserDN = "";
-	static String serviceUserPassword = "";
-	static String ldapUrl = "ldap://195.251.240.232:389";
+	static String serviceUserDN = GetPropertyValues.getProperties().getProperty("serviceUserDN");
+	static String serviceUserPassword = GetPropertyValues.getProperties().getProperty("serviceUserPassword");
+	static String ldapUrl = GetPropertyValues.getProperties().getProperty("ldapUrl");
 	static String identifyingAttribute = "uid";
 	static String base = "ou=people,dc=teithe,dc=gr";
 

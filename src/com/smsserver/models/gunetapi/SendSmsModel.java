@@ -3,9 +3,9 @@ package com.smsserver.models.gunetapi;
 import java.util.Arrays;
 
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.smsserver.configuration.GetPropertyValues;
 
 
 
@@ -17,11 +17,11 @@ public class SendSmsModel {
 	public String messageId;//to id toy minimatos
 	public String[] replacements; //se periptwsi p thelei array
 	public String recipient;//username i msisdn toy xristi 
-	public String institution =  "TEITHE";//ypoxrewtiko gia teithe
+	public final String institution =  "TEITHE";//ypoxrewtiko gia teithe
     @JsonProperty("pre-shared key")
-    public String preSharedKey= "f0F0767834843f0";//tha simfwnithei ystera
+    public final String preSharedKey= GetPropertyValues.getProperties().getProperty("preSharedKey");
     @JsonProperty("dlr-url")
-    public String dlrUrl= "http://195.251.120.230:8080/sms/service/dlr"; //ena link-service opoy tha stelnetai mia anafora paradosis -proeraitiko
+    public final String dlrUrl= GetPropertyValues.getProperties().getProperty("dlrUrl");//ena link-service opoy tha stelnetai mia anafora paradosis -proeraitiko
     @JsonProperty("sms-forward-id")
     public String smsForwardId;//efoson ginei se dinexeia enos forward request-proeraitiko
 	
