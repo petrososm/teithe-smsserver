@@ -1,8 +1,5 @@
 package com.smsserver.doa;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletionService;
@@ -17,65 +14,29 @@ import com.smsserver.models.gunetapi.SendSmsModel;
 import com.smsserver.models.gunetapi.SmsResponseModel;
 import com.smsserver.models.site.SendReport;
 import com.smsserver.models.site.SendSmsRequest;
-import com.smsserver.sql.LocalDb;
-import com.smsserver.sql.Nireas;
 
 public class MobileTerminated {
 	
 	public static SendReport sendAimodosia(String date) throws Exception{
 		
-		ArrayList<String> mobileNumbers=new ArrayList<String>();
-		ArrayList<String> blacklistedNumbers=new ArrayList<String>();
-		
-		String query="SELECT mobile FROM users u"
-				+ " where mobile IS NOT NULL "
-				+ "AND u.id NOT IN(  select r.donorId "
-				+ "from donationdonor r,dates d  "
-				+ "where  STR_TO_DATE(d.date, '%d-%m-%Y') > DATE_SUB(CURDATE(), INTERVAL 6 MONTH) "
-				+ "and r.donationId=d.id)";
-		try (Connection conn = Nireas.getSqlConnections().getConnection();
-				PreparedStatement stmt = conn
-				.prepareStatement(query);){
-
-			ResultSet rs=stmt.executeQuery();
-
-			while(rs.next())
-				mobileNumbers.add(rs.getString(1));
-
-		} 
-		
-		query="select mobile from aimodosia_blacklist";
-		try (Connection conn = LocalDb.getSqlConnections().getConnection();
-				PreparedStatement stmt = conn
-				.prepareStatement(query);){
-
-			ResultSet rs=stmt.executeQuery();
-
-			while(rs.next())
-				blacklistedNumbers.add(rs.getString(1));
-		} 
-		
-		
-		mobileNumbers.removeAll(blacklistedNumbers);
+		ArrayList<String> mobileNumbers=AimodosiaDoa.getMobileNumbers();
 		
 		SendSmsModel sms=new SendSmsModel("aimodosiaservice","aimodosiamessageid",new String[]{date});
 		int delivered=sendSmsParallel(sms,mobileNumbers,2);
 		Logs.logMobileTerminated("AIMODOSIA", "ADMIN", sms, mobileNumbers.size(), delivered);
 		sms=null;
-		return new SendReport(mobileNumbers.size(),delivered);
+		return new SendReport(mobileNumbers.size(),delivered,0);
 		
 	}
 	
 	
 	public static SendReport sendMoodle(SendSmsRequest request)throws Exception{
 		
-		ArrayList<String> mobileNumbers=new ArrayList<String>();
-		//find mobileNumbersFromMoodle
-		mobileNumbers.add("6973256967");
-		mobileNumbers.add("6973255947");
-		mobileNumbers.add("6973296874");
-		mobileNumbers.add("6973296861");
-		
+		ArrayList<String> enrolledStudents=MoodleDoa.getEnrolledStudents(request.course);
+		int enrolledStudentsCount=enrolledStudents.size();
+
+		ArrayList<String> mobileNumbers=Discovery.getMobileMass(enrolledStudents);
+
 		String serviceId=ServicesOnLoad.getMobileTerminatedServices().get(request.messageId).serviceId;
 		
 		SendSmsModel sms=new SendSmsModel(serviceId,request.messageId,request.replacements);
@@ -83,7 +44,8 @@ public class MobileTerminated {
 		Logs.logMobileTerminated(request.course, request.professor, sms, mobileNumbers.size(), delivered);
 		sms=null;
 		request=null;
-		return new SendReport(mobileNumbers.size(),delivered);
+		enrolledStudents=null;
+		return new SendReport(mobileNumbers.size(),delivered,enrolledStudentsCount);
 		
 	}
 
@@ -94,11 +56,10 @@ public class MobileTerminated {
 
 		
 		for(int i=0;i<threads;i++){
-			pool.submit(getCallableTask(sms, mobNumbers, i*(mobNumbers.size()/threads), (i+1)*(mobNumbers.size()/threads)));
+			pool.submit(getCallableTask(sms, mobNumbers,
+					(int)Math.floor(i*(mobNumbers.size()/(double)threads)), (int)Math.floor((i+1)*(mobNumbers.size()/(double)threads))));
 			Thread.sleep(200);
 		}
-
-
 		int total=0;
 		for(int i = 0; i < threads; i++){
 		   try {
@@ -113,6 +74,7 @@ public class MobileTerminated {
 		threadPool.shutdown();
 		return total;	
 	}
+	
 	
 	private static Callable<String> getCallableTask(SendSmsModel sms,ArrayList<String> mobNumbers,int start,int end){
 		

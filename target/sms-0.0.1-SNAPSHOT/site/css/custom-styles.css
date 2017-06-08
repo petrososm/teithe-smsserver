@@ -399,31 +399,26 @@ ul {
 	outline: none;
 }
 
-.site-footer {
-	position: inherit;
+html {
+	position: relative;
+	min-height: 100%;
+}
+
+body {
+	/* Margin bottom by footer height */
+	margin-bottom: 30px;
+}
+
+.footer {
+	position: absolute;
 	bottom: 0;
-	left: 10%;
-	right: 10%;
-	overflow: hidden;
-	padding: 60px 0;
-	border-top: 1px solid #dfdfdf;
+	width: 100%;
+	/* Set the fixed height of the footer here */
+	height: 60px;
+	background-color: #f5f5f5;
+
 }
 
-.site-footer a {
-	margin-right: 30px;
-}
-
-.site-footer a:hover {
-	text-decoration: none;
-	color: #e24f43;
-}
-
-.site-footer a i {
-	display: inline-block;
-	text-align: center;
-	font-size: 14px;
-	color: #e24f43;
-}
 /*------------------------------------------------------
 		Menu Styles
 -------------------------------------------------------*/

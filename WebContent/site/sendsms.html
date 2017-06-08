@@ -59,56 +59,35 @@
 		<div id='mainDiv'
 			style='display: inline-block; vertical-align: top; margin-right: 20px'>
 			<h3>
-				<label for="templateSelect">Μήνυμα</label> <select
-					id="templateSelect" onchange="leaveChange()"></select>
+				<label for="templateSelect">Μάθημα</label> <select id="courseSelect"
+					onchange="courseSelected()"></select> <br> <label
+					for="templateSelect">Μήνυμα</label> <select id="templateSelect"
+					onchange="templateSelected()"></select>
 			</h3>
 			<div id='ajax_loader'
 				style="position: fixed; left: 50%; top: 20%; display: none;">
 				<img src="images/25.gif"></img>
-				
+
 			</div>
 			<div id="message"></div>
 		</div>
 
 	</div>
-
-
-	<div class="container">
-		<div class="site-footer">
-			<div class="row">
-				<div class="col-sm-6 col-md-3">
-					<div class="block">
-						<h2>SMS Aggregator by Gunet</h2>
-						<a href="http://sms.gunet.gr">sms.gunet.gr</a>
-					</div>
-				</div>
-				<div class="col-sm-6 col-md-3">
-					<div class="block">
-						<h2>Powered by NOC</h2>
-						<a href="http://www.noc.teithe.gr/">Noc.teithe.gr</a>
-					</div>
-				</div>
-				<div class="col-sm-6 col-md-3">
-					<div class="block">
-						<h2>Template By</h2>
-						<a href="http://alltemplateneeds.com">www.alltemplateneeds.com</a>
-
-					</div>
-				</div>
-				<div class="col-sm-6 col-md-3">
-					<div class="block">
-						<h2>Πτυχιακή Εργασία του</h2>
-						<a href="#">Πέτρου Οσμαντσικίδη</a>
-
-					</div>
-				</div>
-			</div>
+	<br>
+	<div class="container" style="display: none;" id='alert'>
+		<div class="alert alert-danger alert-dismissable">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+			<h3 id='alertMessage'></h3>
 		</div>
 	</div>
-	<!-- Main jumbotron for a primary marketing message or call to action -->
 
 
-	<!-- /container -->
+    <footer class="footer">
+      <div class="container">
+        <p class="text-muted">Place sticky footer content here.</p>
+      </div>
+    </footer>
+
 
 
 	<!-- Bootstrap core JavaScript
@@ -119,6 +98,7 @@
 	<script src="js/jquery-1.9.1.js"></script>
 	<script src="js/bootstrap.js"></script>
 	<script src="js/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+	<script src="js/bootbox.min.js"></script>
 	<script src="js/myjs.js"></script>
 
 

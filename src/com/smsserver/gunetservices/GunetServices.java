@@ -17,13 +17,7 @@ public class GunetServices {
 
 
 	public static SmsResponseModel testSend(SendSmsModel sendSms){
-		System.out.println(sendSms);
-		try {
-			Thread.sleep(10000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		//System.out.println(sendSms);
        SmsResponseModel s= new SmsResponseModel();
        s.error="";
        return s;

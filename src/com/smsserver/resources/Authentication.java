@@ -10,6 +10,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.smsserver.auth.security.Ldap;
 import com.smsserver.auth.security.Secured;
 import com.smsserver.auth.security.Token;
 import com.smsserver.auth.users.Role;
@@ -27,8 +28,8 @@ public class Authentication {
     public Response authenticateUser(User u) throws URISyntaxException {
 
         try {
-            //String access=Ldap.performAuthentication(u.getUsername(), u.getPassword());
-        	String access="staff";
+            String access=Ldap.performAuthentication(u.getUsername(), u.getPassword());
+        	//String access="staff";
             String token = Token.issueToken(u.getUsername(),access);
             
             User returnUser=new User(u.getUsername(),token,access.toLowerCase());

@@ -12,7 +12,7 @@ import javax.ws.rs.core.SecurityContext;
 
 import com.smsserver.auth.security.Secured;
 import com.smsserver.doa.MobileChanger;
-import com.smsserver.doa.MobileDiscovery;
+import com.smsserver.doa.Discovery;
 
 @Path("/site/mobile")
 public class Mobile {
@@ -26,7 +26,7 @@ public class Mobile {
     	Principal principal = securityContext.getUserPrincipal();
     	String username = principal.getName();
     	try {
-			return Response.ok(MobileDiscovery.getMobile(username)).build();
+			return Response.ok(Discovery.getMobile(username)).build();
 		} catch (Exception e) {
 			e.printStackTrace();
             return Response.status(Response.Status.NOT_FOUND).build();

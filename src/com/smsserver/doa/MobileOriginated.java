@@ -79,7 +79,7 @@ public class MobileOriginated {
 		}
 		
 		
-		String authenticator=MobileDiscovery.getUsername(smsRequest.msisdn);
+		String authenticator=Discovery.getUsername(smsRequest.msisdn);
 		
 		DataSource ds = Pithia.getSqlConnections();
 		if(ds==null)

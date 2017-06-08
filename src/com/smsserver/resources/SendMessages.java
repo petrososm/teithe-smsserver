@@ -1,6 +1,7 @@
 package com.smsserver.resources;
 
 import java.net.URISyntaxException;
+import java.security.Principal;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -12,6 +13,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.SecurityContext;
 
+import com.smsserver.auth.security.Secured;
+import com.smsserver.auth.users.Role;
 import com.smsserver.doa.MobileTerminated;
 import com.smsserver.models.site.SendSmsRequest;
 
@@ -24,7 +27,7 @@ public class SendMessages {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.TEXT_PLAIN)
-	//@Secured(Role.ADMIN)
+	@Secured(Role.ADMIN)
     public Response sendAimodosia(String date) throws URISyntaxException {
     	try {
 			return Response.ok(MobileTerminated.sendAimodosia(date)).build();
@@ -36,15 +39,16 @@ public class SendMessages {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-   //@Secured(Role.STAFF)
+   @Secured(Role.STAFF)
     public Response sendMoodle(SendSmsRequest req) throws URISyntaxException {
-    	//Principal principal = securityContext.getUserPrincipal();
-    	//req.professor = principal.getName();
-    	req.professor="petros";
+    	Principal principal = securityContext.getUserPrincipal();
+    	req.professor = principal.getName();
+
     	try {
 			
 			return Response.ok(MobileTerminated.sendMoodle(req)).build();
 		} catch (Exception e) {
+			e.printStackTrace();
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		}
 

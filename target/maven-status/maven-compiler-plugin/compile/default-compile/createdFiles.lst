@@ -12,6 +12,7 @@ com\smsserver\auth\security\AuthenticationFilter.class
 com\smsserver\auth\security\Token.class
 com\smsserver\configuration\Start.class
 com\smsserver\gunetservices\ClientHelper.class
+com\smsserver\doa\AimodosiaDoa.class
 com\smsserver\models\services\mobileoriginated\Messages.class
 com\smsserver\doa\Logs.class
 com\smsserver\models\services\mobileoriginated\Keywords.class
@@ -19,10 +20,12 @@ com\smsserver\models\site\User.class
 com\smsserver\auth\users\AuthenticatedUsers.class
 com\smsserver\auth\security\Ldap.class
 com\smsserver\auth\security\MySecurityContext$1.class
+com\smsserver\doa\MoodleDoa.class
 com\smsserver\models\site\SendSmsRequest.class
 com\smsserver\models\logs\MobileOriginatedLogs.class
 com\smsserver\models\services\mobileoriginated\ExtraKeyword.class
 com\smsserver\auth\security\AuthorizationFilter.class
+com\smsserver\models\site\Course.class
 com\smsserver\resources\Authentication.class
 com\smsserver\sql\LocalDb.class
 com\smsserver\configuration\ServicesOnLoad.class
@@ -33,11 +36,11 @@ com\smsserver\models\gunetapi\SmsForwardResponseModel.class
 com\smsserver\doa\MobileTerminated.class
 com\smsserver\models\logs\MobileTerminatedLogs.class
 com\smsserver\doa\ScheduledBackupLogs.class
+com\smsserver\doa\Discovery.class
 com\smsserver\models\site\SmsTemplate.class
 com\smsserver\doa\MobileChanger.class
 com\smsserver\sql\Nireas.class
 com\smsserver\auth\users\Role.class
-com\smsserver\doa\MobileDiscovery.class
 com\smsserver\sql\Pithia.class
 com\smsserver\models\site\ServiceDescription.class
 com\smsserver\gunetservices\GunetServices.class
@@ -45,7 +48,7 @@ com\smsserver\auth\security\Secured.class
 com\smsserver\auth\users\User.class
 com\smsserver\models\gunetapi\DlrRequestModel.class
 com\smsserver\models\services\mobileterminated\Message.class
+com\smsserver\sql\Moodle.class
 com\smsserver\models\services\mobileterminated\MobileTerminatedService.class
 com\smsserver\models\gunetapi\SmsForwardModel.class
-com\smsserver\doa\ScheduledSendNewGrades.class
 com\smsserver\models\gunetapi\SmsResponseModel.class

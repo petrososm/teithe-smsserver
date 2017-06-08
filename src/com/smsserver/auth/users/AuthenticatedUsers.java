@@ -15,6 +15,7 @@ public class AuthenticatedUsers {
 				  .expiration(2, TimeUnit.DAYS)
 				  .build();
 		put(new User("it123853","STAFF"));
+		put(new User("peris","STAFF"));
 	}
 
 	public static void put(User u) {
