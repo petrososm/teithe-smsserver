@@ -6,6 +6,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
+
 	<repositories>
 		<repository>
 			<id>maven2-repository.java.net</id>
@@ -98,6 +99,11 @@
 	</dependencies>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>WebContent/WEB-INF/resources</directory>
+			</resource>
+		</resources>
 		<sourceDirectory>src</sourceDirectory>
 		<plugins>
 			<plugin>
