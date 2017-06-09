@@ -29,5 +29,10 @@ public class SmsForwardModel {
 	public SmsForwardModel() {
 		super();
 	}
+	@Override
+	public String toString() {
+		return "SmsForwardModel [msisdn=" + msisdn + ", keyword=" + keyword + ", body=" + body + ", preSharedKey="
+				+ preSharedKey + ", smsForwardId=" + smsForwardId + "]";
+	}
   
 }

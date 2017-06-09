@@ -98,13 +98,17 @@ public class MobileOriginated {
 			
 			String messageToSend="";
 			String[] replacements=null;
-
+			
+			System.out.println(service);
+			System.out.println(authenticator);
+			
 			try (ResultSet rs = stmt.executeQuery();) {
 				if(service.messages.defaultMessage==null)
 					throw new Exception("NO REPLY");//na min stilei minima
 				if (!rs.next()) {
 					messageToSend = mobileOriginatedService.messages.errorMessage;// ypothetontas oti dn xreiazetai replacement kai oti einai panta to 2o minima
-				} else {					
+				} else {
+					messageToSend=service.messages.defaultMessage;
 					replacements=new String[service.numberOfReplacements];
 					for(int i=0;i<service.numberOfReplacements;i++)
 						replacements[i]=rs.getString(i+1);

@@ -48,10 +48,14 @@ public class MobileOriginatedService {
 
 	@Override
 	public String toString() {
-		return "Question [keywords=" + keywords + ", query=" + query + ", database=" + database + ", messages="
-				+ messages + ", serviceId=" + serviceId + ", preSharedKey=" + preSharedKey + ", queryParams="
-				+ queryParams + "]";
+		return "MobileOriginatedService [query=" + query + ", database=" + database + ", messages=" + messages
+				+ ", serviceId=" + serviceId + ", preSharedKey=" + preSharedKey + ", numberOfReplacements="
+				+ numberOfReplacements + ", queryParams=" + queryParams + "]";
 	}
+
+
+
+
 
 
 
