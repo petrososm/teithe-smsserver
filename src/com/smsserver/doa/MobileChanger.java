@@ -38,8 +38,10 @@ public class MobileChanger {
 	public static void changeMobileNumber(String username,int verificationcode) throws Exception{
 		System.out.println(verificationcode);
 		System.out.println(mobileVerification);
-		if(mobileVerification.containsKey(verificationcode))
+		if(mobileVerification.containsKey(verificationcode)){
 				insertMobile(username,mobileVerification.get(verificationcode));
+				mobileVerification.remove(verificationcode);
+		}
 		else
 			throw new Exception();
 				

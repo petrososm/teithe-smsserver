@@ -7,9 +7,11 @@ import java.sql.ResultSet;
 import javax.sql.DataSource;
 
 import com.smsserver.configuration.ServicesOnLoad;
+import com.smsserver.gunetservices.GunetServices;
 import com.smsserver.models.gunetapi.SendSmsModel;
 import com.smsserver.models.gunetapi.SmsForwardModel;
 import com.smsserver.models.gunetapi.SmsForwardResponseModel;
+import com.smsserver.models.gunetapi.SmsResponseModel;
 import com.smsserver.models.services.mobileoriginated.ExtraKeyword;
 import com.smsserver.models.services.mobileoriginated.MobileOriginatedService;
 import com.smsserver.sql.Pithia;
@@ -31,13 +33,14 @@ public class MobileOriginated {
 
 		
 		try {
+			System.out.println(smsRequest);
 			SendSmsModel sms=null;
 			if(smsRequest.keyword.equalsIgnoreCase("ΑΙΜΟΔΟΣΙΑ"))
 				sms=prepareReplyAimodosia(smsRequest);
 			else
 				sms=prepareReplyPithia(smsRequest, mobileOriginatedService);//an petaksei exception to pianei katw k leitourgei antistoixa
-			//SmsResponseModel response=GunetServices.sendSms(sms);
-			//Logs.logMobileOriginated(smsRequest,sms,response);
+			SmsResponseModel response=GunetServices.sendSingleSms(sms);
+			Logs.logMobileOriginated(smsRequest,sms,response);
 			return new SmsForwardResponseModel(true);
 		}catch(NotFoundException ex){
 			userNotFound();
