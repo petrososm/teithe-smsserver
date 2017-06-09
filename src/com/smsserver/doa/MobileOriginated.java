@@ -28,12 +28,12 @@ public class MobileOriginated {
 
 		MobileOriginatedService mobileOriginatedService = ServicesOnLoad.getServices().get(smsRequest.keyword);
 		
-		if(!mobileOriginatedService.preSharedKey.equals(smsRequest.preSharedKey))
-			return new SmsForwardResponseModel(false, "Wrong preSharedKey", "0");
+		//if(!mobileOriginatedService.preSharedKey.equals(smsRequest.preSharedKey))
+			//return new SmsForwardResponseModel(false, "Wrong preSharedKey", "0");
 
 		
 		try {
-			System.out.println(smsRequest);
+			System.out.println("checkpoint");
 			SendSmsModel sms=null;
 			if(smsRequest.keyword.equalsIgnoreCase("ΑΙΜΟΔΟΣΙΑ"))
 				sms=prepareReplyAimodosia(smsRequest);
@@ -78,10 +78,7 @@ public class MobileOriginated {
 						}
 					}
 			}
-
 		}
-		
-		
 		String authenticator=Discovery.getUsername(smsRequest.msisdn);
 		
 		DataSource ds = Pithia.getSqlConnections();

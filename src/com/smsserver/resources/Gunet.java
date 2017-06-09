@@ -42,7 +42,8 @@ public class Gunet {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public SmsForwardResponseModel smsForward(SmsForwardModel smsRequest) {	
-
+		
+		System.out.println(smsRequest);
 		SmsForwardResponseModel smsResponse=MobileOriginated.reply(smsRequest);
 		//smsResponse=Logic.epistrofi response
 		//isws prepei na epistrefei builder
