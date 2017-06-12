@@ -45,6 +45,11 @@ public class DlrRequestModel {
 	public void setError(String error) {
 		this.error = error;
 	}
+	@Override
+	public String toString() {
+		return "DlrRequestModel [serviceId=" + serviceId + ", recipient=" + recipient + ", status=" + status
+				+ ", error=" + error + "]";
+	}
 	
 	
 

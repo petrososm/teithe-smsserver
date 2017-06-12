@@ -54,39 +54,82 @@
 
 
 	</div>
-
-	<div class="container">
-		<div id='mainDiv'
-			style='display: inline-block; vertical-align: top; margin-right: 20px'>
-			<h3>
-				<label for="templateSelect">Μάθημα</label> <select id="courseSelect"
-					onchange="courseSelected()"></select> <br> <label
-					for="templateSelect">Μήνυμα</label> <select id="templateSelect"
-					onchange="templateSelected()"></select>
-			</h3>
-			<div id='ajax_loader'
-				style="position: fixed; left: 50%; top: 20%; display: none;">
-				<img src="images/25.gif"></img>
-
-			</div>
-			<div id="message"></div>
-		</div>
-
-	</div>
-	<br>
 	<div class="container" style="display: none;" id='alert'>
 		<div class="alert alert-danger alert-dismissable">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
 			<h3 id='alertMessage'></h3>
 		</div>
 	</div>
+	<div class="container">
+		<div class="panel-group" id="accordion">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4 class="panel-title">
+						<a data-toggle="collapse" data-parent="#accordion"
+							href="#collapse1"><h2>ΜΑΖΙΚΗ ΑΠΟΣΤΟΛΗ</h2></a>
+					</h4>
+				</div>
+				<div id="collapse1" class="panel-collapse collapse ">
+					<div class="panel-body">
+						<div id='mainDiv'
+							style='display: inline-block; vertical-align: top; margin-right: 20px'>
+							<h3>
+								<label for="templateSelectMoodle">Μήνυμα</label> <select
+									id="templateSelectMoodle" onchange="templateSelected('Moodle')"></select><br>
+								<label for="templateSelect">Μάθημα</label> <select
+									id="courseSelect" onchange="courseSelected()"></select>
+
+							</h3>
+							<div id="messageMoodle"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4 class="panel-title">
+						<a data-toggle="collapse" data-parent="#accordion"
+							href="#collapse2"><h2>ΜΟΝΑΔΙΚΗ ΑΠΟΣΤΟΛΗ</h2></a>
+					</h4>
+				</div>
+				<div id="collapse2" class="panel-collapse collapse ">
+					<div class="panel-body">
+						<div id='mainDiv'
+							style='display: inline-block; vertical-align: top; margin-right: 20px'>
+							<div>
+								<h3>
+									<label for="templateSelectDirect">Μήνυμα</label> <select
+										id="templateSelectDirect"
+										onchange="templateSelected('Direct')"></select>
+								</h3>
+							</div>
+							<div class="input_fields_wrap">
+								<h2>Παραλήπτες</h2>
+								<div>
+									 <input type="text" name="recipients">
+									<button class="add_field_button">Προσθήκη παραληπτών</button>
+								</div>
+							</div>
+							<br>
+							<div id="messageDirect"></div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
 
-    <footer class="footer">
-      <div class="container">
-        <p class="text-muted">Place sticky footer content here.</p>
-      </div>
-    </footer>
+	</div>
+	<br>
+
+
+
+	<footer class="footer">
+		<div class="container">
+			<p class="text-muted">Place sticky footer content here.</p>
+		</div>
+	</footer>
 
 
 

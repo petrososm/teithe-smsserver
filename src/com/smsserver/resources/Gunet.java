@@ -30,17 +30,16 @@ public class Gunet {
 	
 	@Path("dlr/")
 	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
 	public void getDlr(DlrRequestModel dlrReq) {// methodos gia na pairnoyme
 													// plirofories meta tin
 													// apostoli
-
+		System.out.println(dlrReq);
 		Logs.logDlr(dlrReq);
 	}
 	
 	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	public SmsForwardResponseModel smsForward(SmsForwardModel smsRequest) {	
 		
 		System.out.println(smsRequest);

@@ -3,7 +3,7 @@ package com.smsserver.models.site;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class SendSmsRequest {
+public class SendSmsRequestMoodle {
 	
 	
 	public String course;
@@ -13,6 +13,6 @@ public class SendSmsRequest {
 
 	
 	
-	public SendSmsRequest(){};
+	public SendSmsRequestMoodle(){};
 
 }

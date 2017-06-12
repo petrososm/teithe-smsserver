@@ -34,12 +34,21 @@ public class Data {
 		
 	}
 	
-	@Path("/mtservices")
+	@Path("/mtservices/moodle")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured(Role.STAFF)
-	public ArrayList<SmsTemplate> getMobileTerminatedServices() {
-			return ServicesOnLoad.getSmsTemplates();
+	public ArrayList<SmsTemplate> getMobileTerminatedServicesMoodle() {
+			return ServicesOnLoad.getSmsTemplatesMoodle();
+		
+	}
+	
+	@Path("/mtservices/direct")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured(Role.STAFF)
+	public ArrayList<SmsTemplate> getMobileTerminatedServicesSingle() {
+			return ServicesOnLoad.getSmsTemplatesSingle();
 		
 	}
 	

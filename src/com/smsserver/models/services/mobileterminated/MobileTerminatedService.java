@@ -8,6 +8,7 @@ public class MobileTerminatedService {
 	
 	public String serviceId;
 	public String preSharedKey;
+	public String type;
 	@XmlElement(name="message")
 	public Message[] messages;
 	@Override

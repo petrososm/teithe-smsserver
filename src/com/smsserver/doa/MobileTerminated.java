@@ -1,6 +1,7 @@
 package com.smsserver.doa;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletionService;
 import java.util.concurrent.ExecutionException;
@@ -13,7 +14,8 @@ import com.smsserver.gunetservices.GunetServices;
 import com.smsserver.models.gunetapi.SendSmsModel;
 import com.smsserver.models.gunetapi.SmsResponseModel;
 import com.smsserver.models.site.SendReport;
-import com.smsserver.models.site.SendSmsRequest;
+import com.smsserver.models.site.SendSmsRequestDirect;
+import com.smsserver.models.site.SendSmsRequestMoodle;
 
 public class MobileTerminated {
 	
@@ -30,7 +32,7 @@ public class MobileTerminated {
 	}
 	
 	
-	public static SendReport sendMoodle(SendSmsRequest request)throws Exception{
+	public static SendReport sendMoodle(SendSmsRequestMoodle request)throws Exception{
 		
 		ArrayList<String> enrolledStudents=MoodleDoa.getEnrolledStudents(request.course);
 		int enrolledStudentsCount=enrolledStudents.size();
@@ -47,6 +49,18 @@ public class MobileTerminated {
 		enrolledStudents=null;
 		return new SendReport(mobileNumbers.size(),delivered,enrolledStudentsCount);
 		
+	}
+	public static SendReport sendDirect(SendSmsRequestDirect request) throws Exception {
+		ArrayList<String> mobileNumbers=new ArrayList<String>(Arrays.asList(request.recipients));
+		String serviceId=ServicesOnLoad.getMobileTerminatedServices().get(request.messageId).serviceId;
+
+		SendSmsModel sms=new SendSmsModel(serviceId,request.messageId,request.replacements);
+		int delivered=sendSmsParallel(sms,mobileNumbers,2);
+		Logs.logMobileTerminated(String.join(", ", request.recipients), request.sender, sms, mobileNumbers.size(), delivered);
+		sms=null;
+		request=null;
+		return new SendReport(mobileNumbers.size(),delivered,mobileNumbers.size());
+
 	}
 
 
@@ -93,4 +107,7 @@ public class MobileTerminated {
 		};
 		return callableObj;
 	}
+
+
+
 }

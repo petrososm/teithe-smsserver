@@ -5,18 +5,77 @@
 		<serviceId>cancelService</serviceId>
 		<message>
 			<messageId>cancel1</messageId>
-			<message>Το μαθημα ? της ? αναβάλλεται</message>
+			<message>ΤΟ ΜΑΘΗΜΑ ? ΤΗΣ ? ΑΝΑΒΑΛΛΕΤΑΙ</message>
 		</message>
 		<message>
 			<messageId>cancel2</messageId>
-			<message>Το μαθημα ? της ? αναβάλλεται και θα γινει αναπληρωση στις ?</message>
+			<message>ΤΟ ΜΑΘΗΜΑ ? ΤΗΣ ? ΑΝΑΒΑΛΛΕΤΑΙ ΚΑΙ ΘΑ ΠΡΑΓΜΑΤΟΠΟΙΗΘΕΙ ΤΗΝ ?
+			</message>
 		</message>
 		<message>
-			<messageId>cancel1</messageId>
-			<message>Θα γινει αναπληρωση του μαθηματος ? στις ?</message>
+			<messageId>cancel3</messageId>
+			<message>ΘΑ ΓΙΝΕΙ ΑΝΑΠΛΗΡΩΣΗ ΤΟΥ ΜΑΘΗΜΑΤΟΣ ? ΤΗΝ ?</message>
 		</message>
 		<preSharedKey>123789</preSharedKey>
+		<type>moodle</type>
 	</service>
+
+	<service>
+		<serviceId>ergasiesService</serviceId>
+		<message>
+			<messageId>ergasia1</messageId>
+			<message>ΕΧΕΙ ΑΝΑΚΟΙΝΩΘΕΙ ΕΡΓΑΣΙΑ ΓΙΑ ΤΟ ΜΑΘΗΜΑ ?.ΠΡΟΘΕΣΜΙΑ ΕΡΓΑΣΙΑΣ
+				ΕΩΣ ΤΙΣ ?
+			</message>
+		</message>
+		<message>
+			<messageId>ergasia2</messageId>
+			<message>Η ΠΡΟΘΕΣΜΙΑ ΓΙΑ ΤΗΝ ΕΡΓΑΣΙΑ ΣΤΟ ΜΑΘΗΜΑ ? ΛΗΓΕΙ ΣΤΙΣ ?
+			</message>
+		</message>
+		<message>
+			<messageId>ergasia3</messageId>
+			<message>ΘΑ ΓΙΝΕΙ ΠΑΡΟΥΣΙΑΣΗ ΕΡΓΑΣΙΩΝ ΓΙΑ ΤΟ ΜΑΘΗΜΑ ? ΣΤΙΣ ?
+			</message>
+		</message>
+		<preSharedKey>123789</preSharedKey>
+		<type>moodle</type>
+	</service>
+
+	<service>
+		<serviceId>moodleService</serviceId>
+		<message>
+			<messageId>ergasia1</messageId>
+			<message>ΔΙΑΒΑΣΤΕ ΣΗΜΑΝΤΙΚΗ ΑΝΑΚΟΙΝΩΣΗ ΓΙΑ ΤΟ ΜΑΘΗΜΑ ? ΣΤΟ MOODLE
+			</message>
+		</message>
+		<message>
+			<messageId>ergasia2</messageId>
+			<message>ΕΧΟΥΝ ΑΝΑΚΟΙΝΩΘΕΙ ΒΑΘΜΟΛΟΓΙΕΣ ΓΙΑ ΤΟ ΜΑΘΗΜΑ ?
+			</message>
+		</message>
+		<preSharedKey>123789</preSharedKey>
+		<type>moodle</type>
+	</service>
+
+	<service>
+		<serviceId>ptyxiakiService</serviceId>
+		<message>
+			<messageId>ergasia1</messageId>
+			<message>ΕΙΣΤΕ ΕΠΙΒΛΕΠΩΝ ΓΙΑ ΤΗΝ ΠΤΥΧΙΑΚΗ ΕΡΓΑΣΙΑ ΤΟΥ ? ΣΤΙΣ ?
+			</message>
+		</message>
+		<message>
+			<messageId>ergasia2</messageId>
+			<message>Η ΠΑΡΟΥΣΙΑΣΗ ΤΗΣ ΠΤΥΧΙΑΚΗΣ ΣΟΥ ΕΡΓΑΣΙΕΣ ΕΙΝΑΙ ΣΤΙΣ ?
+			</message>
+		</message>
+		<preSharedKey>123789</preSharedKey>
+		<type>single</type>
+	</service>
+
+
+
 
 
 </root>

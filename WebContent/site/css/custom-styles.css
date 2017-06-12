@@ -9,7 +9,8 @@ h1, h2, h3, h4, h5, h6 {
 	margin: 0;
 	font-family: 'fjalla_oneregular';
 	color: #5c5c5c;
-	padding-bottom: 10px;
+	padding-top: 5px;
+	padding-bottom: 5px;
 }
 
 h2 {
@@ -577,4 +578,16 @@ body {
 	text-decoration: none;
 	display: inline-block;
 	font-size: 14px;
+}
+
+.add_field_button{
+	background-color: #DC143C;
+	border: none;
+	color: white;
+	padding: 6px 12px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 12px;
+	
 }
