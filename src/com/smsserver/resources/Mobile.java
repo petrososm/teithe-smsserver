@@ -11,8 +11,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
 import com.smsserver.auth.security.Secured;
-import com.smsserver.doa.MobileChanger;
 import com.smsserver.doa.Discovery;
+import com.smsserver.doa.MobileChanger;
 
 @Path("/site/mobile")
 public class Mobile {
@@ -52,7 +52,6 @@ public class Mobile {
 			MobileChanger.changeMobileNumber(username, Integer.parseInt(verification));
 			return Response.ok().build();
 		} catch (Exception e) {
-			e.printStackTrace();
             return Response.status(Response.Status.FORBIDDEN).build();
 		}
 

@@ -85,7 +85,8 @@ function loadIndexDiv(){
 		html="<h1>Πατώντας το μαζική αποστολή μπορείτε να στείλετε μαζικά sms για ανακοινώσεις στο moodle<h1>";
 	}
 	else if(role=='stud'){
-		html="<h1>Καλωσήρθες χρήστη.Τσέκαρε αν το τηλεφωνό σου είναι σωστο</h1>"
+		html="<h1>Καλωσήρθες χρήστη.<br>Στην καρτέλα 'ΥΠΗΡΕΣΙΕΣ' μπορεις να δεις τις διαθεσιμες υπηρεσιες που παρέχονται απο το ιδρύμα<br>" +
+				"Για την σωστή λειτουργία της υπηρεσίας επιβεβαίωσε το τηλεφωνό σου</h1>"
 	}
 	else if(role=='admin'){
 		html="<h1>Καλωσήρθατε κυριε Διαχειριστα.</h1>"
@@ -269,6 +270,8 @@ function loadIndexDiv(){
     		if(e[0]!=null){
     			e[0].value=course;
     			e[0].size=course.length;
+
+
     		}    	
     	}
     	
@@ -279,22 +282,26 @@ function loadIndexDiv(){
     function templateSelected(type){
     	var e = document.getElementById("templateSelect"+type);
     	message= e.options[e.selectedIndex].text;
-    	var html="<h3>";
+    	var html="<h4>";
     	var array=message.split('?');
     	inputs=array.length-1;
     	for(i=0;i<inputs;i++){
     		html+=array[i];
-    		html+="<input maxlength='50' name='inputs'></input>";
+    		html+="<input type=\"text\" class=\"form-control\" name='inputs'></input>";
     	}
     	if(message.charAt(message.length - 1)!='?'){
     		html+=array[array.length-1];
     	}
     	
     			
-    	html+="</h3>"
+    	html+="</h4>"
     	html+="<br><button class='button' onclick='sendSms(\""+type+"\")'>Αποστολή μηνύματος</button>";
-
+    	
+    	
     	$('#message'+type).html(html);
+    	$('input[name=\'inputs\'').css('width', '70%');
+    	$('#message'+type).show();
+    	
     	if(type=='Moodle'){
     		var course=$( "select#courseSelect option:checked").text();
 	    	if(course!='Επιλέξτε μάθημα')
@@ -467,8 +474,10 @@ function loadIndexDiv(){
 	        e.preventDefault();
 	        if(x < max_fields){ //max input box allowed
 	            x++; //text box increment
-	            $(wrapper).append('<div><input type="text" name="recipients"/><a href="#" class="remove_field"> Διαγραφή</a></div>'); //add input box
+	            $(wrapper).append('<div><input type="text" maxlength=\'10\' name="recipients"/><a href="#" class="remove_field"> Διαγραφή</a></div>'); //add input box
 	        }
+	       
+	        	
 	    	
 
 	    });
@@ -503,8 +512,8 @@ function loadIndexDiv(){
     function sendMobileConfirmation(){
 		var e = document.getElementById('mobileNumber');
 		var mobile=e.value;
-		if(mobile.length!=10){
-			alert("Το νουμερο πρεπει να ειναι 10 ψηφια")
+		if(mobile.length!=10||!($.isNumeric(mobile))){
+			bootbox.alert("Το νουμερο πρεπει να ειναι 10 ψηφια");
 			return;
 		}
 
@@ -531,7 +540,9 @@ function loadIndexDiv(){
     	    data: verificationCode,
     	    success: function(msg){
     	    	$('#mobileDiv').html("<h1>Το νούμερο του κινητού σας άλλαξε</h1>");
-    	    },beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' +getCookie('token')); }
+    	    },error: function () {
+          	    	bootbox.alert('<h2>Ο κωδικός επιβεβαίωσης είναι λάθος</h2>');
+  			},beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' +getCookie('token')); }
     	});
     	
     }

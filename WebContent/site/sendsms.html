@@ -33,7 +33,7 @@
 
 							<button type="button" class="navbar-toggle collapsed"
 								data-toggle="collapse" data-target=".navbar-collapse">
-								<h3 class="hide">Menu</h3>
+								<h3 class="hide">ΜΕΝΟΥ ΥΠΗΡΕΣΙΩΝ</h3>
 								<span class="fw-icon-th-list "></span>
 
 							</button>
@@ -60,6 +60,7 @@
 			<h3 id='alertMessage'></h3>
 		</div>
 	</div>
+	
 	<div class="container">
 		<div class="panel-group" id="accordion">
 			<div class="panel panel-default">
@@ -71,17 +72,17 @@
 				</div>
 				<div id="collapse1" class="panel-collapse collapse ">
 					<div class="panel-body">
-						<div id='mainDiv'
+						<div id='divSendMoodle'
 							style='display: inline-block; vertical-align: top; margin-right: 20px'>
 							<h3>
 								<label for="templateSelectMoodle">Μήνυμα</label> <select
-									id="templateSelectMoodle" onchange="templateSelected('Moodle')"></select><br>
+									id="templateSelectMoodle" class="form-control" onchange="templateSelected('Moodle')"></select>
 								<label for="templateSelect">Μάθημα</label> <select
-									id="courseSelect" onchange="courseSelected()"></select>
-
+									id="courseSelect" class="form-control" onchange="courseSelected()"></select>
 							</h3>
-							<div id="messageMoodle"></div>
+
 						</div>
+						<div id="messageMoodle" style="display: none;"></div>
 					</div>
 				</div>
 			</div>
@@ -99,14 +100,14 @@
 							<div>
 								<h3>
 									<label for="templateSelectDirect">Μήνυμα</label> <select
-										id="templateSelectDirect"
+										id="templateSelectDirect" class="form-control"
 										onchange="templateSelected('Direct')"></select>
 								</h3>
 							</div>
 							<div class="input_fields_wrap">
 								<h2>Παραλήπτες</h2>
 								<div>
-									 <input type="text" name="recipients">
+									 <input type="text" maxlength='10' name="recipients">
 									<button class="add_field_button">Προσθήκη παραληπτών</button>
 								</div>
 							</div>
@@ -123,13 +124,10 @@
 	</div>
 	<br>
 
+<footer class="page-row">
+  <p>Copyright, blah blah blah.</p>
+</footer>
 
-
-	<footer class="footer">
-		<div class="container">
-			<p class="text-muted">Place sticky footer content here.</p>
-		</div>
-	</footer>
 
 
 

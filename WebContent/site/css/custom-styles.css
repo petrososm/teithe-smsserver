@@ -282,50 +282,6 @@ ul {
 	color: #a5a5a5;
 }
 
-.featured-items {
-	padding: 60px 0;
-	overflow: hidden;
-}
-
-.featured-items i {
-	display: inline-block;
-	text-align: center;
-	line-height: 130px;
-	height: 130px;
-	width: 130px;
-	border: 4px solid #dfdfdf;
-	-webkit-border-radius: 50%;
-	-moz-border-radius: 50%;
-	border-radius: 50%;
-	font-size: 40px;
-	color: #e24f43;
-	float: left;
-	margin-right: 20px;
-}
-
-.featured-items i:hover {
-	background: #e24f43;
-	color: #fff;
-	transition: all 1s;
-	border: 4px solid #e24f43;
-}
-
-.featured-items h2 {
-	padding-top: 30px;
-	padding-bottom: 20px;
-}
-
-.featured-items .block {
-	margin-bottom: 30px;
-}
-
-.subscribe {
-	background: #5c5c5c;
-	padding: 30px;
-	border-radius: 3px;
-	overflow: hidden;
-}
-
 .subscribe h1 {
 	display: inline-block;
 	float: left;
@@ -381,17 +337,19 @@ ul {
 
 .site-header button {
 	text-align: left !important;
-	padding-bottom: 0 !important;
+	padding-bottom: 10 !important;
 }
 
 .site-header .fw-icon-th-list {
 	float: right;
 	padding-top: 10px;
+	padding-bottom:10px;
 }
 
 .navbar-toggle {
 	margin: 0;
 	padding-top: 4px;
+	
 }
 
 .navbar-toggle {
@@ -400,25 +358,20 @@ ul {
 	outline: none;
 }
 
-html {
-	position: relative;
-	min-height: 100%;
-}
+html,
+body { height: 100%; }
 
 body {
-	/* Margin bottom by footer height */
-	margin-bottom: 30px;
+  display: table;
+  width: 100%;
 }
 
-.footer {
-	position: absolute;
-	bottom: 0;
-	width: 100%;
-	/* Set the fixed height of the footer here */
-	height: 60px;
-	background-color: #f5f5f5;
-
+.page-row {
+  display: table-row;
+  height: 1px;
 }
+
+.page-row-expanded { height: 100%; }
 
 /*------------------------------------------------------
 		Menu Styles
@@ -570,6 +523,7 @@ body {
 }
 
 .button {
+	padding-top:10px;
 	background-color: #DC143C;
 	border: none;
 	color: white;
@@ -590,4 +544,11 @@ body {
 	display: inline-block;
 	font-size: 12px;
 	
+}
+
+#messageMoodle{
+	    padding-top:5px;
+	    padding-bottom:10px;
+	
+		border-top: 2px solid #ccc;	
 }
