@@ -41,7 +41,7 @@ public class SendMessages {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-    @Secured(Role.STAFF)
+	@Secured({Role.STAFF,Role.ADMIN})
     public Response sendMoodle(SendSmsRequestMoodle req) throws URISyntaxException {
     	Principal principal = securityContext.getUserPrincipal();
     	req.professor = principal.getName();
@@ -60,7 +60,7 @@ public class SendMessages {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-    @Secured(Role.STAFF)
+	@Secured({Role.STAFF,Role.ADMIN})
     public Response sendDirect(SendSmsRequestDirect req) throws URISyntaxException {
     	Principal principal = securityContext.getUserPrincipal();
     	req.sender = principal.getName();

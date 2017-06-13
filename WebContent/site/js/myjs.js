@@ -13,46 +13,27 @@ var message;
 $( document ).ready(function () {
 
 		if(path=='sendsms.html'){		
-			if(role!='staff')
-				redirectLogin('Δεν έχετε πρόσβαση σε αυτή την ιστοσελίδα');
 			loadSendSms();
 			
 		}
-		if(path=='aimodosia.html'){
-			if(role!='admin')
-				redirectLogin('Δεν έχετε πρόσβαση σε αυτή την ιστοσελίδα');
-		}
-		if(path=='services.html')
+		else if(path=='services.html')
 			loadServicesDocumentation();
-		if(path==""||path=="index.html")
+		else if(path==""||path=="index.html")
 			loadIndexDiv();
-		if(path=='mobile.html'){
-			if(role.length==0)
-				redirectLogin('Δεν έχετε πρόσβαση σε αυτή την ιστοσελίδα');
+		else if(path=='mobile.html'){
 			loadMobileDiv();
 		}
-		if(path=='login.htlm'){
-			if(role.length!=0)
-				window.location('./')
-		}
-		
-
 		loadNavBar(); 
 });
 
 
-
-
- 
-
-
-function redirectLogin(message){
-	bootbox.alert(message,function(result){
+function cookieExpired(){
+	bootbox.alert("Η συνεδρία έληξε,παρακαλώ συνδεθείτε ξανά",function(result){
 		if(role.length!=0){
 			setCookie('role',"",-1);
 			setCookie('token',"",-1);
 		}
-		setCookie('redirect',path,0.5);
+		setCookie('redirect',path,0.1);
 		location.replace("login.html");
 	});	
 }
@@ -98,8 +79,9 @@ function loadNavBar(){
 		links[3]={link:"logout.html",value:'ΑΠΟΣΥΝΔΕΣΗ'};
 	}
 	else if(role=='admin'){
-		links[2]={link:"aimodosia.html",value:'ΑΙΜΟΔΟΣΙΑ '};
-		links[3]={link:"logout.html",value:'ΑΠΟΣΥΝΔΕΣΗ'};
+		links[2]={link:"sendsms.html",value:'ΑΠΟΣΤΟΛΗ SMS'};
+		links[3]={link:"aimodosia.html",value:'ΑΙΜΟΔΟΣΙΑ '};
+		links[4]={link:"logout.html",value:'ΑΠΟΣΥΝΔΕΣΗ'};
 	}
 	else if(role=='stud'){
 		links[2]={link:"mobile.html",value:'ΑΛΛΑΓΗ ΚΙΝΗΤΟΥ'}
@@ -245,7 +227,7 @@ function loadIndexDiv(){
 			},beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' +getCookie('token'));
 			},complete: function(xhr, textStatus) {
 			        if(xhr.status==401||xhr.status==403){
-  			        	redirectLogin("Η συνεδρία σας έληξε.Παρακαλώ κάντε ξανα είσοδο στο σύστημα");
+  			        	cookieExpired();
   			        }
   			 } 
 			
@@ -272,7 +254,7 @@ function loadIndexDiv(){
 			},beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' +getCookie('token'));
 			},complete: function(xhr, textStatus) {
 			        if(xhr.status==401||xhr.status==403){
-  			        	redirectLogin("Η συνεδρία σας έληξε.Παρακαλώ κάντε ξανα είσοδο στο σύστημα");
+  			        	cookieExpired();
   			        }
   			 } 
 			
@@ -405,7 +387,7 @@ function loadIndexDiv(){
       				},beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' +getCookie('token'));}
       				,complete: function(xhr, textStatus) {
       			        if(xhr.status==401||xhr.status==403){
-      			        	redirectLogin("Η συνεδρία σας έληξε.Παρακαλώ κάντε ξανα είσοδο στο σύστημα");
+      			        	cookieExpired();
       			        }
       			    } 
 
@@ -481,7 +463,7 @@ function loadIndexDiv(){
       				},beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' +getCookie('token'));}
       				,complete: function(xhr, textStatus) {
       			        if(xhr.status==401||xhr.status==403){
-      			        	redirectLogin("Η συνεδρία σας έληξε.Παρακαλώ κάντε ξανα είσοδο στο σύστημα");
+      			        	cookieExpired();
       			        }
       			    } 
 
@@ -551,7 +533,7 @@ function loadIndexDiv(){
   				},beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' +getCookie('token'));},
   				complete: function(xhr, textStatus) {
   			        if(xhr.status==401||xhr.status==403){
-  			        	redirectLogin("Η συνεδρία σας έληξε.Παρακαλώ κάντε ξανα είσοδο στο σύστημα");
+  			        	cookieExpired();
   			        }
   				}
 
@@ -580,7 +562,7 @@ function loadIndexDiv(){
 				$('#mobile').html("Δεν έχετε κάποιο κινητό τηλέφωνο καταχωρημένο");
 			},complete: function(xhr, textStatus) {
   			        if(xhr.status==401||xhr.status==403){
-  			        	redirectLogin("Η συνεδρία σας έληξε.Παρακαλώ κάντε ξανα είσοδο στο σύστημα");
+  			        	cookieExpired();
   			        }
 			},
 			beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' +getCookie('token')); }
@@ -611,7 +593,7 @@ function loadIndexDiv(){
 			beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' +getCookie('token')); },
 			complete: function(xhr, textStatus) {
 			        if(xhr.status==401||xhr.status==403){
-			        	redirectLogin("Η συνεδρία σας έληξε.Παρακαλώ κάντε ξανα είσοδο στο σύστημα");
+			        	cookieExpired();
 			        }
 			}
 		});
@@ -632,7 +614,7 @@ function loadIndexDiv(){
   			},beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' +getCookie('token')); 
   			},complete: function(xhr, textStatus) {
 			        if(xhr.status==401||xhr.status==403){
-			        	redirectLogin("Η συνεδρία σας έληξε.Παρακαλώ κάντε ξανα είσοδο στο σύστημα");
+			        	cookieExpired();
 			        }
 			}
     	});

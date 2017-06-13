@@ -37,7 +37,7 @@ public class Data {
 	@Path("/mtservices/moodle")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Secured(Role.STAFF)
+	@Secured({Role.STAFF,Role.ADMIN})
 	public ArrayList<SmsTemplate> getMobileTerminatedServicesMoodle() {
 			return ServicesOnLoad.getSmsTemplatesMoodle();
 		
@@ -46,7 +46,7 @@ public class Data {
 	@Path("/mtservices/direct")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Secured(Role.STAFF)
+	@Secured({Role.STAFF,Role.ADMIN})
 	public ArrayList<SmsTemplate> getMobileTerminatedServicesSingle() {
 			return ServicesOnLoad.getSmsTemplatesDirect();
 		
@@ -55,7 +55,7 @@ public class Data {
 	@Path("/courses")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Secured(Role.STAFF)
+	@Secured({Role.STAFF,Role.ADMIN})
 	public Response getCoursesPerProfessor(){
     	Principal principal = securityContext.getUserPrincipal();
     	String username = principal.getName();

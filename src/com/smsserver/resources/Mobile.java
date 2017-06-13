@@ -52,7 +52,7 @@ public class Mobile {
 			MobileChanger.changeMobileNumber(username, Integer.parseInt(verification));
 			return Response.ok().build();
 		} catch (Exception e) {
-            return Response.status(Response.Status.FORBIDDEN).build();
+            return Response.status(Response.Status.EXPECTATION_FAILED).build();
 		}
 
 	}
