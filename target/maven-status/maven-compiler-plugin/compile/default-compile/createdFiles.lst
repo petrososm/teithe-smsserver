@@ -20,8 +20,9 @@ com\smsserver\models\site\User.class
 com\smsserver\auth\users\AuthenticatedUsers.class
 com\smsserver\auth\security\Ldap.class
 com\smsserver\auth\security\MySecurityContext$1.class
+com\smsserver\models\site\SendSmsRequestDirect.class
+com\smsserver\models\site\SendSmsRequestMoodle.class
 com\smsserver\doa\MoodleDoa.class
-com\smsserver\models\site\SendSmsRequest.class
 com\smsserver\models\logs\MobileOriginatedLogs.class
 com\smsserver\models\services\mobileoriginated\ExtraKeyword.class
 com\smsserver\auth\security\AuthorizationFilter.class

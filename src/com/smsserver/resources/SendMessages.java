@@ -27,7 +27,7 @@ public class SendMessages {
 	@Path("/aimodosia")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.TEXT_PLAIN)
+	//@Consumes(MediaType.TEXT_PLAIN)
 	@Secured(Role.ADMIN)
     public Response sendAimodosia(String date) throws URISyntaxException {
     	try {

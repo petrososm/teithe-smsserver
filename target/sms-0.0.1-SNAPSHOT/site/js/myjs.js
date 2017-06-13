@@ -2,11 +2,10 @@ var role=getCookie("role");
 var url = location.pathname;
 var array = url.split('/');
 var path = array[array.length-1];
-var inputs;
-var message;
-//var baseurl="http://195.251.120.230:8080";
- //var baseurl="http://localhost:8080";
 var baseurl='http://'+location.host;
+
+//sendsmsVars
+var message;
 
 
 
@@ -14,16 +13,17 @@ var baseurl='http://'+location.host;
 (function () {
 
 		if(path=='sendsms.html'){		
-			//if(role!='staff')
-				//redirectLogin();
+			if(role!='staff')
+				redirectLogin();
 			loadSendSms();
+			
 		}
 		if(path=='aimodosia.html'){
 			if(role!='admin')
 				redirectLogin();
 		}
 		if(path=='services.html')
-			populateDocumentation();
+			loadServicesDocumentation();
 		if(path==""||path=="index.html")
 			loadIndexDiv();
 		if(path=='mobile.html'){
@@ -84,7 +84,8 @@ function loadIndexDiv(){
 		html="<h1>Πατώντας το μαζική αποστολή μπορείτε να στείλετε μαζικά sms για ανακοινώσεις στο moodle<h1>";
 	}
 	else if(role=='stud'){
-		html="<h1>Καλωσήρθες χρήστη.Τσέκαρε αν το τηλεφωνό σου είναι σωστο</h1>"
+		html="<h1>Καλωσήρθες χρήστη.<br>Στην καρτέλα 'ΥΠΗΡΕΣΙΕΣ' μπορεις να δεις τις διαθεσιμες υπηρεσιες που παρέχονται απο το ιδρύμα<br>" +
+				"Για την σωστή λειτουργία της υπηρεσίας επιβεβαίωσε το τηλεφωνό σου</h1>"
 	}
 	else if(role=='admin'){
 		html="<h1>Καλωσήρθατε κυριε Διαχειριστα.</h1>"
@@ -121,9 +122,9 @@ function loadIndexDiv(){
 		var url = location.pathname;
 		var array = url.split('/');
 		var path=array[array.length-1];
-		links.forEach(renderProductList);
+		links.forEach(renderList);
 		
-        function renderProductList(element, index, arr) {
+        function renderList(element, index, arr) {
             var li = document.createElement('li');
 			a = document.createElement('a');
 			a.href =  element.link;
@@ -144,7 +145,7 @@ function loadIndexDiv(){
 		
     }
 	
-	function populateDocumentation(){
+	function loadServicesDocumentation(){
 		if(role=='staff')
 			$('#verifyPhoneLabel').hide();
 
@@ -214,11 +215,13 @@ function loadIndexDiv(){
     }
 	
     function loadSendSms(){
-    	loadCourses();
-    	loadSmsTemplates();
+    	loadCoursesMoodle();
+    	loadSmsTemplates('Moodle');
+    	loadSmsTemplates('Direct');
+    	loadDynamicInput();
     }
     
-    function loadCourses(){
+    function loadCoursesMoodle(){
     	$('#courseSelect').append($(
 		'<option>')
 		.text('Επιλέξτε μάθημα')
@@ -239,18 +242,18 @@ function loadIndexDiv(){
     	
     }
     
-    function loadSmsTemplates(){
-    	$('#templateSelect').append($(
+    function loadSmsTemplates(type){
+    	$('#templateSelect'+type).append($(
 		'<option>')
 		.text('Επιλέξτε μήνυμα')
 		.attr('value',0));
     	$.ajax({
-			url : baseurl+'/sms/service/site/mtservices',
+			url : baseurl+'/sms/service/site/mtservices/'+type.toLowerCase(),
 			type : 'GET',
 			dataType : 'json',
 			success : function(json) {
 				$.each(json,function(i,value) {
-									$('#templateSelect').append($(
+									$('#templateSelect'+type).append($(
 															'<option>')
 															.text(value['message'])
 															.attr('value',value['messageId']));
@@ -261,49 +264,76 @@ function loadIndexDiv(){
     
     function courseSelected(){
     	var course=$( "select#courseSelect option:checked").text();
-    	if(course!='Επιλέξτε μάθημα')
-    		$('#input0').val(course);
+    	if(course!='Επιλέξτε μάθημα'){
+    		var e= $("input[name='inputs']");
+    		if(e[0]!=null){
+    			e[0].value=course;
+    			e[0].size=course.length;
+
+
+    		}    	
+    	}
+    	
 
     }
     
     
-    function templateSelected(){
-    	var e = document.getElementById("templateSelect");
+    function templateSelected(type){
+    	var e = document.getElementById("templateSelect"+type);
     	message= e.options[e.selectedIndex].text;
-    	var html="<h3>";
+    	var html="<h4>";
     	var array=message.split('?');
     	inputs=array.length-1;
     	for(i=0;i<inputs;i++){
     		html+=array[i];
-    		html+="<input maxlength='50' id='input"+i+"'></input>";
+    		html+="<input type=\"text\" class=\"form-control\" name='inputs'></input>";
     	}
     	if(message.charAt(message.length - 1)!='?'){
     		html+=array[array.length-1];
     	}
     	
     			
-    	html+="</h3>"
-    	html+="<br><button class='button' onclick='sendSms()'>Αποστολή μηνύματος</button>";
-
-    	$('#message').html(html);
-    	var course=$( "select#courseSelect option:checked").text();
-    	if(course!='Επιλέξτε μάθημα')
-    		$('#input0').val(course);
+    	html+="</h4>"
+    	html+="<br><button class='button' onclick='sendSms(\""+type+"\")'>Αποστολή μηνύματος</button>";
+    	
+    	
+    	$('#message'+type).html(html);
+    	$('input[name=\'inputs\'').css('width', '70%');
+    	$('#message'+type).show();
+    	
+    	if(type=='Moodle'){
+    		var course=$( "select#courseSelect option:checked").text();
+	    	if(course!='Επιλέξτε μάθημα')
+	    		$('#input0').val(course);
+    	}
     }
     
-    function sendSms(){
+    function sendSms(type){
+    	if(type=='Moodle')
+    		sendSmsMoodle();
+    	else if(type=='Direct'){
+    		sendSmsDirect();
+    	}
+    }
+    
+    function sendSmsMoodle(){
     	
     	var messageToSend=message;
     	
-    	for(i=0;i<inputs;i++){
-    		var e = document.getElementById("input"+i);
-    		if(e.value==""){
+    	var inputCheck=true;
+	    $("input[name='inputs']").each(function() {
+	    		messageToSend=messageToSend.replace('?',$(this).val());
+	        	if($(this).val()==''){
+	        		inputCheck=false;
+	        	}
+	    });
+	       
+	    if(!inputCheck){
     			$('#alert').show();
     			$('#alertMessage').html("Συμπλήρώστε ολα τα πεδία");
     			return;
-    		}
-    		messageToSend=messageToSend.replace('?',e.value);
-    	}
+	     }
+    	
     	
     	var course=$( "select#courseSelect option:checked").text();
     	if(course=='Επιλέξτε μάθημα'){
@@ -312,16 +342,19 @@ function loadIndexDiv(){
 			return;
     	}
     	
+	    	var tem = document.getElementById("templateSelectMoodle");
+  	    	if(tem.options[tem.selectedIndex].value==0){
+  	    		$('#alert').show();
+  				$('#alertMessage').html("Επιλέξτε μήνυμα");
+  	    		return;
+  	    	}
+    	
     	$('#alert').hide();
 
     	bootbox.confirm('Θα αποσταλεί το μήνυμα <br><i>'+messageToSend+'</i><br>στους εγγεγραμένους φοιτητές του μαθήματος<br><i>'+course, function(result) {
     		  if(result==true){
 
-      	    	var tem = document.getElementById("templateSelect");
-      	    	if(tem.options[tem.selectedIndex].value==0){
-      	    		alert("Επέλεξε μήνυμα");
-      	    		return;
-      	    	}
+
       	    	
       	    	var dialog = bootbox.dialog({
       	    	    message: '<h1 class="text-center">Τα μηνύματα στέλνονται.Παρακαλώ περιμέντε..</h1>',
@@ -329,16 +362,11 @@ function loadIndexDiv(){
       	    	});
               	var data={};
       	    	data.messageId=tem.options[tem.selectedIndex].value;
-      	    	var replacements=[];
-      	    	for(i=0;i<inputs;i++){
-      	    		var e = document.getElementById("input"+i);
-      	    		replacements[i]=e.value;
-      	    	}
-      	    	data.replacements=replacements;
+      	    	data.replacements=$("input[name='inputs']").map(function(){return $(this).val();}).get();;
       	    	data.course=$( "select#courseSelect option:checked").val();	
 
       	    	$.ajax({
-      				url: baseurl+'/sms/service/send',
+      				url: baseurl+'/sms/service/send/moodle',
       				type: 'POST',
       				data: JSON.stringify(data),
       				contentType: 'application/json',
@@ -346,13 +374,86 @@ function loadIndexDiv(){
       				success: function(response) {
       					dialog.modal('hide');
 
-              	    	$('#mainDiv').html('<h2>Στο μάθημα ειναι εγγεγραμένοι '+response['total']+' μαθητές<br>' +
+              	    	bootbox.alert('<h2>Στο μάθημα ειναι εγγεγραμένοι '+response['total']+' μαθητές<br>' +
               	    			'Βρέθηκαν τηλέφωνα για '+response['sent']+' φοιτητές<br>'+
-              	    			'Το μήνυμα παραδώθηκε επιτυχώς σε '+response['delivered']+' φοιτητές</h2>');
+              	    			'Το μήνυμα παραδώθηκε επιτυχώς σε '+response['delivered']+' φοιτητές</h2>'
+              	    			,function(){ location.replace("sendsms.html") });;
+              	    	
       				},
       				error: function () {
       					dialog.modal('hide');
-              	    	$('#mainDiv').html('<h2>Η αποστολή απέτυχε.<br>Επικοινωνήστε με τον διαχειριστή</h2>');
+              	    	bootbox.alert('<h2>Η αποστολή απέτυχε.<br>Επικοινωνήστε με τον διαχειριστή</h2>');
+      				},beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' +getCookie('token'));}
+
+      			});	
+    		  }
+    	}); 
+            	
+    		
+    	
+    }
+ function sendSmsDirect(){
+    	
+    	var messageToSend=message;
+    	
+    	var inputCheck="";
+	    $("input[name='inputs']").each(function() {
+	    		messageToSend=messageToSend.replace('?',$(this).val());
+	        	if($(this).val()==''){
+	        		inputCheck='Συμπληρώστε όλα τα πεδία';
+	        	}
+	    });
+	    
+	    $("input[name='recipients']").each(function() {
+        	if($(this).val()==''||$(this).val().length!=10||!($.isNumeric($(this).val()))){
+        		inputCheck='Συμπληρώστε σωστά τα νούμερα των παραληπτών';
+        	}
+    });
+	       
+	    if(inputCheck!=""){
+    			$('#alert').show();
+    			$('#alertMessage').html(inputCheck);
+    			return;
+	     }
+    	
+    	
+    	var tem = document.getElementById("templateSelectDirect");
+	    	if(tem.options[tem.selectedIndex].value==0){
+	    		$('#alert').show();
+				$('#alertMessage').html("Επιλέξτε μήνυμα");
+	    		return;
+	    	}
+    	$('#alert').hide();
+    	
+    	
+    	bootbox.confirm('Θα αποσταλεί το μήνυμα <br><i>'+messageToSend+'</i><br>στα τηλέφωνα<br><i>'+$("input[name='recipients']").map(function(){return $(this).val();}).get(), function(result) {
+    		  if(result==true){
+      	    	
+      	    	var dialog = bootbox.dialog({
+      	    	    message: '<h1 class="text-center">Τα μηνύματα στέλνονται.Παρακαλώ περιμέντε..</h1>',
+      	    	    closeButton: false
+      	    	});
+              	var data={};
+      	    	data.messageId=tem.options[tem.selectedIndex].value;
+      	    	data.replacements=$("input[name='inputs']").map(function(){return $(this).val();}).get();
+      	    	data.recipients=$("input[name='recipients']").map(function(){return $(this).val();}).get();
+
+      	    	$.ajax({
+      				url: baseurl+'/sms/service/send/direct',
+      				type: 'POST',
+      				data: JSON.stringify(data),
+      				contentType: 'application/json',
+      				dataType: 'json',
+      				success: function(response) {
+      					dialog.modal('hide');
+
+              	    	bootbox.alert('<h2>Το μήνυμα παραδώθηκε επιτυχώς σε '+response['delivered']+' παραλήπτες</h2>'
+              	    			,function(){ location.replace("sendsms.html") });;
+              	    	
+      				},
+      				error: function () {
+      					dialog.modal('hide');
+              	    	bootbox.alert('<h2>Η αποστολή απέτυχε.<br>Επικοινωνήστε με τον διαχειριστή</h2>');
       				},beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' +getCookie('token'));}
 
       			});	
@@ -363,30 +464,63 @@ function loadIndexDiv(){
     	
     }
     
+	function loadDynamicInput(){
+	    var max_fields      = 10; //maximum input boxes allowed
+	    var wrapper         = $(".input_fields_wrap"); //Fields wrapper
+	    var add_button      = $(".add_field_button"); //Add button ID
+	    var x = 1; //initlal text box count
+	    $(add_button).click(function(e){ //on add input button click
+	        e.preventDefault();
+	        if(x < max_fields){ //max input box allowed
+	            x++; //text box increment
+	            $(wrapper).append('<div><input type="text" maxlength=\'10\' name="recipients"/><a href="#" class="remove_field"> Διαγραφή</a></div>'); //add input box
+	        }
+	       
+	        	
+	    	
+
+	    });
+	    
+	    $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
+	        e.preventDefault(); $(this).parent('div').remove(); x--;
+	    })
+	    
+	    
+	    
+		}
+    
     
     function sendAimodosia(){       
 		var e = document.getElementById('date');
 		var date=e.value;
-		var r = confirm('ΑΠΟΣΤΟΛΗ  ?');
-    	if (r == true) {
+    
+  	    	var dialog = bootbox.dialog({
+  	    	    message: '<h1 class="text-center">Τα μηνύματα στέλνονται.Παρακαλώ περιμέντε..</h1>',
+  	    	    closeButton: false
+  	    	});
     		$.ajax({
         	    type: 'POST',
-        	    url: baseurl+'/sms/service/site/send/aimodosia',
+        	    url: baseurl+'/sms/service/send/aimodosia',
         	    data: date,
-        	    success: function(msg){
-        	    	$('#mainDiv').html("<h1>ΤΟ ΜΗΝΥΜΑ ΣΤΑΛΘΗΚΕ ΜΕ ΕΠΙΤΥΧΙΑ</h1>");
-        	    }
+        	    success: function(response){
+        	    	dialog.modal('hide');
+        	    	$('#mainDiv').html("<h2>'Σταλθηκε σε "+response['sent']+" αιμοδότες<br>"+
+              	    			"Το μήνυμα παραδώθηκε επιτυχώς σε "+response['delivered']+" αιμοδότες</h2>");
+        	    },error: function () {
+  					dialog.modal('hide');
+          	    	bootbox.alert('<h2>Η αποστολή απέτυχε.<br>Ενδο-επικοινωνήστε με τον διαχειριστή</h2>');
+  				},beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' +getCookie('token'));}
         	});
     		
 
-    	} 
+
     }
     
     function sendMobileConfirmation(){
 		var e = document.getElementById('mobileNumber');
 		var mobile=e.value;
-		if(mobile.length!=10){
-			alert("Το νουμερο πρεπει να ειναι 10 ψηφια")
+		if(mobile.length!=10||!($.isNumeric(mobile))){
+			bootbox.alert("Το νουμερο πρεπει να ειναι 10 ψηφια");
 			return;
 		}
 
@@ -413,7 +547,9 @@ function loadIndexDiv(){
     	    data: verificationCode,
     	    success: function(msg){
     	    	$('#mobileDiv').html("<h1>Το νούμερο του κινητού σας άλλαξε</h1>");
-    	    },beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' +getCookie('token')); }
+    	    },error: function () {
+          	    	bootbox.alert('<h2>Ο κωδικός επιβεβαίωσης είναι λάθος</h2>');
+  			},beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' +getCookie('token')); }
     	});
     	
     }

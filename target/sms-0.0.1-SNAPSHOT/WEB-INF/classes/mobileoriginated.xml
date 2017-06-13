@@ -10,7 +10,7 @@
 		<description>ΕΠΙΣΤΡΕΦΕΙ ΤΟΝ ΒΑΘΜΟ ΤΟΥ ΧΡΗΣΤΗ ΣΤΟ ΣΥΓΚΕΚΡΙΜΕΝΟ ΜΑΘΗΜΑ</description>
 		<userInput>ΚΩΔΙΚΟΣ ΜΑΘΗΜΑΤΟΣ</userInput>
 		<query>SELECT username , mobile FROM v_SMS_GetPithiaCreds WHERE
-			(mobile = ?)</query>
+			(username = ?)</query>
 		<numberOfReplacements>2</numberOfReplacements>
 		<serviceId>gradeService</serviceId>
 		<messages>
@@ -24,7 +24,7 @@
 			<message>secondMessage</message>
 			<numberOfReplacements> 3</numberOfReplacements>
 		</extraKeyword>
-		<preSharedKey>123789</preSharedKey>
+		<preSharedKey>f0F0767834843f0</preSharedKey>
 		<database>pithia</database>
 	</service>
 
@@ -34,7 +34,7 @@
 		</keywords>
 		<description>ΕΠΙΣΤΡΕΦΕΙ ΤΑ CREDENTIALS ΤΟΥ ΧΡΗΣΤΗ</description>
 		<query>SELECT username , password FROM v_SMS_GetPithiaCreds WHERE
-			(mobile = ?)</query>
+			(username = ?)</query>
 		<numberOfReplacements>2</numberOfReplacements>
 		<serviceId>gradeService</serviceId>
 		<messages>
@@ -44,11 +44,11 @@
 		<extraKeyword>
 			<keyword>password</keyword>
 			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΟ ΣΥΝΘΗΜΑΤΙΚΟ ΤΟΥ ΧΡΗΣΤΗ</description>
-			<query>SELECT password FROM v_SMS_GetPithiaCreds WHERE (mobile = ?)</query>
+			<query>SELECT password FROM v_SMS_GetPithiaCreds WHERE (username = ?)</query>
 			<message>secondMessage</message>
 			<numberOfReplacements> 1</numberOfReplacements>
 		</extraKeyword>
-		<preSharedKey>123789</preSharedKey>
+		<preSharedKey>f0F0767834843f0</preSharedKey>
 		<database>pithia</database>
 	</service>
 

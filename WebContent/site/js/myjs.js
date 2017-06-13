@@ -4,51 +4,58 @@ var array = url.split('/');
 var path = array[array.length-1];
 var baseurl='http://'+location.host;
 
-//sendsmsVars
-var inputs;
+//sendsmsVar
 var message;
 
 
 
 
-(function () {
+$( document ).ready(function () {
 
 		if(path=='sendsms.html'){		
-			//if(role!='staff')
-				//redirectLogin();
+			if(role!='staff')
+				redirectLogin('Δεν έχετε πρόσβαση σε αυτή την ιστοσελίδα');
 			loadSendSms();
 			
 		}
 		if(path=='aimodosia.html'){
 			if(role!='admin')
-				redirectLogin();
+				redirectLogin('Δεν έχετε πρόσβαση σε αυτή την ιστοσελίδα');
 		}
 		if(path=='services.html')
-			populateDocumentation();
+			loadServicesDocumentation();
 		if(path==""||path=="index.html")
 			loadIndexDiv();
 		if(path=='mobile.html'){
 			if(role.length==0)
-				redirectLogin();
+				redirectLogin('Δεν έχετε πρόσβαση σε αυτή την ιστοσελίδα');
 			loadMobileDiv();
 		}
+		if(path=='login.htlm'){
+			if(role.length!=0)
+				window.location('./')
+		}
+		
 
 		loadNavBar(); 
-})();
+});
 
 
 
 
  
-function redirectLogin(){
-	if(role.length!=0){
-		setCookie('role',"",-1);
-		setCookie('token',"",-1);
-	}
-	setCookie('redirect',path,0.5);
-	location.replace("login.html");
+
+
+function redirectLogin(message){
+	bootbox.alert(message,function(result){
+		if(role.length!=0){
+			setCookie('role',"",-1);
+			setCookie('token',"",-1);
+		}
+		setCookie('redirect',path,0.5);
+		location.replace("login.html");
+	});	
 }
- 
 
 function setCookie(cname,cvalue,hours) {
 	
@@ -75,6 +82,59 @@ function getCookie(cname) {
 }
 
 
+
+
+function loadNavBar(){
+	 
+    var ul = document.getElementById('navbar');
+    var t, tt;
+	var links = [
+		{link:"./",value:"Home"},
+		{link:"services.html",value:"ΥΠΗΡΕΣΙΕΣ"}];
+	if(role.length==0)
+		links[2]={link:"login.html",value:'ΕΙΣΟΔΟΣ'};
+	else if(role=='staff'){
+		links[2]={link:"sendsms.html",value:'ΑΠΟΣΤΟΛΗ SMS'};
+		links[3]={link:"logout.html",value:'ΑΠΟΣΥΝΔΕΣΗ'};
+	}
+	else if(role=='admin'){
+		links[2]={link:"aimodosia.html",value:'ΑΙΜΟΔΟΣΙΑ '};
+		links[3]={link:"logout.html",value:'ΑΠΟΣΥΝΔΕΣΗ'};
+	}
+	else if(role=='stud'){
+		links[2]={link:"mobile.html",value:'ΑΛΛΑΓΗ ΚΙΝΗΤΟΥ'}
+		links[3]={link:"logout.html",value:'ΑΠΟΣΥΝΔΕΣΗ'}
+	}
+			
+	var url = location.pathname;
+	var array = url.split('/');
+	var path=array[array.length-1];
+	links.forEach(renderList);
+	
+    function renderList(element, index, arr) {
+        var li = document.createElement('li');
+		a = document.createElement('a');
+		a.href =  element.link;
+		a.innerHTML = element.value;
+		if(element.link==path){
+			li.setAttribute('class','active');
+		}
+		else if(element.link=="./" && path==""){
+			li.setAttribute('class','active');
+		}
+		
+		
+		li.appendChild(a);
+        ul.appendChild(li);
+
+       
+    }
+	
+}
+
+//------------------------------------------------------------------------------------------------
+//INDEX.HTML
+//------------------------------------------------------------------------------------------------
 function loadIndexDiv(){
 	
 	var html;
@@ -96,57 +156,11 @@ function loadIndexDiv(){
 	
 }
  
- 
- 
- function loadNavBar(){
-	 
-        var ul = document.getElementById('navbar');
-        var t, tt;
-		var links = [
-			{link:"./",value:"Home"},
-			{link:"services.html",value:"ΥΠΗΡΕΣΙΕΣ"}];
-		if(role.length==0)
-			links[2]={link:"login.html",value:'ΕΙΣΟΔΟΣ'};
-		else if(role=='staff'){
-			links[2]={link:"sendsms.html",value:'ΑΠΟΣΤΟΛΗ SMS'};
-			links[3]={link:"logout.html",value:'ΑΠΟΣΥΝΔΕΣΗ'};
-		}
-		else if(role=='admin'){
-			links[2]={link:"aimodosia.html",value:'ΑΙΜΟΔΟΣΙΑ '};
-			links[3]={link:"logout.html",value:'ΑΠΟΣΥΝΔΕΣΗ'};
-		}
-		else if(role=='stud'){
-			links[2]={link:"mobile.html",value:'ΑΛΛΑΓΗ ΚΙΝΗΤΟΥ'}
-			links[3]={link:"logout.html",value:'ΑΠΟΣΥΝΔΕΣΗ'}
-		}
-				
-		var url = location.pathname;
-		var array = url.split('/');
-		var path=array[array.length-1];
-		links.forEach(renderProductList);
-		
-        function renderProductList(element, index, arr) {
-            var li = document.createElement('li');
-			a = document.createElement('a');
-			a.href =  element.link;
-			a.innerHTML = element.value;
-			if(element.link==path){
-				li.setAttribute('class','active');
-			}
-			else if(element.link=="./" && path==""){
-				li.setAttribute('class','active');
-			}
-			
-			
-			li.appendChild(a);
-            ul.appendChild(li);
 
-           
-        }
-		
-    }
-	
-	function populateDocumentation(){
+//------------------------------------------------------------------------------------------------
+//SERVICES.HTML
+//------------------------------------------------------------------------------------------------
+	function loadServicesDocumentation(){
 		if(role=='staff')
 			$('#verifyPhoneLabel').hide();
 
@@ -170,6 +184,9 @@ function loadIndexDiv(){
 								});
    }
    
+//  ------------------------------------------------------------------------------------------------
+//  LOGIN.HTML
+//  ------------------------------------------------------------------------------------------------
        function login(){
         var data={};
         data.username=document.getElementById("username").value;
@@ -192,34 +209,21 @@ function loadIndexDiv(){
 					location.replace("./");
 			},
 			error: function () {
-				alert("Login Failed");
+				bootbox.alert("Η ταυτοποίηση των στοιχείων σας απέτυχε");
 				
 			}
 		});
     }
        
-    function loadMobileDiv(){
-    	$.ajax({
-			url : baseurl+'/sms/service/site/mobile',
-			type : 'GET',
-			dataType : 'text',
-			async:false,
-			success : function(response) {
-		    	$('#mobile').html("Το νουμερό σου είναι "+ response);
-			},
-			error: function(){
-				$('#mobile').html("Δεν έχετε κάποιο κινητό τηλέφωνο καταχωρημένο");
-			},
-			beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' +getCookie('token')); }
-		});
-    	
-    }
+//     ------------------------------------------------------------------------------------------------
+//     SENDSMS.HTML
+//     ------------------------------------------------------------------------------------------------
 	
     function loadSendSms(){
     	loadCoursesMoodle();
     	loadSmsTemplates('Moodle');
     	loadSmsTemplates('Direct');
-    	loadDynamicInput();
+    	loadDirectSms();
     }
     
     function loadCoursesMoodle(){
@@ -238,7 +242,13 @@ function loadIndexDiv(){
 															.text(value['courseName'])
 															.attr('value',value['courseId']));
 								});
-			},beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' +getCookie('token'));}
+			},beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' +getCookie('token'));
+			},complete: function(xhr, textStatus) {
+			        if(xhr.status==401||xhr.status==403){
+  			        	redirectLogin("Η συνεδρία σας έληξε.Παρακαλώ κάντε ξανα είσοδο στο σύστημα");
+  			        }
+  			 } 
+			
 		});
     	
     }
@@ -259,42 +269,52 @@ function loadIndexDiv(){
 															.text(value['message'])
 															.attr('value',value['messageId']));
 								});
-			},beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' +getCookie('token'));}
+			},beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' +getCookie('token'));
+			},complete: function(xhr, textStatus) {
+			        if(xhr.status==401||xhr.status==403){
+  			        	redirectLogin("Η συνεδρία σας έληξε.Παρακαλώ κάντε ξανα είσοδο στο σύστημα");
+  			        }
+  			 } 
+			
 		});
     }
     
     function courseSelected(){
+    	changeInputToCourse();
+    }
+    
+    function changeInputToCourse(){
     	var course=$( "select#courseSelect option:checked").text();
     	if(course!='Επιλέξτε μάθημα'){
     		var e= $("input[name='inputs']");
     		if(e[0]!=null){
     			e[0].value=course;
-    			e[0].size=course.length;
-
-
     		}    	
     	}
-    	
-
+    	else{
+    		var e= $("input[name='inputs']");
+    		if(e[0]!=null){
+    			e[0].value="";
+    		}    	
+    	}
     }
     
     
     function templateSelected(type){
     	var e = document.getElementById("templateSelect"+type);
     	message= e.options[e.selectedIndex].text;
-    	var html="<h4>";
+    	var html="";
     	var array=message.split('?');
     	inputs=array.length-1;
     	for(i=0;i<inputs;i++){
-    		html+=array[i];
+    		html+="<h4>"+array[i]+"</h4>";
     		html+="<input type=\"text\" class=\"form-control\" name='inputs'></input>";
     	}
     	if(message.charAt(message.length - 1)!='?'){
-    		html+=array[array.length-1];
+    		html+="<h4>"+array[array.length-1]+"</h4>";	
     	}
     	
     			
-    	html+="</h4>"
     	html+="<br><button class='button' onclick='sendSms(\""+type+"\")'>Αποστολή μηνύματος</button>";
     	
     	
@@ -303,9 +323,7 @@ function loadIndexDiv(){
     	$('#message'+type).show();
     	
     	if(type=='Moodle'){
-    		var course=$( "select#courseSelect option:checked").text();
-	    	if(course!='Επιλέξτε μάθημα')
-	    		$('#input0').val(course);
+    		changeInputToCourse();
     	}
     }
     
@@ -367,7 +385,7 @@ function loadIndexDiv(){
       	    	data.course=$( "select#courseSelect option:checked").val();	
 
       	    	$.ajax({
-      				url: baseurl+'/sms/service/send',
+      				url: baseurl+'/sms/service/send/moodle',
       				type: 'POST',
       				data: JSON.stringify(data),
       				contentType: 'application/json',
@@ -385,6 +403,11 @@ function loadIndexDiv(){
       					dialog.modal('hide');
               	    	bootbox.alert('<h2>Η αποστολή απέτυχε.<br>Επικοινωνήστε με τον διαχειριστή</h2>');
       				},beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' +getCookie('token'));}
+      				,complete: function(xhr, textStatus) {
+      			        if(xhr.status==401||xhr.status==403){
+      			        	redirectLogin("Η συνεδρία σας έληξε.Παρακαλώ κάντε ξανα είσοδο στο σύστημα");
+      			        }
+      			    } 
 
       			});	
     		  }
@@ -456,6 +479,11 @@ function loadIndexDiv(){
       					dialog.modal('hide');
               	    	bootbox.alert('<h2>Η αποστολή απέτυχε.<br>Επικοινωνήστε με τον διαχειριστή</h2>');
       				},beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' +getCookie('token'));}
+      				,complete: function(xhr, textStatus) {
+      			        if(xhr.status==401||xhr.status==403){
+      			        	redirectLogin("Η συνεδρία σας έληξε.Παρακαλώ κάντε ξανα είσοδο στο σύστημα");
+      			        }
+      			    } 
 
       			});	
     		  }
@@ -465,7 +493,7 @@ function loadIndexDiv(){
     	
     }
     
-	function loadDynamicInput(){
+	function loadDirectSms(){
 	    var max_fields      = 10; //maximum input boxes allowed
 	    var wrapper         = $(".input_fields_wrap"); //Fields wrapper
 	    var add_button      = $(".add_field_button"); //Add button ID
@@ -476,38 +504,92 @@ function loadIndexDiv(){
 	            x++; //text box increment
 	            $(wrapper).append('<div><input type="text" maxlength=\'10\' name="recipients"/><a href="#" class="remove_field"> Διαγραφή</a></div>'); //add input box
 	        }
-	       
-	        	
-	    	
-
 	    });
 	    
 	    $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
 	        e.preventDefault(); $(this).parent('div').remove(); x--;
 	    })
 	    
+		
+	    
+		$('#panel2').on('shown.bs.collapse', function (e) {
+			var e= $("input[name='inputs']");
+    		if(e[0]!=null){
+    			e[0].value="";
+    		}    	
+		})
+		
 	    
 	    
 		}
+	
+	
+
     
-    
+//  ------------------------------------------------------------------------------------------------
+//  AIMODOSIA.HTML
+//  ------------------------------------------------------------------------------------------------
     function sendAimodosia(){       
 		var e = document.getElementById('date');
 		var date=e.value;
-		var r = confirm('ΑΠΟΣΤΟΛΗ  ?');
-    	if (r == true) {
+    
+  	    	var dialog = bootbox.dialog({
+  	    	    message: '<h1 class="text-center">Τα μηνύματα στέλνονται.Παρακαλώ περιμέντε..</h1>',
+  	    	    closeButton: false
+  	    	});
     		$.ajax({
         	    type: 'POST',
-        	    url: baseurl+'/sms/service/site/send/aimodosia',
+        	    url: baseurl+'/sms/service/send/aimodosia',
         	    data: date,
-        	    success: function(msg){
-        	    	$('#mainDiv').html("<h1>ΤΟ ΜΗΝΥΜΑ ΣΤΑΛΘΗΚΕ ΜΕ ΕΠΙΤΥΧΙΑ</h1>");
-        	    }
+        	    success: function(response){
+        	    	dialog.modal('hide');
+        	    	$('#mainDiv').html("<h2>'Σταλθηκε σε "+response['sent']+" αιμοδότες<br>"+
+              	    			"Το μήνυμα παραδώθηκε επιτυχώς σε "+response['delivered']+" αιμοδότες</h2>");
+        	    },error: function () {
+  					dialog.modal('hide');
+          	    	bootbox.alert('<h2>Η αποστολή απέτυχε.<br>Ενδο-επικοινωνήστε με τον διαχειριστή</h2>');
+  				},beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' +getCookie('token'));},
+  				complete: function(xhr, textStatus) {
+  			        if(xhr.status==401||xhr.status==403){
+  			        	redirectLogin("Η συνεδρία σας έληξε.Παρακαλώ κάντε ξανα είσοδο στο σύστημα");
+  			        }
+  				}
+
+  				
         	});
     		
 
-    	} 
+
     }
+    
+    
+//    ------------------------------------------------------------------------------------------------
+//    MOBILE.HTML
+//    ------------------------------------------------------------------------------------------------
+    
+    function loadMobileDiv(){
+    	$.ajax({
+			url : baseurl+'/sms/service/site/mobile',
+			type : 'GET',
+			dataType : 'text',
+			async:false,
+			success : function(response) {
+		    	$('#mobile').html("Το νουμερό σας είναι "+ response);
+			},
+			error: function(){
+				$('#mobile').html("Δεν έχετε κάποιο κινητό τηλέφωνο καταχωρημένο");
+			},complete: function(xhr, textStatus) {
+  			        if(xhr.status==401||xhr.status==403){
+  			        	redirectLogin("Η συνεδρία σας έληξε.Παρακαλώ κάντε ξανα είσοδο στο σύστημα");
+  			        }
+			},
+			beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' +getCookie('token')); }
+
+		});
+    	
+    }
+    
+   
     
     function sendMobileConfirmation(){
 		var e = document.getElementById('mobileNumber');
@@ -526,7 +608,12 @@ function loadIndexDiv(){
 		    			"<input maxlength='50' id='verificationCode'></input></h2>" +
 		    			"<button class='button' onclick='changeMobile()'>ΑΛΛΑΓΗ</button>");			
 			},
-			beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' +getCookie('token')); }
+			beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' +getCookie('token')); },
+			complete: function(xhr, textStatus) {
+			        if(xhr.status==401||xhr.status==403){
+			        	redirectLogin("Η συνεδρία σας έληξε.Παρακαλώ κάντε ξανα είσοδο στο σύστημα");
+			        }
+			}
 		});
     	
     }
@@ -542,7 +629,12 @@ function loadIndexDiv(){
     	    	$('#mobileDiv').html("<h1>Το νούμερο του κινητού σας άλλαξε</h1>");
     	    },error: function () {
           	    	bootbox.alert('<h2>Ο κωδικός επιβεβαίωσης είναι λάθος</h2>');
-  			},beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' +getCookie('token')); }
+  			},beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' +getCookie('token')); 
+  			},complete: function(xhr, textStatus) {
+			        if(xhr.status==401||xhr.status==403){
+			        	redirectLogin("Η συνεδρία σας έληξε.Παρακαλώ κάντε ξανα είσοδο στο σύστημα");
+			        }
+			}
     	});
     	
     }

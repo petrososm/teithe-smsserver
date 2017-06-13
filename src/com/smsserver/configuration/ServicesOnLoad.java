@@ -19,7 +19,7 @@ public class ServicesOnLoad {
 	static HashMap<String, MobileOriginatedService> mobileOriginatedServices = new HashMap<String, MobileOriginatedService>();
 	static ArrayList<ServiceDescription> descriptions=new ArrayList<ServiceDescription>();
 	static ArrayList<SmsTemplate> smsTemplatesMoodle=new ArrayList<SmsTemplate>();
-	static ArrayList<SmsTemplate> smsTemplatesSingle=new ArrayList<SmsTemplate>();
+	static ArrayList<SmsTemplate> smsTemplatesDirect=new ArrayList<SmsTemplate>();
 
 
 	public static HashMap<String, MobileOriginatedService> getMobileOriginatedServices() {
@@ -34,8 +34,8 @@ public class ServicesOnLoad {
 		return smsTemplatesMoodle;
 	}
 
-	public static ArrayList<SmsTemplate> getSmsTemplatesSingle() {
-		return smsTemplatesSingle;
+	public static ArrayList<SmsTemplate> getSmsTemplatesDirect() {
+		return smsTemplatesDirect;
 	}
 
 	static void loadMobileOriginated() {
@@ -90,8 +90,8 @@ public class ServicesOnLoad {
 						mobileTerminatedServices.put(m.messageId, s);
 						if(s.type.equalsIgnoreCase("moodle"))
 							smsTemplatesMoodle.add(new SmsTemplate(m.messageId,m.message));
-						else if (s.type.equalsIgnoreCase("single")){
-							smsTemplatesSingle.add(new SmsTemplate(m.messageId,m.message));
+						else if (s.type.equalsIgnoreCase("direct")){
+							smsTemplatesDirect.add(new SmsTemplate(m.messageId,m.message));
 						}
 					}		
 			}

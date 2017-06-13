@@ -11,8 +11,8 @@ D:\Documents\GitHub\teithe-smsserver\src\com\smsserver\doa\Logs.java
 D:\Documents\GitHub\teithe-smsserver\src\com\smsserver\models\gunetapi\SmsForwardModel.java
 D:\Documents\GitHub\teithe-smsserver\src\com\smsserver\models\gunetapi\SmsResponseModel.java
 D:\Documents\GitHub\teithe-smsserver\src\com\smsserver\models\gunetapi\SmsForwardResponseModel.java
-D:\Documents\GitHub\teithe-smsserver\src\com\smsserver\models\site\SendSmsRequest.java
 D:\Documents\GitHub\teithe-smsserver\src\com\smsserver\sql\Pithia.java
+D:\Documents\GitHub\teithe-smsserver\src\com\smsserver\models\site\SendSmsRequestDirect.java
 D:\Documents\GitHub\teithe-smsserver\src\com\smsserver\sql\Nireas.java
 D:\Documents\GitHub\teithe-smsserver\src\com\smsserver\models\services\mobileterminated\MobileTerminatedService.java
 D:\Documents\GitHub\teithe-smsserver\src\com\smsserver\gunetservices\GunetServices.java
@@ -40,6 +40,7 @@ D:\Documents\GitHub\teithe-smsserver\src\com\smsserver\auth\security\Ldap.java
 D:\Documents\GitHub\teithe-smsserver\src\com\smsserver\configuration\ServicesOnLoad.java
 D:\Documents\GitHub\teithe-smsserver\src\com\smsserver\resources\Authentication.java
 D:\Documents\GitHub\teithe-smsserver\src\com\smsserver\gunetservices\ClientHelper.java
+D:\Documents\GitHub\teithe-smsserver\src\com\smsserver\models\site\SendSmsRequestMoodle.java
 D:\Documents\GitHub\teithe-smsserver\src\com\smsserver\sql\Moodle.java
 D:\Documents\GitHub\teithe-smsserver\src\com\smsserver\doa\MobileOriginated.java
 D:\Documents\GitHub\teithe-smsserver\src\com\smsserver\models\site\User.java

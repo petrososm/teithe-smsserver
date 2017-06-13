@@ -101,7 +101,7 @@
 	<build>
 		<resources>
 			<resource>
-				<directory>WebContent/WEB-INF/resources</directory>
+				<directory>src/resources</directory>
 			</resource>
 		</resources>
 		<sourceDirectory>src</sourceDirectory>

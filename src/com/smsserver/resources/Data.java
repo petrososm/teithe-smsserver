@@ -48,7 +48,7 @@ public class Data {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured(Role.STAFF)
 	public ArrayList<SmsTemplate> getMobileTerminatedServicesSingle() {
-			return ServicesOnLoad.getSmsTemplatesSingle();
+			return ServicesOnLoad.getSmsTemplatesDirect();
 		
 	}
 	
