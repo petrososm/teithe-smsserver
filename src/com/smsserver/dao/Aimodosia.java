@@ -32,7 +32,7 @@ public class Aimodosia {
 
 		} 
 		
-		query="select mobile from aimodosia where blacklist == 1";
+		query="select mobile from aimodosia where blacklist =1";
 		try (Connection conn = LocalDb.getSqlConnections().getConnection();
 				PreparedStatement stmt = conn
 				.prepareStatement(query);){
@@ -43,7 +43,7 @@ public class Aimodosia {
 				mobileNumbers.add(rs.getString(1));
 		} 
 		
-		query="select mobile from aimodosia where blacklist == 0";
+		query="select mobile from aimodosia where blacklist = 0";
 		try (Connection conn = LocalDb.getSqlConnections().getConnection();
 				PreparedStatement stmt = conn
 				.prepareStatement(query);){

@@ -33,6 +33,7 @@ public class SendMessages {
     	try {
 			return Response.ok(MobileTerminated.sendAimodosia(date)).build();
 		} catch (Exception e) {
+			e.printStackTrace();
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
 		}
     }
