@@ -12,7 +12,8 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
-import com.smsserver.doa.ScheduledBackupLogs;
+import com.smsserver.dao.ScheduledBackupLogs;
+import com.smsserver.services.Services;
 
 @WebListener
 public class Start implements ServletContextListener {
@@ -20,8 +21,8 @@ public class Start implements ServletContextListener {
 	private ScheduledExecutorService scheduler;
 	
 	public void contextInitialized(ServletContextEvent event) {
-		ServicesOnLoad.loadMobileOriginated();
-		ServicesOnLoad.loadMobileTerminated();
+		Services.loadMobileOriginated();
+		Services.loadMobileTerminated();
 		GetPropertyValues.loadConfig();
 
 
