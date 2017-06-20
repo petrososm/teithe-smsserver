@@ -14,10 +14,10 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.SecurityContext;
 
 import com.smsserver.controllers.filters.Secured;
+import com.smsserver.controllers.models.site.SendSmsRequestDirect;
+import com.smsserver.controllers.models.site.SendSmsRequestMoodle;
 import com.smsserver.services.MobileTerminated;
 import com.smsserver.services.auth.Role;
-import com.smsserver.services.models.site.SendSmsRequestDirect;
-import com.smsserver.services.models.site.SendSmsRequestMoodle;
 
 @Path("/send")
 public class SendMessages {

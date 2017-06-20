@@ -23,13 +23,19 @@ public class Logs {
 	public static void logMobileOriginated(SmsForwardModel smsRequest, SendSmsModel sms, SmsResponseModel response) {
 		if(response.error.equals(""))
 			response.error="Delivered";
+		String replacements="";
+		if(sms.replacements!=null)
+			replacements=String.join(", ", sms.replacements);
 
 		_MOLogs.add(new MobileOriginatedLogs(smsRequest.msisdn, smsRequest.keyword, smsRequest.body, sms.serviceId,
-				sms.messageId, String.join(", ", sms.replacements), response.error));
+				sms.messageId,replacements , response.error));
 	}
 	
 	public static void logMobileTerminated(String recipientGroup,String sender,SendSmsModel sms,int sentTo,int received){
-		_MTLogs.add(new MobileTerminatedLogs(recipientGroup,sender,sms.serviceId,sms.messageId,String.join(", ", sms.replacements),sentTo,received));
+		String replacements="";
+		if(sms.replacements!=null)
+			replacements=String.join(", ", sms.replacements);
+		_MTLogs.add(new MobileTerminatedLogs(recipientGroup,sender,sms.serviceId,sms.messageId,replacements,sentTo,received));
 	}
 
 	public static ArrayList<DlrRequestModel> getDeliveryReports() {

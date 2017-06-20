@@ -7,12 +7,12 @@ import java.util.HashMap;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
+import com.smsserver.controllers.models.site.ServiceDescription;
+import com.smsserver.controllers.models.site.SmsTemplate;
 import com.smsserver.services.models.mobileoriginated.ExtraKeyword;
 import com.smsserver.services.models.mobileoriginated.MobileOriginatedService;
 import com.smsserver.services.models.mobileterminated.Message;
 import com.smsserver.services.models.mobileterminated.MobileTerminatedService;
-import com.smsserver.services.models.site.ServiceDescription;
-import com.smsserver.services.models.site.SmsTemplate;
 public class Services {
 
 	static HashMap<String, MobileTerminatedService> mobileTerminatedServices = new HashMap<String, MobileTerminatedService>();

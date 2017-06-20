@@ -5,7 +5,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-public class Nireas {
+public class NireasConnections {
 	// https://avaldes.com/jax-rs-restful-web-services-with-jndi-datasource-for-mysql-in-tomcat/
 	// isws prepei na boyn rithmiseis k se alla simeia toy tomcat.katw katw
 	private static DataSource mySqlDataSource = null;

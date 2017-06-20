@@ -11,10 +11,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.smsserver.controllers.filters.Secured;
+import com.smsserver.controllers.models.site.User;
 import com.smsserver.services.auth.Ldap;
 import com.smsserver.services.auth.Role;
 import com.smsserver.services.auth.Token;
-import com.smsserver.services.models.site.User;
 
 
 

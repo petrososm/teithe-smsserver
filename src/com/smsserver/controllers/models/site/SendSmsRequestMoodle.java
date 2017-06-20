@@ -1,4 +1,4 @@
-package com.smsserver.services.models.site;
+package com.smsserver.controllers.models.site;
 
 import javax.xml.bind.annotation.XmlRootElement;
 

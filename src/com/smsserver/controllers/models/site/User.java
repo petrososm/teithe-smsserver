@@ -1,4 +1,4 @@
-package com.smsserver.services.models.site;
+package com.smsserver.controllers.models.site;
 
 import java.io.Serializable;
 

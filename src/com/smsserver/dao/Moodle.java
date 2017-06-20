@@ -5,7 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import com.smsserver.services.models.site.Course;
+
+import com.smsserver.controllers.models.site.Course;
 
 public class Moodle {
 	
@@ -13,7 +14,7 @@ public class Moodle {
 		
 		ArrayList<Course> courses=new ArrayList<Course>();
 		String query="SELECT * FROM moodle.v_teacherspercourse where username=?";
-		try (Connection conn =com.smsserver.dao.sqlconnections.Moodle.getSqlConnections().getConnection();
+		try (Connection conn =com.smsserver.dao.sqlconnections.MoodleConnections.getSqlConnections().getConnection();
 				PreparedStatement stmt = conn
 				.prepareStatement(query);){
 			stmt.setString(1, professor);
@@ -30,7 +31,7 @@ public class Moodle {
 	public static ArrayList<String> getEnrolledStudents(String course) throws SQLException{
 		ArrayList<String> usernames=new ArrayList<String>();
 		String query="SELECT username FROM moodle.v_studentspercourse where CourseCode=?";
-		try (Connection conn = com.smsserver.dao.sqlconnections.Moodle.getSqlConnections().getConnection();
+		try (Connection conn = com.smsserver.dao.sqlconnections.MoodleConnections.getSqlConnections().getConnection();
 				PreparedStatement stmt = conn
 				.prepareStatement(query);){
 			stmt.setString(1, course);

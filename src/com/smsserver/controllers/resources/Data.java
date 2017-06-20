@@ -14,11 +14,11 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.SecurityContext;
 
 import com.smsserver.controllers.filters.Secured;
+import com.smsserver.controllers.models.site.ServiceDescription;
+import com.smsserver.controllers.models.site.SmsTemplate;
 import com.smsserver.dao.Moodle;
 import com.smsserver.services.Services;
 import com.smsserver.services.auth.Role;
-import com.smsserver.services.models.site.ServiceDescription;
-import com.smsserver.services.models.site.SmsTemplate;
 
 @Path("/site")
 public class Data {

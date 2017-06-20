@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.smsserver.dao.sqlconnections.LocalDb;
-import com.smsserver.dao.sqlconnections.Pithia;
+import com.smsserver.dao.sqlconnections.PithiaConnections;
 
 import javassist.NotFoundException;
 
@@ -40,7 +40,7 @@ public class Discovery {
 		ArrayList<String> mobNumbers=new ArrayList<String>();
 		try(
 			Connection local = LocalDb.getSqlConnections().getConnection();
-			Connection pithia = Pithia.getSqlConnections().getConnection();
+			Connection pithia = PithiaConnections.getSqlConnections().getConnection();
 			PreparedStatement stmtLocal = local.prepareStatement("select mobNumber from mobilenumbers where username=?");
 			PreparedStatement stmtPithia = pithia
 					.prepareStatement("SELECT RIGHT(mobile,10) FROM  v_SMS_GetPithiaCreds WHERE   username= ? and mobile != '-'");
@@ -84,7 +84,7 @@ public class Discovery {
 	}
 
 	private static String findUsernamePithia(String mobile) throws SQLException {
-		try (Connection conn = Pithia.getSqlConnections().getConnection();
+		try (Connection conn = PithiaConnections.getSqlConnections().getConnection();
 				PreparedStatement stmt = conn
 						.prepareStatement("SELECT username FROM  v_SMS_GetPithiaCreds WHERE  RIGHT(mobile,10) = ?)");) {
 
@@ -110,7 +110,7 @@ public class Discovery {
 	}
 
 	private static String findMobilePithia(String username) throws SQLException {
-		try (Connection conn = Pithia.getSqlConnections().getConnection();
+		try (Connection conn = PithiaConnections.getSqlConnections().getConnection();
 				PreparedStatement stmt = conn
 				.prepareStatement("SELECT RIGHT(mobile,10) FROM  v_SMS_GetPithiaCreds WHERE   username= ? and mobile != '-'")) {
 			
