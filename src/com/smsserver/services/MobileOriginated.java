@@ -38,12 +38,13 @@ public class MobileOriginated {
 		try {
 			System.out.println("checkpoint");
 			SendSmsModel sms=null;
-			if(smsRequest.keyword.equalsIgnoreCase("ΑΙΜΟΔΟΣΙΑ"))
+			if(smsRequest.keyword.equalsIgnoreCase("ΑΙΜΟΔΟΣΙΑ")
+			||smsRequest.keyword.equalsIgnoreCase("AIMODOSIA"))
 				sms=prepareReplyAimodosia(smsRequest);
 			else
 				sms=prepareReplyPithia(smsRequest, mobileOriginatedService);//an petaksei exception to pianei katw k leitourgei antistoixa
 			
-			SmsResponseModel response=GunetServices.testSend(sms);
+			SmsResponseModel response=GunetServices.sendSingleSms(sms);
 			Logs.logMobileOriginated(smsRequest,sms,response);
 			return new SmsForwardResponseModel(true);
 		}

@@ -284,6 +284,11 @@ function loadIndexDiv(){
     
     function templateSelected(type){
     	var e = document.getElementById("templateSelect"+type);
+    	if(e.options[e.selectedIndex].value=='0'){
+    		$('#message'+type).hide();
+    		return;
+    	}
+    		
     	message= e.options[e.selectedIndex].text;
     	var html="";
     	var array=message.split('?');
@@ -494,11 +499,14 @@ function loadIndexDiv(){
 	    
 		
 	    
+		$('#panel1').on('shown.bs.collapse', function (e) {
+    			$('#templateSelectDirect').val('0').change();
+   	
+		})
+		
 		$('#panel2').on('shown.bs.collapse', function (e) {
-			var e= $("input[name='inputs']");
-    		if(e[0]!=null){
-    			e[0].value="";
-    		}    	
+    			$('#templateSelectMoodle').val('0').change();
+    		    	
 		})
 		
 	    
