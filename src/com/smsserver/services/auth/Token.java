@@ -11,16 +11,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 public class Token {
 
-	public static final Map<String, User> users = new ConcurrentHashMap<>();
-
-	public static String issueToken(String username, String access) {
-		User u = new User(username, access);
-		users.put(username, u);
-		
+	public static String issueToken(User u) {
 		String jwtToken = createJWT("ATEITH SMS SERVER", u.getUsername());
-		
-		AuthenticatedUsers.put(u);
-		
 		return jwtToken;
 	}
 

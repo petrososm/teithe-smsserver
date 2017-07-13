@@ -2,6 +2,7 @@ package com.smsserver.controllers.resources;
 
 import java.security.Principal;
 
+import javax.ejb.EJB;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -19,6 +20,10 @@ public class Mobile {
 	
 	@Context
 	SecurityContext securityContext;
+	@EJB
+	Discovery discovery;
+	@EJB
+	MobileChanger mobChanger;
 	
 	@GET
 	@Secured
@@ -26,7 +31,7 @@ public class Mobile {
     	Principal principal = securityContext.getUserPrincipal();
     	String username = principal.getName();
     	try {
-			return Response.ok(Discovery.getMobile(username)).build();
+			return Response.ok(discovery.getMobile(username)).build();
 		} catch (Exception e) {
 			e.printStackTrace();
             return Response.status(Response.Status.NOT_FOUND).build();
@@ -36,10 +41,11 @@ public class Mobile {
 	@Path("/sendConfirmation/{mobile}")
 	@GET
 	@Secured
-	public void getVerification(@PathParam("mobile") String mobile){
+	public Response getVerification(@PathParam("mobile") String mobile){
     	Principal principal = securityContext.getUserPrincipal();
     	String username = principal.getName();
-    	MobileChanger.sendVerificationCode(username,mobile);
+    	mobChanger.sendVerificationCode(username,mobile);
+    	return Response.status(Response.Status.NO_CONTENT).build();
 	}
 	
 	
@@ -49,7 +55,7 @@ public class Mobile {
     	Principal principal = securityContext.getUserPrincipal();
     	String username = principal.getName();
     	try {
-			MobileChanger.changeMobileNumber(username, Integer.parseInt(verification));
+			mobChanger.changeMobileNumber(username, Integer.parseInt(verification));
 			return Response.ok().build();
 		} catch (Exception e) {
             return Response.status(Response.Status.EXPECTATION_FAILED).build();

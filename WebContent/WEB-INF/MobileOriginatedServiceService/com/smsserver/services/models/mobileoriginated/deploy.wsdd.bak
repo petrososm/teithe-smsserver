@@ -1,0 +1,28 @@
+<!-- Use this file to deploy some handlers/chains and services      -->
+<!-- Two ways to do this:                                           -->
+<!--   java org.apache.axis.client.AdminClient deploy.wsdd          -->
+<!--      after the axis server is running                          -->
+<!-- or                                                             -->
+<!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   -->
+<!--      from the same directory that the Axis engine runs         -->
+
+<deployment
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from MobileOriginatedServiceService WSDL service -->
+
+  <service name="MobileOriginatedService" provider="java:RPC" style="wrapped" use="literal">
+      <parameter name="wsdlTargetNamespace" value="http://mobileoriginated.models.services.smsserver.com"/>
+      <parameter name="wsdlServiceElement" value="MobileOriginatedServiceService"/>
+      <parameter name="schemaQualified" value="http://mobileoriginated.models.services.smsserver.com"/>
+      <parameter name="wsdlServicePort" value="MobileOriginatedService"/>
+      <parameter name="className" value="com.smsserver.services.models.mobileoriginated.MobileOriginatedServiceSoapBindingImpl"/>
+      <parameter name="wsdlPortType" value="MobileOriginatedService"/>
+      <parameter name="typeMappingVersion" value="1.2"/>
+      <operation name="toString" qname="operNS:toString" xmlns:operNS="http://mobileoriginated.models.services.smsserver.com" returnQName="retNS:toStringReturn" xmlns:retNS="http://mobileoriginated.models.services.smsserver.com" returnType="rtns:string" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+      </operation>
+      <parameter name="allowedMethods" value="toString"/>
+
+  </service>
+</deployment>

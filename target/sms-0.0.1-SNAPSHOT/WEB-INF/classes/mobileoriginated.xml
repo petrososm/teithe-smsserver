@@ -25,7 +25,6 @@
 			<numberOfReplacements> 3</numberOfReplacements>
 		</extraKeyword>
 		<preSharedKey>f0F0767834843f0</preSharedKey>
-		<database>pithia</database>
 	</service>
 
 	<service>
@@ -49,7 +48,6 @@
 			<numberOfReplacements> 1</numberOfReplacements>
 		</extraKeyword>
 		<preSharedKey>f0F0767834843f0</preSharedKey>
-		<database>pithia</database>
 	</service>
 
 	<service>
@@ -74,53 +72,35 @@
 			<numberOfReplacements> 1</numberOfReplacements>
 		</extraKeyword>
 		<preSharedKey>123789</preSharedKey>
-		<database>pithia</database>
 	</service>
 
 	<service>
 		<keywords>
 			<keyword>ΑΙΜΟΔΟΣΙΑ</keyword>
+			<keyword>AIMODOSIA</keyword>
 		</keywords>
-		<description>ΕΠΙΣΤΡΕΦΕΙ ΤΗΝ ΗΜΕΡΟΜΗΝΙΑ ΤΗΣ ΕΠΟΜΕΝΗΣ ΔΥΝΑΤΗΣ ΑΙΜΟΔΟΣΙΑΣ
-			ΣΤΟΝ ΧΡΗΣΤΗ</description>
-		<query>SELECT * FROM DLRS where id = ?</query>
-		<numberOfReplacements>2</numberOfReplacements>
-		<serviceId>gradeService</serviceId>
-		<messages>
-			<defaultMessage>testMessage</defaultMessage>
-			<errorMessage>errorMessage</errorMessage>
-		</messages>
+		<description>ΕΓΓΡΑΦΗ ΤΟΥ ΧΡΗΣΤΗ ΣΤΗΝ ΥΠΗΡΕΣΙΑ ΑΥΤΟΜΑΤΗΣ ΑΠΟΣΤΟΛΗΣ ΜΗΝΥΜΑΤΩΝ ΑΙΜΟΔΟΣΙΑΣ</description>
+		<serviceId>aimodosia</serviceId>
 		<extraKeyword>
-			<keyword>ΣΤΟΠ</keyword>
+			<keyword>STOP</keyword>
 			<description>ΔΙΑΚΟΠΗ ΑΥΤΟΜΑΤΩΝ ΜΗΝΥΜΑΤΩΝ ΑΠΟ ΤΗΝ ΥΠΗΡΕΣΙΑ ΤΗΣ
 				ΑΙΜΟΔΟΣΙΑΣ</description>
-			<query>SELECT * FROM DLRS where id = ?</query>
+		</extraKeyword>
+				<extraKeyword>
+			<keyword>ΤΕΛΕΥΤΑΙΑ</keyword>
+			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΗΝ ΗΜΕΡΟΜΗΝΙΑ ΤΗΣ ΤΕΛΕΥΤΑΙΑΣ ΦΟΡΑΣ ΠΟΥ ΕΔΩΣΕ ΑΙΜΑ Ο ΧΡΗΣΤΗΣ</description>
+		</extraKeyword>
+				<extraKeyword>
+			<keyword>ΦΙΑΛΕΣ</keyword>
+			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΟΝ ΑΡΙΘΜΩ ΦΙΑΛΩΝ ΠΟΥ ΔΙΚΑΙΟΥΤΑΙ Ο ΧΡΗΣΤΗΣ</description>
+		</extraKeyword>
+				<extraKeyword>
+			<keyword>ΦΙΑΛΕΣ ΚΑΤΑΝΑΛ</keyword>
+			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΟΝ ΑΡΙΘΜΟ ΤΩΝ ΦΙΑΛΩΝ ΑΙΜΑΤΟΣ ΠΟΥ ΕΧΟΥΝ ΚΑΤΑΝΑΛΩΘΕΙ ΑΠΟ ΤΟΝ ΧΡΗΣΤΗ</description>
 		</extraKeyword>
 		<preSharedKey>123789</preSharedKey>
-		<database>localdb</database>
 	</service>
 
-	<service>
-		<keywords>
-			<keyword>ΦΙΑΛΕΣ</keyword>
-		</keywords>
-		<description>ΕΠΙΣΤΡΕΦΕΙ ΤΙΣ ΦΙΑΛΕΣ ΠΟΥ ΔΙΚΑΙΩΤΑΙ Ο ΑΙΜΟΔΟΤΗΣ</description>
-		<query>SELECT * FROM DLRS</query>
-		<numberOfReplacements>1</numberOfReplacements>
-		<serviceId>gradeService</serviceId>
-		<messages>
-			<defaultMessage>testMessage</defaultMessage>
-			<errorMessage>errorMessage</errorMessage>
-		</messages>
-		<extraKeyword>
-			<keyword>ΚΑΤΑΝΑΛΩΘΗΚΑΝ</keyword>
-			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΙΣ ΦΙΑΛΕΣ ΠΟΥ ΕΧΕΙ ΠΑΡΕΙ ΗΔΗ Ο ΧΡΗΣΤΗΣ</description>
-			<query>SELECT * FROM BLABLABLA</query>
-			<message>secondMessage</message>
-			<numberOfReplacements> 1</numberOfReplacements>
-		</extraKeyword>
-		<preSharedKey>123789</preSharedKey>
-		<database>localdb</database>
-	</service>
+
 
 </root>

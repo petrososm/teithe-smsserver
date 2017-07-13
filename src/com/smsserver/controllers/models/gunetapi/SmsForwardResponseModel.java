@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class SmsForwardResponseModel {
 
 	// apostelnetai pisw sto gunet otan mas kanei smsforward
-	int result;// an diaxristike swsta 0. alliws 1
-	String errorCode;// to id toy error
-	String error;// to minima lathous unknown service, unknown message, unknown
+	private int result;// an diaxristike swsta 0. alliws 1
+	private String errorCode;// to id toy error
+	private String error;// to minima lathous unknown service, unknown message, unknown
 					// recipient, unknown institution, invalid pre-shared key,
 					// unauthorized sender address, user not opted in, user
 					// deactivated service, user credits expired, service

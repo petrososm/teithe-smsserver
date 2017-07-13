@@ -6,15 +6,22 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.annotation.Resource;
+import javax.sql.DataSource;
+import javax.ejb.Stateless;
 import com.smsserver.controllers.models.site.Course;
 
+@Stateless
 public class Moodle {
-	
-	public static ArrayList<Course> getCourses(String professor) throws SQLException{
-		
+    @Resource(lookup = "jdbc/moodle")
+    DataSource moodle;
+    
+
+   
+	public ArrayList<Course> getCourses(String professor) throws SQLException{
 		ArrayList<Course> courses=new ArrayList<Course>();
 		String query="SELECT * FROM moodle.v_teacherspercourse where username=?";
-		try (Connection conn =com.smsserver.dao.sqlconnections.MoodleConnections.getSqlConnections().getConnection();
+		try (Connection conn =moodle.getConnection();
 				PreparedStatement stmt = conn
 				.prepareStatement(query);){
 			stmt.setString(1, professor);
@@ -23,15 +30,16 @@ public class Moodle {
 
 			while(rs.next())
 				courses.add(new Course(rs.getString("fullname"),rs.getString("shortname")));
+			conn.close();
 		} 
 		
 		return courses;
 	}
 	
-	public static ArrayList<String> getEnrolledStudents(String course) throws SQLException{
+	public ArrayList<String> getEnrolledStudents(String course) throws SQLException{
 		ArrayList<String> usernames=new ArrayList<String>();
 		String query="SELECT username FROM moodle.v_studentspercourse where CourseCode=?";
-		try (Connection conn = com.smsserver.dao.sqlconnections.MoodleConnections.getSqlConnections().getConnection();
+		try (Connection conn = moodle.getConnection();
 				PreparedStatement stmt = conn
 				.prepareStatement(query);){
 			stmt.setString(1, course);

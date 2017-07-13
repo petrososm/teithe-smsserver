@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://mobileoriginated.models.services.smsserver.com" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://mobileoriginated.models.services.smsserver.com" xmlns:intf="http://mobileoriginated.models.services.smsserver.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+ <wsdl:types>
+  <schema elementFormDefault="qualified" targetNamespace="http://mobileoriginated.models.services.smsserver.com" xmlns="http://www.w3.org/2001/XMLSchema">
+   <element name="toString">
+    <complexType/>
+   </element>
+   <element name="toStringResponse">
+    <complexType>
+     <sequence>
+      <element name="toStringReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="toStringRequest">
+
+      <wsdl:part element="impl:toString" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="toStringResponse">
+
+      <wsdl:part element="impl:toStringResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:portType name="MobileOriginatedService">
+
+      <wsdl:operation name="toString">
+
+         <wsdl:input message="impl:toStringRequest" name="toStringRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:toStringResponse" name="toStringResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="MobileOriginatedServiceSoapBinding" type="impl:MobileOriginatedService">
+
+      <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="toString">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="toStringRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="toStringResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="MobileOriginatedServiceService">
+
+      <wsdl:port binding="impl:MobileOriginatedServiceSoapBinding" name="MobileOriginatedService">
+
+         <wsdlsoap:address location="http://localhost:8080/sms/services/MobileOriginatedService"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>

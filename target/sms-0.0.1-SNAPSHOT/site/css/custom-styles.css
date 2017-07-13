@@ -523,7 +523,7 @@ body {
 }
 
 .button {
-	padding-top:10px;
+	margin-top:10px;
 	background-color: #DC143C;
 	border: none;
 	color: white;

@@ -3,6 +3,8 @@ package com.smsserver.controllers.resources;
 import java.net.URISyntaxException;
 import java.security.Principal;
 
+import javax.ejb.EJB;
+import javax.ejb.Stateful;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -20,9 +22,14 @@ import com.smsserver.services.MobileTerminated;
 import com.smsserver.services.auth.Role;
 
 @Path("/send")
+@Stateful
 public class SendMessages {
 	@Context
 	SecurityContext securityContext;
+	@EJB
+	MobileTerminated mobileTerminated;
+	
+
 	
 	@Path("/aimodosia")
     @POST
@@ -31,7 +38,7 @@ public class SendMessages {
 	@Secured(Role.ADMIN)
     public Response sendAimodosia(String date) throws URISyntaxException {
     	try {
-			return Response.ok(MobileTerminated.sendAimodosia(date)).build();
+			return Response.ok(mobileTerminated.sendAimodosia(date)).build();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
@@ -45,11 +52,11 @@ public class SendMessages {
 	@Secured({Role.STAFF,Role.ADMIN})
     public Response sendMoodle(SendSmsRequestMoodle req) throws URISyntaxException {
     	Principal principal = securityContext.getUserPrincipal();
-    	req.professor = principal.getName();
+    	req.setProfessor(principal.getName());
 
     	try {
 			
-			return Response.ok(MobileTerminated.sendMoodle(req)).build();
+			return Response.ok(mobileTerminated.sendMoodle(req)).build();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
@@ -64,12 +71,12 @@ public class SendMessages {
 	@Secured({Role.STAFF,Role.ADMIN})
     public Response sendDirect(SendSmsRequestDirect req) throws URISyntaxException {
     	Principal principal = securityContext.getUserPrincipal();
-    	req.sender = principal.getName();
+    	req.setSender (principal.getName());
     	
     	System.out.println(req);
     	try {
 			
-			return Response.ok(MobileTerminated.sendDirect(req)).build();
+			return Response.ok(mobileTerminated.sendDirect(req)).build();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return Response.status(Status.INTERNAL_SERVER_ERROR).build();

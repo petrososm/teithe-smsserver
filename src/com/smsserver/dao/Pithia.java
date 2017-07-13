@@ -5,17 +5,22 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.smsserver.dao.sqlconnections.PithiaConnections;
+import javax.annotation.Resource;
+import javax.ejb.Stateless;
+import javax.sql.DataSource;
 import com.smsserver.services.models.mobileoriginated.MobileOriginatedService;
 
 import javassist.NotFoundException;
-
+@Stateless
 public class Pithia {
 	
+    @Resource(lookup = "jdbc/pithia")
+    DataSource pithia;
 	
-	public static String[] queryPithia(MobileOriginatedService service,String authenticator,String[] userParameters,int extra) throws Exception{
+	
+	public  String[] queryPithia(MobileOriginatedService service,String authenticator,String[] userParameters,int extra) throws Exception{
 		String[] replacements=new String[service.numberOfReplacements];
-		try (Connection conn = PithiaConnections.getSqlConnections().getConnection();
+		try (Connection conn = pithia.getConnection();
 				PreparedStatement stmt=conn.prepareStatement(service.query);) {
 			
 			stmt.setString(1, authenticator);

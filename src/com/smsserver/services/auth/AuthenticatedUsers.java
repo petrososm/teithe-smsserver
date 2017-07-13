@@ -3,23 +3,28 @@ package com.smsserver.services.auth;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.PostConstruct;
+import javax.ejb.Singleton;
+
 import net.jodah.expiringmap.ExpiringMap;
 
+@Singleton
 public class AuthenticatedUsers {
 
-	static Map<String, User>  authUsers;
+	private static Map<String, User>  authUsers;
 
-	static {
+	@PostConstruct
+	public void init(){
 		authUsers = ExpiringMap.builder()
 				  .maxSize(300)
 				  .expiration(2, TimeUnit.DAYS)
 				  .build();
-		put(new User("it123853","STAFF"));
-		put(new User("peris","STAFF"));
+		put(new User("it123853","zz","STUD"));
+		put(new User("peris","doesntmatter","STAFF"));
 	}
 
 	public static void put(User u) {
-		authUsers.putIfAbsent(u.username, u);
+		authUsers.putIfAbsent(u.getUsername(), u);
 	}
 
 	public static User get(String username) {

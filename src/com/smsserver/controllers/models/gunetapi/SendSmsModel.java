@@ -2,10 +2,10 @@ package com.smsserver.controllers.models.gunetapi;
 
 import java.util.Arrays;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.smsserver.configuration.GetPropertyValues;
+import com.smsserver.services.GetPropertyValues;
 
 
 
@@ -13,17 +13,14 @@ import com.smsserver.configuration.GetPropertyValues;
 public class SendSmsModel {
 
 	
-	public String serviceId;//id tis ipiresias pou periexei to to prokathorismeno minima pros apostoli
-	public String messageId;//to id toy minimatos
-	public String[] replacements; //se periptwsi p thelei array
-	public String recipient;//username i msisdn toy xristi 
-	public final String institution =  "TEITHE";//ypoxrewtiko gia teithe
-    @JsonProperty("pre-shared key")
-    public final String preSharedKey= GetPropertyValues.getProperties().getProperty("preSharedKey");
-    @JsonProperty("dlr-url")
-    public final String dlrUrl= GetPropertyValues.getProperties().getProperty("dlrUrl");//ena link-service opoy tha stelnetai mia anafora paradosis -proeraitiko
-    @JsonProperty("sms-forward-id")
-    public String smsForwardId;//efoson ginei se dinexeia enos forward request-proeraitiko
+	private String serviceId;//id tis ipiresias pou periexei to to prokathorismeno minima pros apostoli
+	private String messageId;//to id toy minimatos
+	private String[] replacements; //se periptwsi p thelei array
+	private String recipient;//username i msisdn toy xristi 
+	private final String institution =  "TEITHE";//ypoxrewtiko gia teithe
+    private final String preSharedKey= GetPropertyValues.getProperties().getProperty("preSharedKey");
+    private final String dlrUrl= GetPropertyValues.getProperties().getProperty("dlrUrl");//ena link-service opoy tha stelnetai mia anafora paradosis -proeraitiko
+    private String smsForwardId;//efoson ginei se dinexeia enos forward request-proeraitiko
 	
     
     public SendSmsModel(String serverId, String messageId, String[] replacements, String recipient, String smsForwardId) {
@@ -61,7 +58,52 @@ public class SendSmsModel {
     
     public SendSmsModel(){}
 
+    
+    
 	
+	public String getServiceId() {
+		return serviceId;
+	}
+	public void setServiceId(String serviceId) {
+		this.serviceId = serviceId;
+	}
+	public String getMessageId() {
+		return messageId;
+	}
+	public void setMessageId(String messageId) {
+		this.messageId = messageId;
+	}
+	public String[] getReplacements() {
+		return replacements;
+	}
+	public void setReplacements(String[] replacements) {
+		this.replacements = replacements;
+	}
+	public String getRecipient() {
+		return recipient;
+	}
+	public void setRecipient(String recipient) {
+		this.recipient = recipient;
+	}
+    @XmlElement(name="sms-forward-id")
+	public String getSmsForwardId() {
+		return smsForwardId;
+	}
+    @XmlElement(name="sms-forward-id")
+	public void setSmsForwardId(String smsForwardId) {
+		this.smsForwardId = smsForwardId;
+	}
+	public String getInstitution() {
+		return institution;
+	}
+	@XmlElement(name="pre-shared key")
+	public String getPreSharedKey() {
+		return preSharedKey;
+	}
+	@XmlElement(name="dlr-url")
+	public String getDlrUrl() {
+		return dlrUrl;
+	}
 	@Override
 	public String toString() {
 		return "SendSmsModel [serviceId=" + serviceId + ", messageId=" + messageId + ", replacements="

@@ -4,6 +4,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.annotation.PostConstruct;
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
@@ -13,32 +16,43 @@ import com.smsserver.services.models.mobileoriginated.ExtraKeyword;
 import com.smsserver.services.models.mobileoriginated.MobileOriginatedService;
 import com.smsserver.services.models.mobileterminated.Message;
 import com.smsserver.services.models.mobileterminated.MobileTerminatedService;
+
+
+@Singleton
 public class Services {
 
-	static HashMap<String, MobileTerminatedService> mobileTerminatedServices = new HashMap<String, MobileTerminatedService>();
-	static HashMap<String, MobileOriginatedService> mobileOriginatedServices = new HashMap<String, MobileOriginatedService>();
-	static ArrayList<ServiceDescription> descriptions=new ArrayList<ServiceDescription>();
-	static ArrayList<SmsTemplate> smsTemplatesMoodle=new ArrayList<SmsTemplate>();
-	static ArrayList<SmsTemplate> smsTemplatesDirect=new ArrayList<SmsTemplate>();
+	 private HashMap<String, MobileTerminatedService> mobileTerminatedServices = new HashMap<String, MobileTerminatedService>();
+	 private HashMap<String, MobileOriginatedService> mobileOriginatedServices = new HashMap<String, MobileOriginatedService>();
+	 private ArrayList<ServiceDescription> descriptions=new ArrayList<ServiceDescription>();
+	 private ArrayList<SmsTemplate> smsTemplatesMoodle=new ArrayList<SmsTemplate>();
+	 private ArrayList<SmsTemplate> smsTemplatesDirect=new ArrayList<SmsTemplate>();
 
+	@PostConstruct
+	private void init(){
+		this.loadMobileOriginated();
+		this.loadMobileTerminated();
+	}
 
-	public static HashMap<String, MobileOriginatedService> getMobileOriginatedServices() {
+	public  HashMap<String, MobileOriginatedService> getMobileOriginatedServices() {
 		return mobileOriginatedServices;
 	}
 
-	public static ArrayList<ServiceDescription> getDescriptions() {
+	public  ArrayList<ServiceDescription> getDescriptions() {
 		return descriptions;
 	}
 
-	public static ArrayList<SmsTemplate> getSmsTemplatesMoodle() {
+	public  ArrayList<SmsTemplate> getSmsTemplatesMoodle() {
 		return smsTemplatesMoodle;
 	}
 
-	public static ArrayList<SmsTemplate> getSmsTemplatesDirect() {
+	public  ArrayList<SmsTemplate> getSmsTemplatesDirect() {
 		return smsTemplatesDirect;
 	}
+	
 
-	public static void loadMobileOriginated() {
+	
+
+	public  void loadMobileOriginated() {
 		try {
 			JAXBContext jc = JAXBContext.newInstance(com.smsserver.services.models.mobileoriginated.Root.class);
 			Unmarshaller unmarshaller = jc.createUnmarshaller();
@@ -78,7 +92,7 @@ public class Services {
 		}
 	}
 	
-	public static void loadMobileTerminated(){
+	public void loadMobileTerminated(){
 		try {
 			JAXBContext jc = JAXBContext.newInstance(com.smsserver.services.models.mobileterminated.Root.class);
 			Unmarshaller unmarshaller = jc.createUnmarshaller();
@@ -104,11 +118,11 @@ public class Services {
 		System.out.println(mobileTerminatedServices);
 	}
 
-	public static HashMap<String, MobileOriginatedService> getServices() {
+	public HashMap<String, MobileOriginatedService> getServices() {
 		return mobileOriginatedServices;
 	}
 
-	public static HashMap<String, MobileTerminatedService> getMobileTerminatedServices() {
+	public HashMap<String, MobileTerminatedService> getMobileTerminatedServices() {
 		return mobileTerminatedServices;
 	}
 

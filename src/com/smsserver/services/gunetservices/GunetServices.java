@@ -8,9 +8,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.smsserver.configuration.GetPropertyValues;
 import com.smsserver.controllers.models.gunetapi.SendSmsModel;
 import com.smsserver.controllers.models.gunetapi.SmsResponseModel;
+import com.smsserver.services.GetPropertyValues;
 
 
 public class GunetServices {
@@ -19,7 +19,7 @@ public class GunetServices {
 	public static SmsResponseModel testSend(SendSmsModel sendSms){
 		System.out.println(sendSms);
        SmsResponseModel s= new SmsResponseModel();
-       s.error="";
+       s.setError("");
        return s;
 
 	}

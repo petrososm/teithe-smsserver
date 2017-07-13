@@ -1,17 +1,14 @@
 package com.smsserver.controllers.models.site;
 
 import java.io.Serializable;
-
 import javax.xml.bind.annotation.XmlRootElement;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 @XmlRootElement
-public class User implements Serializable {
+public class User  {
 
 	    private String username;
 	    private String password;
-	    private String token;
 	    private String role;
 	    
 
@@ -19,16 +16,8 @@ public class User implements Serializable {
 		public User(String username, String token, String role) {
 			super();
 			this.username = username;
-			this.token = token;
+
 			this.role = role;
-		}
-
-		public String getToken() {
-			return token;
-		}
-
-		public void setToken(String token) {
-			this.token = token;
 		}
 
 		public String getRole() {
@@ -47,9 +36,8 @@ public class User implements Serializable {
 		public void setUsername(String username) {
 			this.username = username;
 		}
-		@JsonProperty(access = Access.WRITE_ONLY)
 		public String getPassword() {
-			return password;
+			return "MOXy sucks";
 		}
 		public void setPassword(String password) {
 			this.password = password;

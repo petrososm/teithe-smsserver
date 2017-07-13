@@ -77,9 +77,10 @@
 	<service>
 		<keywords>
 			<keyword>ΑΙΜΟΔΟΣΙΑ</keyword>
+			<keyword>AIMODOSIA</keyword>
 		</keywords>
 		<description>ΕΓΓΡΑΦΗ ΤΟΥ ΧΡΗΣΤΗ ΣΤΗΝ ΥΠΗΡΕΣΙΑ ΑΥΤΟΜΑΤΗΣ ΑΠΟΣΤΟΛΗΣ ΜΗΝΥΜΑΤΩΝ ΑΙΜΟΔΟΣΙΑΣ</description>
-		<serviceId>gradeService</serviceId>
+		<serviceId>aimodosia</serviceId>
 		<extraKeyword>
 			<keyword>STOP</keyword>
 			<description>ΔΙΑΚΟΠΗ ΑΥΤΟΜΑΤΩΝ ΜΗΝΥΜΑΤΩΝ ΑΠΟ ΤΗΝ ΥΠΗΡΕΣΙΑ ΤΗΣ

@@ -2,6 +2,7 @@ package com.smsserver.services.auth;
 
 import java.util.Properties;
 
+import javax.ejb.Stateless;
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
 import javax.naming.directory.DirContext;
@@ -9,17 +10,18 @@ import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
-import com.smsserver.configuration.GetPropertyValues;
+import com.smsserver.services.GetPropertyValues;
 
+@Stateless
 public class Ldap {
 
-	static String serviceUserDN = GetPropertyValues.getProperties().getProperty("serviceUserDN");
-	static String serviceUserPassword = GetPropertyValues.getProperties().getProperty("serviceUserPassword");
-	static String ldapUrl = GetPropertyValues.getProperties().getProperty("ldapUrl");
-	static String identifyingAttribute = "uid";
-	static String base = "ou=people,dc=teithe,dc=gr";
+	private final String serviceUserDN = GetPropertyValues.getProperties().getProperty("serviceUserDN");
+	private final String serviceUserPassword = GetPropertyValues.getProperties().getProperty("serviceUserPassword");
+	private final String ldapUrl = GetPropertyValues.getProperties().getProperty("ldapUrl");
+	private final String identifyingAttribute = "uid";
+	private final String base = "ou=people,dc=teithe,dc=gr";
 
-	public static String performAuthentication(String identifier, String password) throws Exception {
+	public String performAuthentication(User user) throws Exception {
 
 		// first create the service context
 		DirContext serviceCtx = null;
@@ -40,7 +42,7 @@ public class Ldap {
 			sc.setSearchScope(SearchControls.SUBTREE_SCOPE);
 
 			// use a search filter to find only the user we want to authenticate
-			String searchFilter = "(" + identifyingAttribute + "=" + identifier + ")";
+			String searchFilter = "(" + identifyingAttribute + "=" + user.getUsername() + ")";
 			NamingEnumeration<SearchResult> results = serviceCtx.search(base, searchFilter, sc);
 
 			if (results.hasMore()) {
@@ -54,7 +56,7 @@ public class Ldap {
 //				authEnv.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
 //				authEnv.put(Context.PROVIDER_URL, ldapUrl);
 //				authEnv.put(Context.SECURITY_PRINCIPAL, distinguishedName);
-//				authEnv.put(Context.SECURITY_CREDENTIALS, password);
+//				authEnv.put(Context.SECURITY_CREDENTIALS, u.getRealPassword());
 //				new InitialDirContext(authEnv);
 
 				System.out.println("Authentication successful");

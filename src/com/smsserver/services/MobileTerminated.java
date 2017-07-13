@@ -9,6 +9,9 @@ import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import javax.ejb.EJB;
+import javax.ejb.Stateful;
+
 import com.smsserver.controllers.models.gunetapi.SendSmsModel;
 import com.smsserver.controllers.models.gunetapi.SmsResponseModel;
 import com.smsserver.controllers.models.site.SendReport;
@@ -19,43 +22,54 @@ import com.smsserver.dao.Discovery;
 import com.smsserver.dao.Moodle;
 import com.smsserver.services.gunetservices.GunetServices;
 
+@Stateful
 public class MobileTerminated {
+	@EJB
+	Discovery discovery;
+	@EJB
+	Services services;
+	@EJB
+	Aimodosia aimodosia;
+	@EJB
+	Logs logs;
+	@EJB
+	Moodle moodle;
 	
-	public static SendReport sendAimodosia(String date) throws Exception{
+	public SendReport sendAimodosia(String date) throws Exception{
 		
-		ArrayList<String> mobileNumbers=Aimodosia.getMobileNumbers();
+		ArrayList<String> mobileNumbers=aimodosia.getMobileNumbers();
 		
 		SendSmsModel sms=new SendSmsModel("aimodosia","aimodosiaMsg5",new String[]{date});
 		int delivered=sendSmsParallel(sms,mobileNumbers,2,false);
-		Logs.logMobileTerminated("AIMODOSIA", "ADMIN", sms, mobileNumbers.size(), delivered);
+		logs.logMobileTerminated("AIMODOSIA", "ADMIN", sms, mobileNumbers.size(), delivered);
 		sms=null;
 		return new SendReport(mobileNumbers.size(),delivered,0);
 		
 	}
 	
 	
-	public static SendReport sendMoodle(SendSmsRequestMoodle request)throws Exception{
+	public  SendReport sendMoodle(SendSmsRequestMoodle request)throws Exception{
 		
-		ArrayList<String> enrolledStudents=Moodle.getEnrolledStudents(request.course);
+		ArrayList<String> enrolledStudents=moodle.getEnrolledStudents(request.course);
 		int enrolledStudentsCount=enrolledStudents.size();
 
-		ArrayList<String> mobileNumbers=Discovery.getMobileMass(enrolledStudents);
+		ArrayList<String> mobileNumbers=discovery.getMobileMass(enrolledStudents);
 
-		String serviceId=Services.getMobileTerminatedServices().get(request.messageId).serviceId;
+		String serviceId=services.getMobileTerminatedServices().get(request.messageId).serviceId;
 		
 		SendSmsModel sms=new SendSmsModel(serviceId,request.messageId,request.replacements);
 		int delivered=sendSmsParallel(sms,mobileNumbers,2,true);
-		Logs.logMobileTerminated(request.course, request.professor, sms, mobileNumbers.size(), delivered);
+		logs.logMobileTerminated(request.course, request.professor, sms, mobileNumbers.size(), delivered);
 		return new SendReport(mobileNumbers.size(),delivered,enrolledStudentsCount);
 		
 	}
-	public static SendReport sendDirect(SendSmsRequestDirect request) throws Exception {
+	public SendReport sendDirect(SendSmsRequestDirect request) throws Exception {
 		ArrayList<String> mobileNumbers=new ArrayList<String>(Arrays.asList(request.recipients));
-		String serviceId=Services.getMobileTerminatedServices().get(request.messageId).serviceId;
+		String serviceId=services.getMobileTerminatedServices().get(request.messageId).serviceId;
 
 		SendSmsModel sms=new SendSmsModel(serviceId,request.messageId,request.replacements);
 		int delivered=sendSmsParallel(sms,mobileNumbers,2,false);
-		Logs.logMobileTerminated(String.join(", ", request.recipients), request.sender, sms, mobileNumbers.size(), delivered);
+		logs.logMobileTerminated(String.join(", ", request.recipients), request.sender, sms, mobileNumbers.size(), delivered);
 		return new SendReport(mobileNumbers.size(),delivered,mobileNumbers.size());
 
 	}

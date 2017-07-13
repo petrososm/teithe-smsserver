@@ -3,6 +3,7 @@
 	<name>sms</name>
 	<comment></comment>
 	<projects>
+		<project>1055rock</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

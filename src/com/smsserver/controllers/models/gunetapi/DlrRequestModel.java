@@ -6,10 +6,10 @@ public class DlrRequestModel {
 	
 
 
-	String serviceId;//to Id tis ipiresias poy klithike
-	String recipient;//o xristis p parelave to minima
-	String status;//DELIVRD', 'ERROR', 'EXPIRED', 'PENDING', 'SENT', 'SUBMITTED', 'UNDELIV'
-	String error;//0-999
+	private String serviceId;//to Id tis ipiresias poy klithike
+	private String recipient;//o xristis p parelave to minima
+	private String status;//DELIVRD', 'ERROR', 'EXPIRED', 'PENDING', 'SENT', 'SUBMITTED', 'UNDELIV'
+	private String error;//0-999
 	
 	public DlrRequestModel(String serviceId, String recipient, String status, String error) {
 		super();
