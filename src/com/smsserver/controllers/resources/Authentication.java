@@ -24,6 +24,8 @@ import com.smsserver.services.auth.User;
 public class Authentication {
 	@EJB
 	Ldap ldap;
+	@EJB
+	AuthenticatedUsers authUsers;
 
 
     @POST
@@ -33,9 +35,9 @@ public class Authentication {
 
         try {
 
-        	user.setRole(ldap.performAuthentication(user));          
+        	user.setRole(ldap.performAuthentication(user).toLowerCase());          
             user.setToken(Token.issueToken(user)); 
-            AuthenticatedUsers.put(user);
+            authUsers.put(user);
             return Response.ok(user).build();
             
         } catch (Exception e) {

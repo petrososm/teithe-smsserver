@@ -2,6 +2,7 @@ package com.smsserver.services.auth;
 
 import java.util.Properties;
 
+import javax.ejb.DependsOn;
 import javax.ejb.Stateless;
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
@@ -15,14 +16,20 @@ import com.smsserver.services.GetPropertyValues;
 @Stateless
 public class Ldap {
 
-	private final String serviceUserDN = GetPropertyValues.getProperties().getProperty("serviceUserDN");
-	private final String serviceUserPassword = GetPropertyValues.getProperties().getProperty("serviceUserPassword");
-	private final String ldapUrl = GetPropertyValues.getProperties().getProperty("ldapUrl");
-	private final String identifyingAttribute = "uid";
-	private final String base = "ou=people,dc=teithe,dc=gr";
+	private String serviceUserDN ;
+	private String serviceUserPassword ;
+	private String ldapUrl ;
+	private String identifyingAttribute ;
+	private String base ;
+	
 
 	public String performAuthentication(User user) throws Exception {
-
+		
+		serviceUserDN = GetPropertyValues.getProperties().getProperty("serviceUserDN");
+		serviceUserPassword = GetPropertyValues.getProperties().getProperty("serviceUserPassword");
+		ldapUrl = GetPropertyValues.getProperties().getProperty("ldapUrl");
+		identifyingAttribute = "uid";
+		base = "ou=people,dc=teithe,dc=gr";
 		// first create the service context
 		DirContext serviceCtx = null;
 		try {

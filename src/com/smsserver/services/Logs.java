@@ -53,21 +53,21 @@ public class Logs {
 	}
 
 	public void logMobileOriginated(SmsForwardModel smsRequest, SendSmsModel sms, SmsResponseModel response) {
-		if(response.error.equals(""))
-			response.error="Delivered";
+		if(response.getError().equals(""))
+			response.setError("Delivered");
 		String replacements="";
-		if(sms.replacements!=null)
-			replacements=String.join(", ", sms.replacements);
+		if(sms.getReplacements()!=null)
+			replacements=String.join(", ", sms.getReplacements());
 
-		_MOLogs.add(new MobileOriginatedLogs(smsRequest.msisdn, smsRequest.keyword, smsRequest.body, sms.serviceId,
-				sms.messageId,replacements , response.error));
+		_MOLogs.add(new MobileOriginatedLogs(smsRequest.getMsisdn(), smsRequest.getKeyword(), smsRequest.getBody(), sms.getServiceId(),
+				sms.getMessageId(),replacements , response.getError()));
 	}
 	
 	public void logMobileTerminated(String recipientGroup,String sender,SendSmsModel sms,int sentTo,int received){
 		String replacements="";
-		if(sms.replacements!=null)
-			replacements=String.join(", ", sms.replacements);
-		_MTLogs.add(new MobileTerminatedLogs(recipientGroup,sender,sms.serviceId,sms.messageId,replacements,sentTo,received));
+		if(sms.getReplacements()!=null)
+			replacements=String.join(", ", sms.getReplacements());
+		_MTLogs.add(new MobileTerminatedLogs(recipientGroup,sender,sms.getServiceId(),sms.getMessageId(),replacements,sentTo,received));
 	}
 
 	public ArrayList<DlrRequestModel> getDeliveryReports() {

@@ -1,106 +1,259 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <root>
 	<service>
+		<serviceId>gradeServiceTEITHE</serviceId>
 		<keywords>
-			<keyword>BA</keyword>
-			<keyword>ΒΑ</keyword>
-			<keyword>ΒΑΘΜΟΣ</keyword>
-			<keyword>BATHMOS</keyword>
+			<keyword>ΒΑΘ</keyword>
+			<keyword>VATHMOS</keyword>
 		</keywords>
-		<description>ΕΠΙΣΤΡΕΦΕΙ ΤΟΝ ΒΑΘΜΟ ΤΟΥ ΧΡΗΣΤΗ ΣΤΟ ΣΥΓΚΕΚΡΙΜΕΝΟ ΜΑΘΗΜΑ</description>
-		<userInput>ΚΩΔΙΚΟΣ ΜΑΘΗΜΑΤΟΣ</userInput>
-		<query>SELECT username , mobile FROM v_SMS_GetPithiaCreds WHERE
-			(username = ?)</query>
-		<numberOfReplacements>2</numberOfReplacements>
-		<serviceId>gradeService</serviceId>
-		<messages>
-			<defaultMessage>testMessage</defaultMessage>
-			<errorMessage>errorMessage</errorMessage>
-		</messages>
-		<extraKeyword>
-			<keyword>ΤΕΛΕΥΤΑΙΟΙ</keyword>
-			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΟΥΣ 4 ΤΕΛΕΥΤΑΙΟΥΣ ΒΑΘΜΟΥΣ</description>
-			<query>SELECT * FROM BLABLABLA</query>
-			<message>secondMessage</message>
-			<numberOfReplacements> 3</numberOfReplacements>
-		</extraKeyword>
-		<preSharedKey>f0F0767834843f0</preSharedKey>
-	</service>
+		<preSharedKey>F0fesFADSr223fA</preSharedKey>
+		<database>pithia</database>
+		<message>
+			<keyword></keyword>
+			<messageId>gradeServiceTEITHEMsg1</messageId>
+			<numberOfReplacements>2</numberOfReplacements>
+			<query>SELECT ctitle,grade
+				FROM
+				[eUniCentral].[dbo].[v_SMS_gradeService]
+				where username=? and
+				coursecode=?
+			</query>
+			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΟΝ ΒΑΘΜΟ ΤΟΥ ΧΡΗΣΤΗ ΣΤΟ ΣΥΓΚΕΚΡΙΜΕΝΟ ΜΑΘΗΜΑ
+			</description>
+			<userInput>ΚΩΔΙΚΟΣ ΜΑΘΗΜΑΤΟΣ</userInput>
+		</message>
+		<message>
+			<keyword>ΞΕΧΩΡ</keyword>
+			<messageId>gradeServiceTEITHEMsg2</messageId>
+			<numberOfReplacements>3</numberOfReplacements>
+			<query>DECLARE @username VARCHAR(50)
+				DECLARE @CID VARCHAR(10)
+				DECLARE
+				@THEORIA VARCHAR(10)
+				DECLARE @ERGASTIRIO VARCHAR(10)
+				SET @username=?
+				SET @CID=?
+				SET @THEORIA=@CID+'1'
+				SET @ERGASTIRIO=@CID+'2'
 
-	<service>
-		<keywords>
-			<keyword>LOGIN</keyword>
-		</keywords>
-		<description>ΕΠΙΣΤΡΕΦΕΙ ΤΑ CREDENTIALS ΤΟΥ ΧΡΗΣΤΗ</description>
-		<query>SELECT username , password FROM v_SMS_GetPithiaCreds WHERE
-			(username = ?)</query>
-		<numberOfReplacements>2</numberOfReplacements>
-		<serviceId>gradeService</serviceId>
-		<messages>
-			<defaultMessage>testMessage</defaultMessage>
-			<errorMessage>errorMessage</errorMessage>
-		</messages>
-		<extraKeyword>
-			<keyword>password</keyword>
-			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΟ ΣΥΝΘΗΜΑΤΙΚΟ ΤΟΥ ΧΡΗΣΤΗ</description>
-			<query>SELECT password FROM v_SMS_GetPithiaCreds WHERE (username = ?)</query>
-			<message>secondMessage</message>
-			<numberOfReplacements> 1</numberOfReplacements>
-		</extraKeyword>
-		<preSharedKey>f0F0767834843f0</preSharedKey>
+				select
+				x.ctitle,x.grade,y.grade
+				FROM
+				(SELECT ctitle,grade
+				FROM
+				[eUniCentral].[dbo].[v_SMS_gradeService]
+				where username=@username and
+				coursecode=@THEORIA)as x
+				,(SELECT grade
+				FROM
+				[eUniCentral].[dbo].[v_SMS_gradeService]
+				where username=@username and
+				coursecode=@ERGASTIRIO)as y
+			</query>
+			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΟΥΣ ΒΑΘΜΟΥΣ ΤΟΥ ΧΡΗΣΤΗ ΓΙΑ ΘΕΩΡΙΑ ΚΑΙ
+				ΕΡΓΑΣΤΗΡΙΟ ΓΙΑ ΤΟ ΣΥΓΚΕΚΡΙΜΕΝΟ ΜΑΘΗΜΑ
+			</description>
+			<userInput>ΚΩΔΙΚΟΣ ΜΑΘΗΜΑΤΟΣ</userInput>
+		</message>
+		<errorMessage>
+			<messageId>gradeServiceTEITHEMsg3</messageId>
+			<numberOfReplacements>0</numberOfReplacements>
+		</errorMessage>
 	</service>
-
 	<service>
+		<serviceId>didaktikesMonades</serviceId>
 		<keywords>
 			<keyword>ΔΜ</keyword>
+			<keyword>DM</keyword>
 		</keywords>
-		<description>ΕΠΙΣΤΡΕΦΕΙ ΤΙΣ ΔΙΔΑΚΤΙΚΕΣ ΜΟΝΑΔΕΣ ΤΟΥ ΧΡΗΣΤΗ</description>
-		<query>SELECT username , password FROM v_SMS_GetPithiaCreds WHERE
-			(mobile = ?)</query>
-		<numberOfReplacements>1</numberOfReplacements>
-		<serviceId>gradeService</serviceId>
-		<messages>
-			<defaultMessage>testMessage</defaultMessage>
-			<errorMessage>errorMessage</errorMessage>
-		</messages>
-		<extraKeyword>
+		<preSharedKey>F0fesFADSr223fA</preSharedKey>
+		<database>pithia</database>
+		<message>
+			<keyword></keyword>
+			<messageId>didaktikesMonadesMsg1</messageId>
+			<numberOfReplacements>1</numberOfReplacements>
+			<query>SELECT ctitle,grade
+				FROM
+				[eUniCentral].[dbo].[v_SMS_gradeService]
+				where username=? and
+				coursecode=?
+			</query>
+			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΙΣ ΔΙΔΑΚΤΙΚΕΣ ΜΟΝΑΔΕΣ ΤΟΥ ΧΡΗΣΤΗ
+			</description>
+		</message>
+		<message>
 			<keyword>ΠΤΥΧΙΟ</keyword>
-			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΙΣ ΔΙΔΑΚΤΙΚΕΣ ΜΟΝΑΔΕΣ ΠΟΥ ΥΠΟΛΟΙΠΟΝΤΑΙ ΓΙΑ
-				ΠΤΥΧΙΟ</description>
-			<query>SELECT password FROM v_SMS_GetPithiaCreds WHERE (mobile = ?)</query>
-			<message>secondMessage</message>
-			<numberOfReplacements> 1</numberOfReplacements>
-		</extraKeyword>
-		<preSharedKey>123789</preSharedKey>
-	</service>
+			<messageId>didaktikesMonadesMsg2</messageId>
+			<numberOfReplacements>1</numberOfReplacements>
+			<query>DECLARE @username VARCHAR(50)
+				DECLARE @CID VARCHAR(10)
+				DECLARE
+				@THEORIA VARCHAR(10)
+				DECLARE @ERGASTIRIO VARCHAR(10)
+				SET @username=?
+				SET @CID=?
+				SET @THEORIA=@CID+'1'
+				SET @ERGASTIRIO=@CID+'2'
 
+				select
+				x.ctitle,x.grade,y.grade
+				FROM
+				(SELECT ctitle,grade
+				FROM
+				[eUniCentral].[dbo].[v_SMS_gradeService]
+				where username=@username and
+				coursecode=@THEORIA)as x
+				,(SELECT grade
+				FROM
+				[eUniCentral].[dbo].[v_SMS_gradeService]
+				where username=@username and
+				coursecode=@ERGASTIRIO)as y
+			</query>
+			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΙΣ ΔΙΔΑΚΤΙΚΕΣ ΜΟΝΑΔΕΣ ΠΟΥ ΥΠΟΛΟΙΠΟΝΤΑΙ ΓΙΑ
+				ΠΤΥΧΙΟ
+			</description>
+		</message>
+		<errorMessage>
+			<messageId>didaktikesMonadesErrorMsg</messageId>
+			<numberOfReplacements>0</numberOfReplacements>
+		</errorMessage>
+	</service>
 	<service>
+		<serviceId>eggrafi</serviceId>
+		<keywords>
+			<keyword>ΕΓΓΡΑΦΗ</keyword>
+			<keyword>EGGRAFI</keyword>
+		</keywords>
+		<preSharedKey>F0fesFADSr223fA</preSharedKey>
+		<database>pithia</database>
+		<message>
+			<keyword></keyword>
+			<messageId>eggrafiMsg1</messageId>
+			<numberOfReplacements>1</numberOfReplacements>
+			<query>SELECT ctitle,grade
+				FROM
+				[eUniCentral].[dbo].[v_SMS_gradeService]
+				where username=? and
+				coursecode=?
+			</query>
+			<description>ΕΠΙΣΤΡΕΦΕΙ ΕΠΙΒΕΒΑΙΩΣΗ ΕΓΓΡΑΦΗΣ ΣΤΟ ΣΥΓΚΕΚΡΙΜΕΝΟ ΜΑΘΗΜΑ
+			</description>
+			<userInput>ΚΩΔΙΚΟΣ ΜΑΘΗΜΑΤΟΣ</userInput>
+		</message>
+		<message>
+			<keyword>ΕΡΓΑΣΤΗΡΙΟ</keyword>
+			<messageId>eggrafiMsg2</messageId>
+			<numberOfReplacements>3</numberOfReplacements>
+			<query>DECLARE @username VARCHAR(50)
+				DECLARE @CID VARCHAR(10)
+				DECLARE
+				@THEORIA VARCHAR(10)
+				DECLARE @ERGASTIRIO VARCHAR(10)
+				SET @username=?
+				SET @CID=?
+				SET @THEORIA=@CID+'1'
+				SET @ERGASTIRIO=@CID+'2'
+
+				select
+				x.ctitle,x.grade,y.grade
+				FROM
+				(SELECT ctitle,grade
+				FROM
+				[eUniCentral].[dbo].[v_SMS_gradeService]
+				where username=@username and
+				coursecode=@THEORIA)as x
+				,(SELECT grade
+				FROM
+				[eUniCentral].[dbo].[v_SMS_gradeService]
+				where username=@username and
+				coursecode=@ERGASTIRIO)as y
+			</query>
+			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΟ ΕΡΓΑΣΤΗΡΙΟ ΚΑΙ ΤΙΣ ΩΡΕΣ ΠΟΥ
+				ΠΡΑΓΜΑΤΟΠΟΙΕΙΤΑΙ
+			</description>
+			<userInput>ΚΩΔΙΚΟΣ ΜΑΘΗΜΑΤΟΣ</userInput>
+		</message>
+		<errorMessage>
+			<messageId>eggrafiErrorMsg</messageId>
+			<numberOfReplacements>0</numberOfReplacements>
+		</errorMessage>
+	</service>
+	<service>
+		<serviceId>aimodosia</serviceId>
 		<keywords>
 			<keyword>ΑΙΜΟΔΟΣΙΑ</keyword>
 			<keyword>AIMODOSIA</keyword>
 		</keywords>
-		<description>ΕΓΓΡΑΦΗ ΤΟΥ ΧΡΗΣΤΗ ΣΤΗΝ ΥΠΗΡΕΣΙΑ ΑΥΤΟΜΑΤΗΣ ΑΠΟΣΤΟΛΗΣ ΜΗΝΥΜΑΤΩΝ ΑΙΜΟΔΟΣΙΑΣ</description>
-		<serviceId>aimodosia</serviceId>
-		<extraKeyword>
+		<preSharedKey>F0fesFADSr223fA</preSharedKey>
+		<database>nireas</database>
+		<message>
+			<keyword></keyword>
+			<messageId>aimodosiaMsg1</messageId>
+			<numberOfReplacements>1</numberOfReplacements>
+			<query>select 'TEITHE STOP' as '';
+				insert into aimodosia(mobile,blacklist) values(?,0)ON DUPLICATE KEY UPDATE blacklist = 0
+			</query>
+			<description>ΕΓΓΡΑΦΗ ΤΟΥ ΧΡΗΣΤΗ ΣΤΗΝ ΥΠΗΡΕΣΙΑ ΑΥΤΟΜΑΤΗΣ ΑΠΟΣΤΟΛΗΣ
+				ΜΗΝΥΜΑΤΩΝ ΑΙΜΟΔΟΣΙΑΣ
+			</description>
+			<database>localdb</database>
+		</message>
+		<message>
 			<keyword>STOP</keyword>
+			<messageId>aimodosiaMsg2</messageId>
+			<numberOfReplacements>1</numberOfReplacements>
+			<query>select 'TEITHE ΑΙΜΟΔΟΣΙΑ' as '';
+				insert into
+				aimodosia(mobile,blacklist) values(?,1)ON DUPLICATE KEY UPDATE
+				blacklist = 1
+			</query>
 			<description>ΔΙΑΚΟΠΗ ΑΥΤΟΜΑΤΩΝ ΜΗΝΥΜΑΤΩΝ ΑΠΟ ΤΗΝ ΥΠΗΡΕΣΙΑ ΤΗΣ
-				ΑΙΜΟΔΟΣΙΑΣ</description>
-		</extraKeyword>
-				<extraKeyword>
+				ΑΙΜΟΔΟΣΙΑΣ
+			</description>
+			<database>localdb</database>
+		</message>
+		<message>
 			<keyword>ΤΕΛΕΥΤΑΙΑ</keyword>
-			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΗΝ ΗΜΕΡΟΜΗΝΙΑ ΤΗΣ ΤΕΛΕΥΤΑΙΑΣ ΦΟΡΑΣ ΠΟΥ ΕΔΩΣΕ ΑΙΜΑ Ο ΧΡΗΣΤΗΣ</description>
-		</extraKeyword>
-				<extraKeyword>
-			<keyword>ΦΙΑΛΕΣ</keyword>
-			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΟΝ ΑΡΙΘΜΩ ΦΙΑΛΩΝ ΠΟΥ ΔΙΚΑΙΟΥΤΑΙ Ο ΧΡΗΣΤΗΣ</description>
-		</extraKeyword>
-				<extraKeyword>
-			<keyword>ΦΙΑΛΕΣ ΚΑΤΑΝΑΛ</keyword>
-			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΟΝ ΑΡΙΘΜΟ ΤΩΝ ΦΙΑΛΩΝ ΑΙΜΑΤΟΣ ΠΟΥ ΕΧΟΥΝ ΚΑΤΑΝΑΛΩΘΕΙ ΑΠΟ ΤΟΝ ΧΡΗΣΤΗ</description>
-		</extraKeyword>
-		<preSharedKey>123789</preSharedKey>
+			<messageId>aimodosiaMsg3</messageId>
+			<numberOfReplacements>1</numberOfReplacements>
+			<query>SELECT STR_TO_DATE(d.date, '%d-%m-%Y')as date FROM "
+				+ "dates
+				d,donationdonor r,users u "
+				+ "where d.id=r.donationId and
+				r.donorId=u.id and u.mobile=? "
+				+ "order by date desc limit 1
+			</query>
+			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΗΝ ΗΜΕΡΟΜΗΝΙΑ ΤΗΣ ΤΕΛΕΥΤΑΙΑΣ ΦΟΡΑΣ ΠΟΥ ΕΔΩΣΕ
+				ΑΙΜΑ Ο ΧΡΗΣΤΗΣ
+			</description>
+		</message>
+		<message>
+			<keyword>ΦΙΑΛ</keyword>
+			<messageId>aimodosiaMsg6</messageId>
+			<numberOfReplacements>1</numberOfReplacements>
+			<query>select flasks from users where mobile = ?
+			</query>
+			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΟΝ ΑΡΙΘΜΩ ΦΙΑΛΩΝ ΠΟΥ ΔΙΚΑΙΟΥΤΑΙ Ο ΧΡΗΣΤΗΣ
+			</description>
+		</message>
+				<message>
+			<keyword>ΦΙΑΛΚΑΤΑΝ</keyword>
+			<messageId>aimodosiaMsg7</messageId>
+			<numberOfReplacements>1</numberOfReplacements>
+			<query>SELECT r.flasks  "
+				+ "from recipient r,users u "
+				+ "where u.id=r.donorId and u.mobile= ? 
+			</query>
+			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΟΝ ΑΡΙΘΜΟ ΤΩΝ ΦΙΑΛΩΝ ΑΙΜΑΤΟΣ ΠΟΥ ΕΧΟΥΝ
+				ΚΑΤΑΝΑΛΩΘΕΙ ΑΠΟ ΤΟΝ ΧΡΗΣΤΗ
+			</description>
+		</message>
+		<errorMessage>
+			<messageId>aimodosiaMsg4</messageId>
+			<numberOfReplacements>0</numberOfReplacements>
+		</errorMessage>
 	</service>
 
-
-
 </root>
+
+	

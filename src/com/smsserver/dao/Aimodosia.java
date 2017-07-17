@@ -10,6 +10,10 @@ import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.sql.DataSource;
 
+import com.smsserver.services.models.mobileoriginated.Message;
+
+import javassist.NotFoundException;
+
 @Stateless
 public class Aimodosia {
 	
@@ -67,79 +71,36 @@ public class Aimodosia {
 		return mobileNumbers;
 	}
 	
-	public  void addBlacklist(String mobile) throws SQLException{
-		try (Connection conn = localdb.getConnection();
-				PreparedStatement stmt = conn
-				.prepareStatement("insert into aimodosia(mobile,blacklist) values(?,1)ON DUPLICATE KEY UPDATE blacklist = 1");){
-			
+	public String[] queryAimodosia(Message message,String mobile,String[] body,int extra) throws SQLException, NotFoundException{
+		String[] replacements = new String[message.getNumberOfReplacements()];
+		DataSource ds;
+		if(message.getDatabase().equals("localdb"))
+			ds=localdb;
+		else
+			ds=nireas;
+		System.out.println(message.getQuery());
+		try (Connection conn = ds.getConnection(); PreparedStatement stmt = conn.prepareStatement(message.getQuery());) {
+
 			stmt.setString(1, mobile);
-			stmt.execute();	
+			for (int i = 1; i < message.getQueryParams(); i++)// ksekinaei apo 1
+															// giati mia
+															// parametros einai
+															// standard
+				stmt.setString(i + 1, body[i - 1 + extra]);
+			// -1 gia na paei sto 0 . extra an iparxei secondary
+
+			
+			try (ResultSet rs = stmt.executeQuery();) {
+				if (!rs.next()) {
+					throw new NotFoundException("query");
+				} else {
+					for (int i = 0; i < replacements.length; i++)
+						replacements[i] = rs.getString(i + 1);
+				}
+			}
 		}
-		
-	}
-	public  void addSubscriber(String mobile) throws SQLException{
-		try (Connection conn = localdb.getConnection();
-				PreparedStatement stmt = conn
-						.prepareStatement("insert into aimodosia(mobile,blacklist) values(?,0)ON DUPLICATE KEY UPDATE blacklist = 0");){
-			
-			stmt.setString(1, mobile);
-			stmt.execute();	
-		}
-	}
-	
+		return replacements;
 
-
-	public String getLastAimodosia(String mobile) throws SQLException {
-		String query="SELECT STR_TO_DATE(d.date, '%d-%m-%Y')as date FROM "
-				+ "dates d,donationdonor r,users u "
-				+ "where d.id=r.donationId and r.donorId=u.id and u.mobile=? "
-				+ "order by date desc limit 1;";
-		try (Connection conn = nireas.getConnection();
-				PreparedStatement stmt = conn
-				.prepareStatement(query);){
-			stmt.setString(1, mobile);
-			
-			ResultSet rs=stmt.executeQuery();
-
-			if(rs.next())
-				return rs.getString(1);
-		} 
-		return null;
-		
-	}
-
-	public String getFialesKatanal(String mobile) throws SQLException {
-		String query="SELECT r.flasks  "
-				+ "from recipient r,users u "
-				+ "where u.id=r.donorId and u.mobile= ? ;";
-		try (Connection conn = nireas.getConnection();
-				PreparedStatement stmt = conn
-				.prepareStatement(query);){
-			stmt.setString(1, mobile);
-			
-			ResultSet rs=stmt.executeQuery();
-
-			if(rs.next())
-				return rs.getString(1);
-		} 
-		return null;
-		
-	}
-
-	public String getFiales(String mobile) throws SQLException {
-		String query="select flasks from users where mobile = ? ";
-		try (Connection conn = nireas.getConnection();
-				PreparedStatement stmt = conn
-				.prepareStatement(query);){
-			stmt.setString(1, mobile);
-			
-			ResultSet rs=stmt.executeQuery();
-
-			if(rs.next())
-				return rs.getString(1);
-		} 
-		return null;
-		
 		
 	}
 	

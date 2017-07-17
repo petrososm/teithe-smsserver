@@ -11,14 +11,14 @@ import com.smsserver.dao.Aimodosia;
 import com.smsserver.dao.Discovery;
 import com.smsserver.dao.Pithia;
 import com.smsserver.services.gunetservices.GunetServices;
-import com.smsserver.services.models.mobileoriginated.ExtraKeyword;
+import com.smsserver.services.models.mobileoriginated.Message;
 import com.smsserver.services.models.mobileoriginated.MobileOriginatedService;
 
 import javassist.NotFoundException;
 
 @Stateful
 public class MobileOriginated {
-	
+
 	@EJB
 	Discovery discovery;
 	@EJB
@@ -26,127 +26,86 @@ public class MobileOriginated {
 	@EJB
 	Logs logs;
 	@EJB
-	Aimodosia aimodosia;
+	Aimodosia aimodosiaDao;
 	@EJB
-	Pithia pithia;
+	Pithia pithiaDao;
+	@EJB
+	GunetServices gunet;
 
-	
 	public SmsForwardResponseModel reply(SmsForwardModel smsRequest) {
-		if (!services.getServices().containsKey(smsRequest.keyword))
-			return new SmsForwardResponseModel(false,"Wrong keyword","0");
+		System.out.println(services.getMobileOriginatedServices().keySet());
+		if (!services.getMobileOriginatedServices().containsKey(smsRequest.getKeyword()))
+			return new SmsForwardResponseModel(false, "Wrong keyword", "0");
 
-		MobileOriginatedService mobileOriginatedService = services.getServices().get(smsRequest.keyword);
-		
-		//if(!mobileOriginatedService.preSharedKey.equals(smsRequest.preSharedKey))
-			//return new SmsForwardResponseModel(false, "Wrong preSharedKey", "0");
+		MobileOriginatedService mobileOriginatedService = services.getMobileOriginatedServices().get(smsRequest.getKeyword());
 
-		
+		// if(!mobileOriginatedService.preSharedKey.equals(smsRequest.preSharedKey))
+		// return new SmsForwardResponseModel(false, "Wrong preSharedKey", "0");
+
 		try {
 			System.out.println("checkpoint");
-			SendSmsModel sms=null;
-			if(mobileOriginatedService.serviceId.equals("aimodosia"))
-				sms=prepareReplyAimodosia(smsRequest);
-			else
-				sms=prepareReplyPithia(smsRequest, mobileOriginatedService);//an petaksei exception to pianei katw k leitourgei antistoixa
+			SendSmsModel sms = null;
 			
-			SmsResponseModel response=GunetServices.sendSingleSms(sms);
-			logs.logMobileOriginated(smsRequest,sms,response);
+			sms = prepareReply(smsRequest, mobileOriginatedService);
+
+			SmsResponseModel response = gunet.sendSingleSms(sms);
+			logs.logMobileOriginated(smsRequest, sms, response);
 			return new SmsForwardResponseModel(true);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return new SmsForwardResponseModel(false, e.getMessage(), "0");
 		}
 
 	}
 
-	private SendSmsModel prepareReplyAimodosia(SmsForwardModel smsRequest) {
-		String messageId=null;
-		String[] replacements=new String[1];
-		try{
-		if(!smsRequest.body.equalsIgnoreCase("")){
-			switch(smsRequest.body){
-			case "STOP":
-				aimodosia.addBlacklist(smsRequest.msisdn);
-				messageId="aimodosiaMsg2";
-				replacements[0]="TEITHE ΑΙΜΟΔΟΣΙΑ";
-				break;
-			case "ΤΕΛΕΥΤΑΙΑ":
-				replacements[0]=aimodosia.getLastAimodosia(smsRequest.msisdn);
-				messageId="aimodosiaMsg3";
-				break;
-			case "ΦΙΑΛΕΣ":
-				replacements[0]=aimodosia.getFiales(smsRequest.msisdn);
-				messageId="aimodosiaMsg6";
-				break;
-			case "ΦΙΑΛΕΣ ΚΑΤΑΝΑΛ":
-				replacements[0]=aimodosia.getFialesKatanal(smsRequest.msisdn);
-				messageId="aimodosiaMsg7";
-				break;
-			default:
-				throw new Exception("NO REPLY");
-			}		
-		}
-		else{
-			aimodosia.addSubscriber(smsRequest.msisdn);
-			messageId="aimodosiaMsg1";
-			replacements[0]="TEITHE STOP";
-		}
 
-		}
-		catch(Exception e){
-			e.printStackTrace();
-			messageId="aimodosiaMsg4";
-		}
-		
-		SendSmsModel sms = new SendSmsModel("aimodosia", messageId,replacements, smsRequest.msisdn,
-					smsRequest.smsForwardId);
-		return sms;
-		
-	
-		
-	}
 
-	private SendSmsModel prepareReplyPithia(SmsForwardModel smsRequest,MobileOriginatedService mobileOriginatedService) throws Exception {
-
-		MobileOriginatedService service=new MobileOriginatedService(mobileOriginatedService);
-
-		String[] userParameters=null;
-		int extra=0;
-		
-		if(!smsRequest.body.equalsIgnoreCase("")){
-			userParameters = smsRequest.body.split("\\s+");//diaxwrizei to body
-				if(mobileOriginatedService.extraKeyword != null){
-					for(ExtraKeyword ek:mobileOriginatedService.extraKeyword){//an yparxoyn k alla query
-						if(userParameters[0].equalsIgnoreCase(ek.keyword)){
-							service.messages.defaultMessage=ek.message;
-							service.numberOfReplacements=ek.numberOfReplacements;//allazei tis parametrous tou erwtimatos
-							service.query=ek.query;
-							service.queryParams=ek.queryParams;
-							extra++;//gia na ksekinisei apo tin epomeni leksi
-						}
-					}
+	private SendSmsModel prepareReply(SmsForwardModel smsRequest, MobileOriginatedService mobileOriginatedService)
+			throws Exception {
+		String[] userParameters = smsRequest.getBody().split("\\s+");;
+		int extra = 0;
+		Message message = null;
+		if (!smsRequest.getBody().equals("")) {
+			for (Message mes : mobileOriginatedService.getMessages()) {
+				if (mes.getKeyword().equalsIgnoreCase(userParameters[0])) {
+					message = mes;
+					extra++;
+				}
 			}
 		}
-		
-		
-		String messageToSend="";
-		String[] replacements=null;
-		try{
-
-			String authenticator=discovery.getUsername(smsRequest.msisdn);
-			replacements=pithia.queryPithia(service,authenticator,userParameters,extra);
+		else {
+			for (Message mes : mobileOriginatedService.getMessages())
+				if (mes.getKeyword().equals(""))
+					message = mes;
 		}
-		catch(NotFoundException ex){
-			messageToSend=service.messages.errorMessage;
-		}
-		SendSmsModel sms = new SendSmsModel(service.serviceId, messageToSend, replacements, smsRequest.msisdn,
-				smsRequest.smsForwardId);
 
+		if (message == null)
+			throw new Exception("No message found with no keyword");// todo real
+																	// exception
+
+			
+
+		String[] replacements = null;
+		SendSmsModel sms;
+
+		try {
+			if (mobileOriginatedService.getDatabase().equalsIgnoreCase("pithia")){
+				String authenticator = discovery.getUsername(smsRequest.getMsisdn());
+				replacements = pithiaDao.queryPithia(message, authenticator, userParameters,extra);
+			}
+			else if(mobileOriginatedService.getDatabase().equalsIgnoreCase("nireas")){
+				replacements=aimodosiaDao.queryAimodosia(message, smsRequest.getMsisdn(), userParameters,extra);
+			}
+		} catch (Exception e) {
+			message = mobileOriginatedService.getErrorMessage();
+			replacements=null;
+			e.printStackTrace();
+		}
+
+		sms = new SendSmsModel(mobileOriginatedService.getServiceId(), message.getMessageId(), replacements,
+				smsRequest.getMsisdn(), smsRequest.getSmsForwardId());
 		return sms;
+
 	}
-	
-
-
 
 }

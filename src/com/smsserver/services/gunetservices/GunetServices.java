@@ -1,6 +1,7 @@
 package com.smsserver.services.gunetservices;
 
 
+import javax.ejb.Stateful;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
@@ -12,11 +13,11 @@ import com.smsserver.controllers.models.gunetapi.SendSmsModel;
 import com.smsserver.controllers.models.gunetapi.SmsResponseModel;
 import com.smsserver.services.GetPropertyValues;
 
-
+@Stateful
 public class GunetServices {
 
 
-	public static SmsResponseModel testSend(SendSmsModel sendSms){
+	public SmsResponseModel testSend(SendSmsModel sendSms){
 		System.out.println(sendSms);
        SmsResponseModel s= new SmsResponseModel();
        s.setError("");
@@ -24,7 +25,7 @@ public class GunetServices {
 
 	}
 	
-	public static SmsResponseModel sendSingleSms (SendSmsModel sendSms) {
+	public SmsResponseModel sendSingleSms (SendSmsModel sendSms) {
 		  try {
 		        
 				Client client = TrustAllClient.IgnoreSSLClient();

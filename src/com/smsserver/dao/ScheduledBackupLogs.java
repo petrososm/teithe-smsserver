@@ -42,13 +42,13 @@ public class ScheduledBackupLogs implements Runnable {
 				.prepareStatement("INSERT INTO mobile_terminated(list,user,serviceId,messageId,replacements,sentTo,received) values (?,?,?,?,?,?,?)");){
 			
 			for ( MobileTerminatedLogs mt : logs.get_MTLogs()) {
-				stmt.setString(1, mt.list);
-				stmt.setString(2, mt.user);
-				stmt.setString(3, mt.serviceId);
-				stmt.setString(4, mt.messageId);
-				stmt.setString(5, mt.replacements);
-				stmt.setInt(6, mt.sentTo);
-				stmt.setInt(7, mt.received);
+				stmt.setString(1, mt.getList());
+				stmt.setString(2, mt.getUser());
+				stmt.setString(3, mt.getServiceId());
+				stmt.setString(4, mt.getMessageId());
+				stmt.setString(5, mt.getReplacements());
+				stmt.setInt(6, mt.getSentTo());
+				stmt.setInt(7, mt.getReceived());
 				stmt.executeUpdate();
 			}
 			System.out.println("MobileTerminated Logs Backed Up");
@@ -71,13 +71,13 @@ public class ScheduledBackupLogs implements Runnable {
 						.prepareStatement("INSERT INTO mobile_originated(mobile,keyword,body,serviceId,messageId,replacements,smsstatus) values (?,?,?,?,?,?,?)");){
 			
 			for ( MobileOriginatedLogs mo : logs.get_MOLogs()) {
-				stmt.setString(1, mo.mobile);
-				stmt.setString(2, mo.keyword);
-				stmt.setString(3, mo.body);
-				stmt.setString(4, mo.serviceId);
-				stmt.setString(5, mo.messageId);
-				stmt.setString(6, mo.replacements);
-				stmt.setString(7, mo.smsstatus);
+				stmt.setString(1, mo.getMobile());
+				stmt.setString(2, mo.getKeyword());
+				stmt.setString(3, mo.getBody());
+				stmt.setString(4, mo.getServiceId());
+				stmt.setString(5, mo.getMessageId());
+				stmt.setString(6, mo.getReplacements());
+				stmt.setString(7, mo.getSmsstatus());
 				stmt.executeUpdate();
 			}
 			System.out.println("Mobile OriginatedLogs Backed Up");

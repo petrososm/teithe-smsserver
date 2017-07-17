@@ -1,70 +1,92 @@
 package com.smsserver.services.models.mobileoriginated;
 
+import java.util.Arrays;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class MobileOriginatedService {
 
-	
-	public Keywords keywords;
-	public String query;
-	public String database;
-	public Messages messages;
-	public String serviceId;
-	public String preSharedKey;
-	public int numberOfReplacements;
-	public ExtraKeyword[] extraKeyword;
-	public String description;
-	public String userInput;
-	public int queryParams;
-
-	public MobileOriginatedService(){
-	}
+	private String serviceId;
+	private Keywords keywords;
+	private String preSharedKey;
+	private String database;
+	@XmlElement(name = "message")
+	private Message[] messages;
+	private Message errorMessage;
 
 
-	public MobileOriginatedService(Keywords keywords, String query, String database, Messages messages, String serviceId) {
-		super();
-		this.keywords = keywords;
-		this.query = query;
-		this.database = database;
-		this.messages = messages;
-		this.serviceId = serviceId;
-		queryParams = query.length() - query.replace("?", "").length();
-
-	}
-
-
-	public MobileOriginatedService(MobileOriginatedService mobileOriginatedService) {
-		super();
-		this.query = mobileOriginatedService.query;
-		this.database = mobileOriginatedService.database;
-		this.messages = mobileOriginatedService.messages;
-		this.serviceId = mobileOriginatedService.serviceId;
-		this.queryParams=mobileOriginatedService.queryParams;
-		this.numberOfReplacements=mobileOriginatedService.numberOfReplacements;
+	public MobileOriginatedService() {
 	}
 
 
 	@Override
 	public String toString() {
-		return "MobileOriginatedService [query=" + query + ", database=" + database + ", messages=" + messages
-				+ ", serviceId=" + serviceId + ", preSharedKey=" + preSharedKey + ", numberOfReplacements="
-				+ numberOfReplacements + ", queryParams=" + queryParams + "]";
+		return "MobileOriginatedService [serviceId=" + serviceId + ", keywords=" + keywords;
+	}
+
+
+	public String getServiceId() {
+		return serviceId;
+	}
+
+
+	public void setServiceId(String serviceId) {
+		this.serviceId = serviceId;
+	}
+
+
+	public Keywords getKeywords() {
+		return keywords;
+	}
+
+
+	public void setKeywords(Keywords keywords) {
+		this.keywords = keywords;
+	}
+
+
+	public String getPreSharedKey() {
+		return preSharedKey;
+	}
+
+
+	public void setPreSharedKey(String preSharedKey) {
+		this.preSharedKey = preSharedKey;
+	}
+
+
+	public String getDatabase() {
+		return database;
+	}
+
+
+	public void setDatabase(String database) {
+		this.database = database;
+	}
+
+
+	public Message[] getMessages() {
+		return messages;
+	}
+
+	public void setMessages(Message[] messages) {
+		this.messages = messages;
+	}
+
+
+	public Message getErrorMessage() {
+		return errorMessage;
+	}
+
+
+	public void setErrorMessage(Message errorMessage) {
+		this.errorMessage = errorMessage;
 	}
 
 
 
 
-
-
-
-
-
-
-	
-	
-	
-	
-	
 }

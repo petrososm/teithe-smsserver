@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.Priority;
+import javax.ejb.EJB;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ResourceInfo;
@@ -26,6 +27,8 @@ public class AuthorizationFilter implements ContainerRequestFilter {
 
     @Context
     private ResourceInfo resourceInfo;
+    @EJB
+    AuthenticatedUsers authUsers;
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
@@ -74,7 +77,7 @@ public class AuthorizationFilter implements ContainerRequestFilter {
 
 
     private void checkPermissions(List<Role> allowedRoles, String username) throws Exception {
-    	User user=AuthenticatedUsers.get(username);
+    	User user=authUsers.get(username);
     	for(Role r:allowedRoles)
     		if(user.getRole().equalsIgnoreCase(r.name()))
     				return;

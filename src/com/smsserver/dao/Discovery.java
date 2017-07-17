@@ -28,6 +28,7 @@ public class Discovery {
 			try {
 				return findUsernamePithia(mobile);
 			} catch (SQLException ex) {
+				e.printStackTrace();
 				throw new NotFoundException(mobile);
 			}
 		}
@@ -40,6 +41,7 @@ public class Discovery {
 			try {
 				return findMobilePithia(username);
 			} catch (SQLException ex) {
+				e.printStackTrace();
 				throw new NotFoundException(username);
 			}
 		}
@@ -96,16 +98,14 @@ public class Discovery {
 	private  String findUsernamePithia(String mobile) throws SQLException {
 		try (Connection conn = pithia.getConnection();
 				PreparedStatement stmt = conn
-						.prepareStatement("SELECT username FROM  v_SMS_GetPithiaCreds WHERE  RIGHT(mobile,10) = ?)");) {
+						.prepareStatement("SELECT username FROM  v_SMS_GetPithiaCreds WHERE  RIGHT(mobile,10) = ?");) {
 
 			stmt.setString(1, mobile);
 			ResultSet rs = stmt.executeQuery();
 			rs.next();
-			
 			return rs.getString(1);
 
 		}
-
 	}
 
 	private  String findMobileLocal(String username) throws SQLException {

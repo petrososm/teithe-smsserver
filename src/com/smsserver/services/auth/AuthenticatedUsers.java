@@ -11,7 +11,7 @@ import net.jodah.expiringmap.ExpiringMap;
 @Singleton
 public class AuthenticatedUsers {
 
-	private static Map<String, User>  authUsers;
+	private Map<String, User>  authUsers;
 
 	@PostConstruct
 	public void init(){
@@ -23,11 +23,11 @@ public class AuthenticatedUsers {
 		put(new User("peris","doesntmatter","STAFF"));
 	}
 
-	public static void put(User u) {
+	public  void put(User u) {
 		authUsers.putIfAbsent(u.getUsername(), u);
 	}
 
-	public static User get(String username) {
+	public User get(String username) {
 		return authUsers.get(username);
 	}
 
