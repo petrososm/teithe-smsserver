@@ -58,7 +58,7 @@ public class Services {
 			com.smsserver.services.models.mobileoriginated.Root moRoot = (com.smsserver.services.models.mobileoriginated.Root) unmarshaller
 					.unmarshal(questionXML);
 
-			for (MobileOriginatedService s : moRoot.mobileOriginatedService) {
+			for (MobileOriginatedService s : moRoot.getMobileOriginatedService()) {
 				for (String keyword : s.getKeywords().keywordList)
 					mobileOriginatedServices.put(keyword, s);
 
@@ -85,14 +85,14 @@ public class Services {
 			com.smsserver.services.models.mobileterminated.Root mtRoot = (com.smsserver.services.models.mobileterminated.Root) unmarshaller
 					.unmarshal(mtxml);
 
-			for (MobileTerminatedService s : mtRoot.mobileTerminatedService) {
-				for (Message m : s.messages) {
-					m.replacements = m.messageId.length() - m.messageId.replace("?", "").length();
-					mobileTerminatedServices.put(m.messageId, s);
-					if (s.type.equalsIgnoreCase("moodle"))
-						smsTemplatesMoodle.add(new SmsTemplate(m.messageId, m.message));
-					else if (s.type.equalsIgnoreCase("direct")) {
-						smsTemplatesDirect.add(new SmsTemplate(m.messageId, m.message));
+			for (MobileTerminatedService s : mtRoot.getMobileTerminatedService()) {
+				for (Message m : s.getMessages()) {
+					m.setReplacements(m.getMessageId().length() - m.getMessageId().replace("?", "").length());
+					mobileTerminatedServices.put(m.getMessageId(), s);
+					if (s.getType().equalsIgnoreCase("moodle"))
+						smsTemplatesMoodle.add(new SmsTemplate(m.getMessageId(), m.getMessage()));
+					else if (s.getType().equalsIgnoreCase("direct")) {
+						smsTemplatesDirect.add(new SmsTemplate(m.getMessageId(), m.getMessage()));
 					}
 				}
 			}

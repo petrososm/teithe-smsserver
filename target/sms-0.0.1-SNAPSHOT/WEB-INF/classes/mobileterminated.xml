@@ -2,18 +2,18 @@
 <root>
 
 	<service>
-		<serviceId>cancelService</serviceId>
+		<serviceId>cancelCourse</serviceId>
 		<message>
-			<messageId>cancel1</messageId>
+			<messageId>cancelCourseMsg1</messageId>
 			<message>ΤΟ ΜΑΘΗΜΑ ? ΤΗΣ ? ΑΝΑΒΑΛΛΕΤΑΙ</message>
 		</message>
 		<message>
-			<messageId>cancel2</messageId>
+			<messageId>cancelCourseMsg2</messageId>
 			<message>ΤΟ ΜΑΘΗΜΑ ? ΤΗΣ ? ΑΝΑΒΑΛΛΕΤΑΙ ΚΑΙ ΘΑ ΠΡΑΓΜΑΤΟΠΟΙΗΘΕΙ ΤΗΝ ?
 			</message>
 		</message>
 		<message>
-			<messageId>cancel3</messageId>
+			<messageId>cancelCourseMsg3</messageId>
 			<message>ΘΑ ΓΙΝΕΙ ΑΝΑΠΛΗΡΩΣΗ ΤΟΥ ΜΑΘΗΜΑΤΟΣ ? ΤΗΝ ?</message>
 		</message>
 		<preSharedKey>123789</preSharedKey>
@@ -21,20 +21,20 @@
 	</service>
 
 	<service>
-		<serviceId>ergasiesService</serviceId>
+		<serviceId>assignmentAnnouncement</serviceId>
 		<message>
-			<messageId>ergasia1</messageId>
+			<messageId>assignmentAnnouncementMsg1</messageId>
 			<message>ΕΧΕΙ ΑΝΑΚΟΙΝΩΘΕΙ ΕΡΓΑΣΙΑ ΓΙΑ ΤΟ ΜΑΘΗΜΑ ?.ΠΡΟΘΕΣΜΙΑ ΕΡΓΑΣΙΑΣ
 				ΕΩΣ ΤΙΣ ?
 			</message>
 		</message>
 		<message>
-			<messageId>ergasia2</messageId>
+			<messageId>assignmentAnnouncementMsg2</messageId>
 			<message>Η ΠΡΟΘΕΣΜΙΑ ΓΙΑ ΤΗΝ ΕΡΓΑΣΙΑ ΣΤΟ ΜΑΘΗΜΑ ? ΛΗΓΕΙ ΣΤΙΣ ?
 			</message>
 		</message>
 		<message>
-			<messageId>ergasia3</messageId>
+			<messageId>assignmentAnnouncementMsg3</messageId>
 			<message>ΘΑ ΓΙΝΕΙ ΠΑΡΟΥΣΙΑΣΗ ΕΡΓΑΣΙΩΝ ΓΙΑ ΤΟ ΜΑΘΗΜΑ ? ΣΤΙΣ ?
 			</message>
 		</message>
@@ -43,14 +43,14 @@
 	</service>
 
 	<service>
-		<serviceId>moodleService</serviceId>
+		<serviceId>moodleAnnouncement</serviceId>
 		<message>
-			<messageId>ergasia1</messageId>
+			<messageId>moodleAnnouncementMsg1</messageId>
 			<message>ΔΙΑΒΑΣΤΕ ΣΗΜΑΝΤΙΚΗ ΑΝΑΚΟΙΝΩΣΗ ΓΙΑ ΤΟ ΜΑΘΗΜΑ ? ΣΤΟ MOODLE
 			</message>
 		</message>
 		<message>
-			<messageId>ergasia2</messageId>
+			<messageId>moodleAnnouncementMsg2</messageId>
 			<message>ΕΧΟΥΝ ΑΝΑΚΟΙΝΩΘΕΙ ΒΑΘΜΟΛΟΓΙΕΣ ΓΙΑ ΤΟ ΜΑΘΗΜΑ ?
 			</message>
 		</message>
@@ -67,7 +67,7 @@
 		</message>
 		<message>
 			<messageId>ergasia2</messageId>
-			<message>Η ΠΑΡΟΥΣΙΑΣΗ ΤΗΣ ΠΤΥΧΙΑΚΗΣ ΣΟΥ ΕΡΓΑΣΙΕΣ ΕΙΝΑΙ ΣΤΙΣ ?
+			<message>Η ΠΑΡΟΥΣΙΑΣΗ ΤΗΣ ΠΤΥΧΙΑΚΗΣ ΣΟΥ ΕΡΓΑΣΙΑΣ ΕΙΝΑΙ ΣΤΙΣ ?
 			</message>
 		</message>
 		<preSharedKey>123789</preSharedKey>

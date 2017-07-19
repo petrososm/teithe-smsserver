@@ -72,11 +72,10 @@
 			<keyword></keyword>
 			<messageId>didaktikesMonadesMsg1</messageId>
 			<numberOfReplacements>1</numberOfReplacements>
-			<query>SELECT ctitle,grade
+			<query>SELECT didmon
 				FROM
-				[eUniCentral].[dbo].[v_SMS_gradeService]
-				where username=? and
-				coursecode=?
+				[eUniCentral].[dbo].[v_SMS_didaktikesMonades]
+				where username=?
 			</query>
 			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΙΣ ΔΙΔΑΚΤΙΚΕΣ ΜΟΝΑΔΕΣ ΤΟΥ ΧΡΗΣΤΗ
 			</description>
@@ -85,29 +84,10 @@
 			<keyword>ΠΤΥΧΙΟ</keyword>
 			<messageId>didaktikesMonadesMsg2</messageId>
 			<numberOfReplacements>1</numberOfReplacements>
-			<query>DECLARE @username VARCHAR(50)
-				DECLARE @CID VARCHAR(10)
-				DECLARE
-				@THEORIA VARCHAR(10)
-				DECLARE @ERGASTIRIO VARCHAR(10)
-				SET @username=?
-				SET @CID=?
-				SET @THEORIA=@CID+'1'
-				SET @ERGASTIRIO=@CID+'2'
-
-				select
-				x.ctitle,x.grade,y.grade
+			<query>SELECT 210-didmon
 				FROM
-				(SELECT ctitle,grade
-				FROM
-				[eUniCentral].[dbo].[v_SMS_gradeService]
-				where username=@username and
-				coursecode=@THEORIA)as x
-				,(SELECT grade
-				FROM
-				[eUniCentral].[dbo].[v_SMS_gradeService]
-				where username=@username and
-				coursecode=@ERGASTIRIO)as y
+				[eUniCentral].[dbo].[v_SMS_didaktikesMonades]
+				where username=?
 			</query>
 			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΙΣ ΔΙΔΑΚΤΙΚΕΣ ΜΟΝΑΔΕΣ ΠΟΥ ΥΠΟΛΟΙΠΟΝΤΑΙ ΓΙΑ
 				ΠΤΥΧΙΟ
@@ -130,11 +110,10 @@
 			<keyword></keyword>
 			<messageId>eggrafiMsg1</messageId>
 			<numberOfReplacements>1</numberOfReplacements>
-			<query>SELECT ctitle,grade
-				FROM
-				[eUniCentral].[dbo].[v_SMS_gradeService]
-				where username=? and
-				coursecode=?
+			<query>SELECT [classtitle]
+				FROM [eUniCentral].[dbo].[v_SMS_eggrafi]
+				where username=?
+				and coursecode=?
 			</query>
 			<description>ΕΠΙΣΤΡΕΦΕΙ ΕΠΙΒΕΒΑΙΩΣΗ ΕΓΓΡΑΦΗΣ ΣΤΟ ΣΥΓΚΕΚΡΙΜΕΝΟ ΜΑΘΗΜΑ
 			</description>
@@ -143,30 +122,14 @@
 		<message>
 			<keyword>ΕΡΓΑΣΤΗΡΙΟ</keyword>
 			<messageId>eggrafiMsg2</messageId>
-			<numberOfReplacements>3</numberOfReplacements>
-			<query>DECLARE @username VARCHAR(50)
-				DECLARE @CID VARCHAR(10)
-				DECLARE
-				@THEORIA VARCHAR(10)
-				DECLARE @ERGASTIRIO VARCHAR(10)
-				SET @username=?
-				SET @CID=?
-				SET @THEORIA=@CID+'1'
-				SET @ERGASTIRIO=@CID+'2'
-
-				select
-				x.ctitle,x.grade,y.grade
+			<numberOfReplacements>2</numberOfReplacements>
+			<query>SELECT classtitle,section
 				FROM
-				(SELECT ctitle,grade
-				FROM
-				[eUniCentral].[dbo].[v_SMS_gradeService]
-				where username=@username and
-				coursecode=@THEORIA)as x
-				,(SELECT grade
-				FROM
-				[eUniCentral].[dbo].[v_SMS_gradeService]
-				where username=@username and
-				coursecode=@ERGASTIRIO)as y
+				[eUniCentral].[dbo].[v_SMS_eggrafi]
+				where username=?
+				and coursecode
+				LIKE '?%'
+				order by coursecode desc
 			</query>
 			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΟ ΕΡΓΑΣΤΗΡΙΟ ΚΑΙ ΤΙΣ ΩΡΕΣ ΠΟΥ
 				ΠΡΑΓΜΑΤΟΠΟΙΕΙΤΑΙ
@@ -175,6 +138,32 @@
 		</message>
 		<errorMessage>
 			<messageId>eggrafiErrorMsg</messageId>
+			<numberOfReplacements>0</numberOfReplacements>
+		</errorMessage>
+	</service>
+	<service>
+		<serviceId>PythiaUserNamePass</serviceId>
+		<keywords>
+			<keyword>ΡΙΤΗΙΑLΟGΙΝ</keyword>
+		</keywords>
+		<preSharedKey>F0fesFADSr223fA</preSharedKey>
+		<database>pithia</database>
+		<message>
+			<keyword></keyword>
+			<messageId>PythiaUserNamePassMsg</messageId>
+			<numberOfReplacements>1</numberOfReplacements>
+			<query>SELECT username
+				,password
+				FROM
+				[eUniCentral].[dbo].[v_SMS_GetPithiaCreds]
+				where username=?
+			</query>
+			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΑ ΔΙΑΠΙΣΤΕΥΤΗΡΙΑ ΤΟΥ ΧΡΗΣΤΗ
+			</description>
+		</message>
+		<errorMessage>
+			<messageId>PythiaUserNamePassErrorMsg
+			</messageId>
 			<numberOfReplacements>0</numberOfReplacements>
 		</errorMessage>
 	</service>
@@ -191,7 +180,9 @@
 			<messageId>aimodosiaMsg1</messageId>
 			<numberOfReplacements>1</numberOfReplacements>
 			<query>select 'TEITHE STOP' as '';
-				insert into aimodosia(mobile,blacklist) values(?,0)ON DUPLICATE KEY UPDATE blacklist = 0
+				insert into
+				aimodosia(mobile,blacklist) values(?,0)ON DUPLICATE KEY UPDATE
+				blacklist = 0
 			</query>
 			<description>ΕΓΓΡΑΦΗ ΤΟΥ ΧΡΗΣΤΗ ΣΤΗΝ ΥΠΗΡΕΣΙΑ ΑΥΤΟΜΑΤΗΣ ΑΠΟΣΤΟΛΗΣ
 				ΜΗΝΥΜΑΤΩΝ ΑΙΜΟΔΟΣΙΑΣ
@@ -236,13 +227,14 @@
 			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΟΝ ΑΡΙΘΜΩ ΦΙΑΛΩΝ ΠΟΥ ΔΙΚΑΙΟΥΤΑΙ Ο ΧΡΗΣΤΗΣ
 			</description>
 		</message>
-				<message>
+		<message>
 			<keyword>ΦΙΑΛΚΑΤΑΝ</keyword>
 			<messageId>aimodosiaMsg7</messageId>
 			<numberOfReplacements>1</numberOfReplacements>
-			<query>SELECT r.flasks  "
+			<query>SELECT r.flasks "
 				+ "from recipient r,users u "
-				+ "where u.id=r.donorId and u.mobile= ? 
+				+ "where
+				u.id=r.donorId and u.mobile= ?
 			</query>
 			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΟΝ ΑΡΙΘΜΟ ΤΩΝ ΦΙΑΛΩΝ ΑΙΜΑΤΟΣ ΠΟΥ ΕΧΟΥΝ
 				ΚΑΤΑΝΑΛΩΘΕΙ ΑΠΟ ΤΟΝ ΧΡΗΣΤΗ

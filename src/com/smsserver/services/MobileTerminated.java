@@ -34,6 +34,8 @@ public class MobileTerminated {
 	Logs logs;
 	@EJB
 	Moodle moodle;
+	@EJB
+	GunetServices gunet;
 	
 	public SendReport sendAimodosia(String date) throws Exception{
 		
@@ -50,34 +52,33 @@ public class MobileTerminated {
 	
 	public  SendReport sendMoodle(SendSmsRequestMoodle request)throws Exception{
 		
-//		ArrayList<String> enrolledStudents=moodle.getEnrolledStudents(request.course);
-//		int enrolledStudentsCount=enrolledStudents.size();
-//
-//		ArrayList<String> mobileNumbers=discovery.getMobileMass(enrolledStudents);
-//
-//		String serviceId=services.getMobileTerminatedServices().get(request.messageId).serviceId;
-//		
-//		SendSmsModel sms=new SendSmsModel(serviceId,request.messageId,request.replacements);
-//		int delivered=sendSmsParallel(sms,mobileNumbers,2,true);
-//		logs.logMobileTerminated(request.course, request.professor, sms, mobileNumbers.size(), delivered);
-//		return new SendReport(mobileNumbers.size(),delivered,enrolledStudentsCount);
-		return null;
+		ArrayList<String> enrolledStudents=moodle.getEnrolledStudents(request.getCourse());
+		int enrolledStudentsCount=enrolledStudents.size();
+
+		ArrayList<String> mobileNumbers=discovery.getMobileMass(enrolledStudents);
+
+		String serviceId=services.getMobileTerminatedServices().get(request.getMessageId()).getServiceId();
+		
+		SendSmsModel sms=new SendSmsModel(serviceId,request.getMessageId(),request.getReplacements());
+		int delivered=sendSmsParallel(sms,mobileNumbers,2,true);
+		logs.logMobileTerminated(request.getCourse(), request.getProfessor(), sms, mobileNumbers.size(), delivered);
+		return new SendReport(mobileNumbers.size(),delivered,enrolledStudentsCount);
+
 		
 	}
 	public SendReport sendDirect(SendSmsRequestDirect request) throws Exception {
-//		ArrayList<String> mobileNumbers=new ArrayList<String>(Arrays.asList(request.recipients));
-//		String serviceId=services.getMobileTerminatedServices().get(request.messageId).serviceId;
-//
-//		SendSmsModel sms=new SendSmsModel(serviceId,request.messageId,request.replacements);
-//		int delivered=sendSmsParallel(sms,mobileNumbers,2,false);
-//		logs.logMobileTerminated(String.join(", ", request.recipients), request.sender, sms, mobileNumbers.size(), delivered);
-//		return new SendReport(mobileNumbers.size(),delivered,mobileNumbers.size());
-		return null;
+		ArrayList<String> mobileNumbers=new ArrayList<String>(Arrays.asList(request.getRecipients()));
+		String serviceId=services.getMobileTerminatedServices().get(request.getMessageId()).getServiceId();
+
+		SendSmsModel sms=new SendSmsModel(serviceId,request.getMessageId(),request.getReplacements());
+		int delivered=sendSmsParallel(sms,mobileNumbers,2,false);
+		logs.logMobileTerminated(String.join(", ", request.getRecipients()), request.getSender(), sms, mobileNumbers.size(), delivered);
+		return new SendReport(mobileNumbers.size(),delivered,mobileNumbers.size());
 
 	}
 
 
-	private static int sendSmsParallel(SendSmsModel sms,ArrayList<String> mobNumbers,int threads,boolean test) throws InterruptedException {
+	private int sendSmsParallel(SendSmsModel sms,ArrayList<String> mobNumbers,int threads,boolean test) throws InterruptedException {
 		ExecutorService threadPool = Executors.newFixedThreadPool(threads);
 		CompletionService<String> pool = new ExecutorCompletionService<String>(threadPool);
 
@@ -102,28 +103,28 @@ public class MobileTerminated {
 	}
 	
 	
-	private static Callable<String> getCallableTask(SendSmsModel sms,ArrayList<String> mobNumbers,int start,int end,boolean test){
+	private Callable<String> getCallableTask(SendSmsModel sms,ArrayList<String> mobNumbers,int start,int end,boolean test){
 		
-//		Callable<String> callableObj = () -> {
-//			int count=0;
-//			SendSmsModel sms1=new SendSmsModel(sms);
-//			for(int k=start;k<end;k++){
-//				sms1.recipient=mobNumbers.get(k);
-//				SmsResponseModel smsResponse;
-//				if(test){	
-//					smsResponse=GunetServices.testSend(sms1);
-//				}
-//				else{
-//					smsResponse=GunetServices.sendSingleSms(sms1);
-//				}
-//				if(smsResponse.error.equals(""))
-//					count++;
-//
-//			}
-//		return String.valueOf(count);
-//		};
-//		return callableObj;
-		return null;
+		Callable<String> callableObj = () -> {
+			int count=0;
+			SendSmsModel sms1=new SendSmsModel(sms);
+			for(int k=start;k<end;k++){
+				sms1.setRecipient(mobNumbers.get(k));
+				SmsResponseModel smsResponse;
+				if(test){	
+					smsResponse=gunet.testSend(sms1);
+				}
+				else{
+					smsResponse=gunet.sendSingleSms(sms1);
+				}
+				if(smsResponse.getError().equals(""))
+					count++;
+
+			}
+		return String.valueOf(count);
+		};
+		return callableObj;
+
 	}
 	
 }

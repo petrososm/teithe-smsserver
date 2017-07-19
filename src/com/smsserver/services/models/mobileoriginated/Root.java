@@ -11,7 +11,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Root {
     
 	@XmlElement(name="service")
-	public ArrayList<MobileOriginatedService> mobileOriginatedService;
+	private ArrayList<MobileOriginatedService> mobileOriginatedService;
+
+	public ArrayList<MobileOriginatedService> getMobileOriginatedService() {
+		return mobileOriginatedService;
+	}
+
+	public void setMobileOriginatedService(ArrayList<MobileOriginatedService> mobileOriginatedService) {
+		this.mobileOriginatedService = mobileOriginatedService;
+	}
 	
 	
 

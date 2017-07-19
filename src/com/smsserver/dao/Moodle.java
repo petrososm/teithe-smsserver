@@ -38,7 +38,7 @@ public class Moodle {
 	
 	public ArrayList<String> getEnrolledStudents(String course) throws SQLException{
 		ArrayList<String> usernames=new ArrayList<String>();
-		String query="SELECT username FROM moodle.v_studentspercourse where CourseCode=?";
+		String query="SELECT username FROM moodle.v_studentspercourse where CourseCode=? and EnrolStartDate>DATE_SUB(CURDATE(), INTERVAL 12 MONTH)";
 		try (Connection conn = moodle.getConnection();
 				PreparedStatement stmt = conn
 				.prepareStatement(query);){

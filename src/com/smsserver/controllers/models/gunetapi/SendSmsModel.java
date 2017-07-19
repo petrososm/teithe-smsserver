@@ -23,9 +23,9 @@ public class SendSmsModel {
     private String smsForwardId;//efoson ginei se dinexeia enos forward request-proeraitiko
 	
     
-    public SendSmsModel(String serverId, String messageId, String[] replacements, String recipient, String smsForwardId) {
+    public SendSmsModel(String serviceId, String messageId, String[] replacements, String recipient, String smsForwardId) {
 		super();
-		this.serviceId = serverId;
+		this.serviceId = serviceId;
 		this.messageId = messageId;
 		this.replacements = replacements;
 		this.recipient = recipient;
