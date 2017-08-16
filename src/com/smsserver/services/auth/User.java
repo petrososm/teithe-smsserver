@@ -1,9 +1,6 @@
 package com.smsserver.services.auth;
 
-import java.io.Serializable;
 import javax.xml.bind.annotation.XmlRootElement;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonProperty.Access;
 @XmlRootElement
 public class User  {
 
@@ -11,6 +8,8 @@ public class User  {
 	    private String password;
 	    private String role;
 	    private String token;
+	    private String fullname;
+	    private int ldapLogin=0;
 	    
 	    
 
@@ -18,7 +17,6 @@ public class User  {
 		public User(String username, String token, String role) {
 			super();
 			this.username = username;
-
 			this.role = role;
 		}
 
@@ -55,6 +53,24 @@ public class User  {
 		public void setToken(String token) {
 			this.token = token;
 		}
+
+
+		public void setLdapLogin(int ldapLogin) {
+			this.ldapLogin = ldapLogin;
+		}
+
+		public int getLdapLogin() {
+			return ldapLogin;
+		}
+
+		public String getFullname() {
+			return fullname;
+		}
+
+		public void setFullname(String fullname) {
+			this.fullname = fullname;
+		}
+		
 
 	    
 	

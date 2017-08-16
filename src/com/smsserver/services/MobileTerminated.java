@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Logger;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
@@ -36,6 +37,9 @@ public class MobileTerminated {
 	Moodle moodle;
 	@EJB
 	GunetServices gunet;
+	
+    private static Logger LOGGER = Logger.getLogger(Discovery.class.getName());
+
 	
 	public SendReport sendAimodosia(String date) throws Exception{
 		

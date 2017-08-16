@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
@@ -21,6 +22,8 @@ public class Aimodosia {
     DataSource nireas;
     @Resource(lookup = "jdbc/localdb")
     DataSource localdb;
+    
+
     
 	public ArrayList<String> getMobileNumbers() throws SQLException{
 		ArrayList<String> mobileNumbers=new ArrayList<String>();
@@ -73,11 +76,12 @@ public class Aimodosia {
 	
 	public String[] queryAimodosia(Message message,String mobile,String[] body,int extra) throws SQLException, NotFoundException{
 		String[] replacements = new String[message.getNumberOfReplacements()];
-		DataSource ds;
-		if(message.getDatabase().equals("localdb"))
-			ds=localdb;
-		else
+		DataSource ds=null;
+		if(message.getDatabase()==null)
 			ds=nireas;
+		else if(message.getDatabase().equals("localdb"))
+			ds=localdb;
+		
 		System.out.println(message.getQuery());
 		try (Connection conn = ds.getConnection(); PreparedStatement stmt = conn.prepareStatement(message.getQuery());) {
 

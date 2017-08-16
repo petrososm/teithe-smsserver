@@ -24,6 +24,7 @@ public class Mobile {
 	Discovery discovery;
 	@EJB
 	MobileChanger mobChanger;
+
 	
 	@GET
 	@Secured
@@ -58,6 +59,7 @@ public class Mobile {
 			mobChanger.changeMobileNumber(username, Integer.parseInt(verification));
 			return Response.ok().build();
 		} catch (Exception e) {
+			e.printStackTrace();
             return Response.status(Response.Status.EXPECTATION_FAILED).build();
 		}
 

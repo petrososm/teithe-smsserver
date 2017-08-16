@@ -72,7 +72,7 @@
 			<keyword></keyword>
 			<messageId>didaktikesMonadesMsg1</messageId>
 			<numberOfReplacements>1</numberOfReplacements>
-			<query>SELECT didmon
+			<query>SELECT CAST(didmon AS INT)
 				FROM
 				[eUniCentral].[dbo].[v_SMS_didaktikesMonades]
 				where username=?
@@ -84,7 +84,7 @@
 			<keyword>ΠΤΥΧΙΟ</keyword>
 			<messageId>didaktikesMonadesMsg2</messageId>
 			<numberOfReplacements>1</numberOfReplacements>
-			<query>SELECT 210-didmon
+			<query>SELECT 210-CAST(didmon AS INT)
 				FROM
 				[eUniCentral].[dbo].[v_SMS_didaktikesMonades]
 				where username=?
@@ -207,12 +207,11 @@
 			<keyword>ΤΕΛΕΥΤΑΙΑ</keyword>
 			<messageId>aimodosiaMsg3</messageId>
 			<numberOfReplacements>1</numberOfReplacements>
-			<query>SELECT STR_TO_DATE(d.date, '%d-%m-%Y')as date FROM "
-				+ "dates
-				d,donationdonor r,users u "
-				+ "where d.id=r.donationId and
-				r.donorId=u.id and u.mobile=? "
-				+ "order by date desc limit 1
+			<query>SELECT STR_TO_DATE(d.date, '%d-%m-%Y')as date FROM dates
+				d,donationdonor r,users u
+				where d.id=r.donationId and
+				r.donorId=u.id and u.mobile=?
+				order by date desc limit 1
 			</query>
 			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΗΝ ΗΜΕΡΟΜΗΝΙΑ ΤΗΣ ΤΕΛΕΥΤΑΙΑΣ ΦΟΡΑΣ ΠΟΥ ΕΔΩΣΕ
 				ΑΙΜΑ Ο ΧΡΗΣΤΗΣ

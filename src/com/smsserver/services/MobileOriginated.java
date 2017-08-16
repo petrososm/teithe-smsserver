@@ -1,5 +1,8 @@
 package com.smsserver.services;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 
@@ -31,9 +34,11 @@ public class MobileOriginated {
 	Pithia pithiaDao;
 	@EJB
 	GunetServices gunet;
+	
+    private static Logger LOGGER = Logger.getLogger(Discovery.class.getName());
+
 
 	public SmsForwardResponseModel reply(SmsForwardModel smsRequest) {
-		System.out.println(services.getMobileOriginatedServices().keySet());
 		if (!services.getMobileOriginatedServices().containsKey(smsRequest.getKeyword()))
 			return new SmsForwardResponseModel(false, "Wrong keyword", "0");
 
@@ -43,16 +48,19 @@ public class MobileOriginated {
 		// return new SmsForwardResponseModel(false, "Wrong preSharedKey", "0");
 
 		try {
-			System.out.println("checkpoint");
 			SendSmsModel sms = null;
 			
 			sms = prepareReply(smsRequest, mobileOriginatedService);
 
 			SmsResponseModel response = gunet.sendSingleSms(sms);
+			if(response.getError().equals(""))
+				LOGGER.log(Level.INFO, "Succesful Reply "+sms+" to sms Request "+smsRequest);
+			else
+				LOGGER.log(Level.INFO, "SMS not delivered "+sms,response);
 			logs.logMobileOriginated(smsRequest, sms, response);
 			return new SmsForwardResponseModel(true);
 		} catch (Exception e) {
-			e.printStackTrace();
+	        LOGGER.log(Level.SEVERE, "SMS not sent "+ smsRequest,e);
 			return new SmsForwardResponseModel(false, e.getMessage(), "0");
 		}
 
@@ -80,7 +88,7 @@ public class MobileOriginated {
 		}
 
 		if (message == null)
-			throw new Exception("No message found with no keyword");// todo real
+			throw new Exception("No message found with default keyword");// todo real
 																	// exception
 
 			
@@ -99,7 +107,7 @@ public class MobileOriginated {
 		} catch (Exception e) {
 			message = mobileOriginatedService.getErrorMessage();
 			replacements=null;
-			e.printStackTrace();
+	        LOGGER.log(Level.INFO, "SMS forward unsuccesful reply ",e);
 		}
 
 		sms = new SendSmsModel(mobileOriginatedService.getServiceId(), message.getMessageId(), replacements,

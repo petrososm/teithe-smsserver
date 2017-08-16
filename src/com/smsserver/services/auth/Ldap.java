@@ -1,11 +1,13 @@
 package com.smsserver.services.auth;
 
+import java.text.Normalizer;
 import java.util.Properties;
 
-import javax.ejb.DependsOn;
 import javax.ejb.Stateless;
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
+import javax.naming.directory.Attribute;
+import javax.naming.directory.Attributes;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.SearchControls;
@@ -16,15 +18,14 @@ import com.smsserver.services.GetPropertyValues;
 @Stateless
 public class Ldap {
 
-	private String serviceUserDN ;
-	private String serviceUserPassword ;
-	private String ldapUrl ;
-	private String identifyingAttribute ;
-	private String base ;
-	
+	private String serviceUserDN;
+	private String serviceUserPassword;
+	private String ldapUrl;
+	private String identifyingAttribute;
+	private String base;
 
 	public String performAuthentication(User user) throws Exception {
-		
+
 		serviceUserDN = GetPropertyValues.getProperties().getProperty("serviceUserDN");
 		serviceUserPassword = GetPropertyValues.getProperties().getProperty("serviceUserPassword");
 		ldapUrl = GetPropertyValues.getProperties().getProperty("ldapUrl");
@@ -43,7 +44,7 @@ public class Ldap {
 			serviceCtx = new InitialDirContext(serviceEnv);
 
 			// we don't need all attributes, just let it get the identifying one
-			String[] attributeFilter = { identifyingAttribute };
+			String[] attributeFilter = { identifyingAttribute, "cn;lang-el" };
 			SearchControls sc = new SearchControls();
 			sc.setReturningAttributes(attributeFilter);
 			sc.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -56,15 +57,26 @@ public class Ldap {
 				// get the users DN (distinguishedName) from the result
 				SearchResult result = results.next();
 				String distinguishedName = result.getNameInNamespace();
-				
+				Attributes attributes = result.getAttributes();
+				Attribute attribute = attributes.get("cn;lang-el");
+				if (attribute != null) {
+					Object o = attribute.get();
+					if (o != null) {
+						String fullname = String.valueOf(o);
+						String s = Normalizer.normalize(fullname, Normalizer.Form.NFD);
+						s = s.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+						user.setFullname(s.toUpperCase());
+					}
+				}
 
-				// attempt another authentication, now with the user
-//				Properties authEnv = new Properties();
-//				authEnv.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-//				authEnv.put(Context.PROVIDER_URL, ldapUrl);
-//				authEnv.put(Context.SECURITY_PRINCIPAL, distinguishedName);
-//				authEnv.put(Context.SECURITY_CREDENTIALS, u.getRealPassword());
-//				new InitialDirContext(authEnv);
+				// Properties authEnv = new Properties();
+				// authEnv.put(Context.INITIAL_CONTEXT_FACTORY,
+				// "com.sun.jndi.ldap.LdapCtxFactory");
+				// authEnv.put(Context.PROVIDER_URL, ldapUrl);
+				// authEnv.put(Context.SECURITY_PRINCIPAL, distinguishedName);
+				// authEnv.put(Context.SECURITY_CREDENTIALS,
+				// user.getRealPassword());
+				// new InitialDirContext(authEnv);
 
 				System.out.println("Authentication successful");
 

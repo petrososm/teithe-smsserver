@@ -2,7 +2,7 @@ var role=getCookie("role");
 var url = location.pathname;
 var array = url.split('/');
 var path = array[array.length-1];
-var baseurl='http://'+location.host;
+var baseurl='https://'+location.host;
 
 //sendsmsVar
 var message;

@@ -2,9 +2,12 @@ package com.smsserver.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.util.ArrayList;
 
+import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
+import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.Stateful;
 import javax.sql.DataSource;
@@ -15,33 +18,37 @@ import com.smsserver.services.models.logs.MobileOriginatedLogs;
 import com.smsserver.services.models.logs.MobileTerminatedLogs;
 
 @Singleton
-public class ScheduledBackupLogs implements Runnable {
+public class ScheduledBackupLogs {
     
 	@Resource(lookup = "jdbc/localdb")
     DataSource localdb;
+
     
-    @EJB
-    Logs logs;
+	private ArrayList<DlrRequestModel> deliveryReports = new ArrayList<DlrRequestModel>();
+	private ArrayList<MobileOriginatedLogs> _MOLogs = new ArrayList<MobileOriginatedLogs>();
+	private ArrayList<MobileTerminatedLogs> _MTLogs = new ArrayList<MobileTerminatedLogs>();
 
 	
-	@Override
-	public void run() {
+    @Schedule(minute = "*/10", hour = "*")
+    @PreDestroy
+	public void backup() {
 		System.out.println("Backing up..");	
 		backupMO();
 		backupMT();
 		backupDlrs();
 
 	}
+	
 
 	private void backupMT() {
-		if (logs.get_MTLogs().isEmpty())
+		if (_MTLogs.isEmpty())
 			return;
 
 		try (Connection conn = localdb.getConnection();
 				PreparedStatement stmt = conn
 				.prepareStatement("INSERT INTO mobile_terminated(list,user,serviceId,messageId,replacements,sentTo,received) values (?,?,?,?,?,?,?)");){
 			
-			for ( MobileTerminatedLogs mt : logs.get_MTLogs()) {
+			for ( MobileTerminatedLogs mt : _MTLogs) {
 				stmt.setString(1, mt.getList());
 				stmt.setString(2, mt.getUser());
 				stmt.setString(3, mt.getServiceId());
@@ -58,19 +65,19 @@ public class ScheduledBackupLogs implements Runnable {
 			System.out.println("MobileTerminated Logs Backup Interrupted");
 		}
 
-		logs.get_MTLogs().clear();
+		_MTLogs.clear();
 
 	}
 
 	private void backupMO() {
-		if (logs.get_MOLogs().isEmpty())
+		if (_MOLogs.isEmpty())
 			return;
 
 		try (Connection conn = localdb.getConnection();
 				PreparedStatement stmt = conn
 						.prepareStatement("INSERT INTO mobile_originated(mobile,keyword,body,serviceId,messageId,replacements,smsstatus) values (?,?,?,?,?,?,?)");){
 			
-			for ( MobileOriginatedLogs mo : logs.get_MOLogs()) {
+			for ( MobileOriginatedLogs mo : _MOLogs) {
 				stmt.setString(1, mo.getMobile());
 				stmt.setString(2, mo.getKeyword());
 				stmt.setString(3, mo.getBody());
@@ -86,19 +93,19 @@ public class ScheduledBackupLogs implements Runnable {
 			System.out.println("Mobile OriginatedLogs Backup Interrupted");
 		}
 
-		logs.get_MOLogs().clear();
+		_MOLogs.clear();
 
 	}
 
 	private void backupDlrs() {
-		if (logs.getDeliveryReports().isEmpty())
+		if (deliveryReports.isEmpty())
 			return;
 
 		try (Connection conn = localdb.getConnection();
 				PreparedStatement stmt = conn
 						.prepareStatement("INSERT INTO DLRS(serviceId,recipient,status,error) values (?,?,?,?)");){
 			
-			for (DlrRequestModel dlr : logs.getDeliveryReports()) {
+			for (DlrRequestModel dlr : deliveryReports) {
 				stmt.setString(1, dlr.getServiceId());
 				stmt.setString(2, dlr.getRecipient());
 				stmt.setString(3, dlr.getStatus());
@@ -109,13 +116,18 @@ public class ScheduledBackupLogs implements Runnable {
 			e.printStackTrace();
 		}
 		System.out.println("DlrsBackedUp");
-		logs.getDeliveryReports().clear();
+		deliveryReports.clear();
 
 	}
 
-	public static void backup() {
-		ScheduledBackupLogs sc = new ScheduledBackupLogs();
-		sc.run();
+	public void addMoLog(MobileOriginatedLogs log){
+		_MOLogs.add(log);
 	}
-
+	public void addMtLog(MobileTerminatedLogs log){
+		_MTLogs.add(log);
+	}
+	public void addDeliveryReport(DlrRequestModel dlr){
+		deliveryReports.add(dlr);
+	}
+	
 }
