@@ -24,8 +24,9 @@ import com.smsserver.controllers.models.site.Course;
 import com.smsserver.controllers.models.site.ServiceDescription;
 import com.smsserver.controllers.models.site.SmsTemplate;
 import com.smsserver.dao.Discovery;
-import com.smsserver.dao.Moodle;
+import com.smsserver.dao.Courses;
 import com.smsserver.services.Services;
+import com.smsserver.services.auth.AuthenticatedUsers;
 import com.smsserver.services.auth.Role;
 
 @Path("/site")
@@ -36,9 +37,11 @@ public class Data {
 	@EJB
 	Services services;
 	@EJB
-	Moodle moodle;
+	Courses moodle;
 	@EJB
 	Discovery discovery;
+	@EJB
+	AuthenticatedUsers authUsers;
 	
 	@Path("/moservices")
 	@GET
@@ -71,10 +74,10 @@ public class Data {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Secured({Role.STAFF,Role.ADMIN})
-	public List<Course> getCoursesPerProfessor() throws SQLException{
+	public List<Course> getCoursesPerProfessor() throws Exception{
     	Principal principal = securityContext.getUserPrincipal();
     	String username = principal.getName();
-    	return moodle.getCourses(username);
+		return moodle.getCoursesPithia(username);
 	}
 	
 	@Path("/users/{search}")

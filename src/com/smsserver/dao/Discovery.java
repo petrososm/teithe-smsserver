@@ -5,7 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -62,32 +65,54 @@ public class Discovery {
 		}
 	}
 
-	public ArrayList<String> getMobileMass(ArrayList<String> usernames) throws SQLException {
-		ArrayList<String> mobNumbers = new ArrayList<String>();
+	public ArrayList<String> getMobileMass(String course) throws SQLException {
+		HashMap<String, String> users = new HashMap<String, String>();
+		ArrayList<String> mobNumbers;
+
+		PreparedStatement stmtDrop = null;
 		try (Connection local = localdb.getConnection();
 				Connection pithia1 = pithia.getConnection();
 				PreparedStatement stmtLocal = local
-						.prepareStatement("select mobNumber from mobilenumbers where username=?");
+						.prepareStatement("select username,mobNumber from mobilenumbers natural join tmp");
+				PreparedStatement stmtCreate = local
+						.prepareStatement("create temporary table tmp(username varchar(30) primary key) ENGINE=MEMORY");
+				PreparedStatement stmtInsert = local.prepareStatement("insert into tmp(username) values(?)");
 				PreparedStatement stmtPithia = pithia1.prepareStatement(
-						"SELECT RIGHT(mobile,10) FROM  v_SMS_GetPithiaCreds WHERE   username= ? and mobile != '-'");) {
+						"SELECT username,RIGHT(mobile,10)as mobile FROM [eUniCentral].[dbo].[v_SMS_eggrafi] where coursecode=?");) {
 
-			ResultSet rs;
-			for (String u : usernames) {
-				stmtLocal.setString(1, u);
-				rs = stmtLocal.executeQuery();
-				if (rs.next()) {
-					mobNumbers.add(rs.getString(1));
-				} else {
-					stmtPithia.setString(1, u);
-					rs = stmtPithia.executeQuery();
-					if (rs.next()) {
-						mobNumbers.add(rs.getString(1));
-						updateMobile(u, rs.getString(1));
-					}
-				}
+			stmtDrop=local.prepareStatement("drop table tmp");
+			stmtPithia.setString(1, course);
+
+			ResultSet rs = stmtPithia.executeQuery();
+			stmtCreate.execute();
+
+			while (rs.next()) {
+				if (!rs.getString("mobile").equals(""))
+					users.put(rs.getString("username"), rs.getString("mobile"));
+				stmtInsert.setString(1, rs.getString("username"));
+				stmtInsert.addBatch();
 			}
+
+			stmtInsert.executeBatch();
+
+
+
+
+			rs = stmtLocal.executeQuery();
+			while (rs.next()) {
+				users.put(rs.getString("username"), rs.getString("mobNumber"));
+			}
+
+			mobNumbers = new ArrayList<String>(users.values());
+
 		}
 
+		finally {
+			if(stmtDrop!=null){
+				stmtDrop.execute();
+				stmtDrop.close();
+			}
+		}
 		return mobNumbers;
 
 	}
@@ -151,10 +176,10 @@ public class Discovery {
 
 	public void updateMobile(String username, String mobile) throws SQLException {
 		String fullname;
-		if(authUsers.contains(username))
-			fullname=authUsers.get(username).getFullname();
+		if (authUsers.contains(username))
+			fullname = authUsers.get(username).getFullname();
 		else
-			fullname=getFullNamePithia(username);
+			fullname = getFullNamePithia(username);
 		try (Connection conn = localdb.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(
 						"insert into mobilenumbers(mobNumber,username,fullname) values(?,?,?)ON DUPLICATE KEY UPDATE mobNumber = ?");) {
@@ -166,78 +191,66 @@ public class Discovery {
 			stmt.execute();
 		}
 	}
-	
-	public String getFullNamePithia(String username) throws SQLException{
+
+	public String getFullNamePithia(String username) throws SQLException {
 		try (Connection conn = pithia.getConnection();
-				PreparedStatement stmt = conn.prepareStatement(
-						"SELECT top 1[first],[last] "
-						+ "FROM [eUniCentral].[dbo].[v_SMS_eggrafi] "
-						+ "where username=?")) {
+				PreparedStatement stmt = conn.prepareStatement("SELECT top 1[first],[last] "
+						+ "FROM [eUniCentral].[dbo].[v_SMS_eggrafi] " + "where username=?")) {
 
 			stmt.setString(1, username);
 			ResultSet rs = stmt.executeQuery();
-			if(rs.next())
-				return rs.getString("last")+" "+rs.getString("first");
-			
+			if (rs.next())
+				return rs.getString("last") + " " + rs.getString("first");
+
 			return null;
 
 		}
 	}
 
-	public ArrayList<UserInfo> findUser(String query) throws Exception{
-		String qpithia="SELECT TOP 10 t.username,RIGHT(t.mobile,10)as mobile  "
-				+ "FROM [eUniCentral].[dbo].[v_SMS_GetPithiaCreds]t "
-				+ "inner join  "
-				+ "(select username FROM [eUniCentral].[dbo].[v_SMS_GetPithiaCreds] "
-				+ "where (username LIKE ? "
-				+ "or mobile LIKE ?)"
-				+ "and isnumeric(mobile)=1 and mobile != '-' "
-				+ "group by username) "
-				+ "as x on x.username=t.username";
-		String qlocal="SELECT * FROM smsserver.mobilenumbers "
-				+ "where username like ? "
-				+ "or mobNumber like ? "
-				+ "or fullname like ?"
-				+ "limit 5 ";
-		ArrayList<UserInfo> results=new ArrayList<UserInfo>();
-		ArrayList<UserInfo> localresults=new ArrayList<UserInfo>();
-		try (Connection conn = pithia.getConnection();
-				PreparedStatement stmt = conn
-				.prepareStatement(qpithia)){
-			
-			stmt.setString(1, "%"+query+"%");
-			stmt.setString(2, "%"+query+"%");
-			ResultSet rs=stmt.executeQuery();
+	public ArrayList<UserInfo> findUser(String query) throws Exception {
+		String qpithia = "SELECT TOP 10 t.username,t.fullname,RIGHT(t.mobile,10)as mobile  "
+				+ "FROM [eUniCentral].[dbo].[v_SMS_GetPithiaCreds] t " + "where (username LIKE ? " + "or mobile LIKE ? "
+				+ "or am LIKE ? " + "or fullname LIKE ?) " + "and isnumeric(mobile)=1 and mobile != '-' ";
+		String qlocal = "SELECT * FROM smsserver.mobilenumbers " + "where username like ? " + "or mobNumber like ? "
+				+ "or fullname like ?" + "limit 5 ";
+		ArrayList<UserInfo> results = new ArrayList<UserInfo>();
+		ArrayList<UserInfo> localresults = new ArrayList<UserInfo>();
+		try (Connection conn = pithia.getConnection(); PreparedStatement stmt = conn.prepareStatement(qpithia)) {
 
-			while(rs.next()){
-				results.add(new UserInfo(rs.getString("username"),rs.getString("mobile"),"pithiaSoon"));
+			stmt.setString(1, "%" + query + "%");
+			stmt.setString(2, "%" + query + "%");
+			stmt.setString(3, "%" + query + "%");
+			stmt.setString(4, "%" + query + "%");
+			ResultSet rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				results.add(new UserInfo(rs.getString("username"), rs.getString("mobile"), rs.getString("fullname")));
 			}
 		}
-		try (Connection conn = localdb.getConnection();
-				PreparedStatement stmt = conn
-				.prepareStatement(qlocal)){
-			
-			stmt.setString(1, "%"+query+"%");
-			stmt.setString(2, "%"+query+"%");
-			stmt.setString(3, "%"+query+"%");
-			ResultSet rs=stmt.executeQuery();
+		try (Connection conn = localdb.getConnection(); PreparedStatement stmt = conn.prepareStatement(qlocal)) {
 
-			while(rs.next()){
-				localresults.add(new UserInfo(rs.getString("username"),rs.getString("mobNumber"),rs.getString("fullname")));
+			stmt.setString(1, "%" + query + "%");
+			stmt.setString(2, "%" + query + "%");
+			stmt.setString(3, "%" + query + "%");
+			ResultSet rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				localresults.add(
+						new UserInfo(rs.getString("username"), rs.getString("mobNumber"), rs.getString("fullname")));
 			}
 		}
 		boolean exists;
-		for(UserInfo r : results){
-			exists=false;
-			for(UserInfo lr:localresults){
-			if(r.getName().equalsIgnoreCase(lr.getName()))
-				exists=true;
+		for (UserInfo r : results) {
+			exists = false;
+			for (UserInfo lr : localresults) {
+				if (r.getName().equalsIgnoreCase(lr.getName()))
+					exists = true;
 			}
-			if(!exists)
+			if (!exists)
 				localresults.add(r);
-			
+
 		}
 		return localresults;
-}
+	}
 
 }

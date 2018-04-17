@@ -12,7 +12,7 @@
 			<keyword></keyword>
 			<messageId>gradeServiceTEITHEMsg1</messageId>
 			<numberOfReplacements>2</numberOfReplacements>
-			<query>SELECT ctitle,grade
+			<query>SELECT ctitle,CONVERT(DECIMAL(10,1),grade)
 				FROM
 				[eUniCentral].[dbo].[v_SMS_gradeService]
 				where username=? and
@@ -22,27 +22,33 @@
 			</description>
 			<userInput>ΚΩΔΙΚΟΣ ΜΑΘΗΜΑΤΟΣ</userInput>
 		</message>
+
 		<message>
-			<keyword>ΞΕΧΩΡ</keyword>
+			<keyword>KSEXWR</keyword>
 			<messageId>gradeServiceTEITHEMsg2</messageId>
 			<numberOfReplacements>3</numberOfReplacements>
-			<query>DECLARE @username VARCHAR(50)
+			<query>
+				DECLARE @USERNAME VARCHAR(50)
 				DECLARE @CID VARCHAR(10)
 				DECLARE
 				@THEORIA VARCHAR(10)
-				DECLARE @ERGASTIRIO VARCHAR(10)
+				DECLARE @ERGASTIRIO
+				VARCHAR(10)
 				SET @username=?
 				SET @CID=?
 				SET @THEORIA=@CID+'1'
-				SET @ERGASTIRIO=@CID+'2'
+				SET
+				@ERGASTIRIO=@CID+'2'
 
 				select
 				x.ctitle,x.grade,y.grade
 				FROM
-				(SELECT ctitle,grade
+				(SELECT
+				ctitle,grade
 				FROM
 				[eUniCentral].[dbo].[v_SMS_gradeService]
-				where username=@username and
+				where
+				username=@username and
 				coursecode=@THEORIA)as x
 				,(SELECT grade
 				FROM
@@ -144,26 +150,24 @@
 	<service>
 		<serviceId>PythiaUserNamePass</serviceId>
 		<keywords>
-			<keyword>ΡΙΤΗΙΑLΟGΙΝ</keyword>
+			<keyword>PITHIALOGIN</keyword>
 		</keywords>
 		<preSharedKey>F0fesFADSr223fA</preSharedKey>
 		<database>pithia</database>
 		<message>
 			<keyword></keyword>
 			<messageId>PythiaUserNamePassMsg</messageId>
-			<numberOfReplacements>1</numberOfReplacements>
-			<query>SELECT username
-				,password
-				FROM
-				[eUniCentral].[dbo].[v_SMS_GetPithiaCreds]
-				where username=?
+			<numberOfReplacements>2</numberOfReplacements>
+			<query>DECLARE @username VARCHAR(50)
+				SET @username=?
+				SELECT @username,substring([eUniCentral].[dbo].[f_Login]
+				(@username,''),5,50)
 			</query>
 			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΑ ΔΙΑΠΙΣΤΕΥΤΗΡΙΑ ΤΟΥ ΧΡΗΣΤΗ
 			</description>
 		</message>
 		<errorMessage>
-			<messageId>PythiaUserNamePassErrorMsg
-			</messageId>
+			<messageId>PythiaUserNamePassErrorMsg</messageId>
 			<numberOfReplacements>0</numberOfReplacements>
 		</errorMessage>
 	</service>
@@ -210,7 +214,8 @@
 			<query>SELECT STR_TO_DATE(d.date, '%d-%m-%Y')as date FROM dates
 				d,donationdonor r,users u
 				where d.id=r.donationId and
-				r.donorId=u.id and u.mobile=?
+				r.donorId=u.id
+				and u.mobile=?
 				order by date desc limit 1
 			</query>
 			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΗΝ ΗΜΕΡΟΜΗΝΙΑ ΤΗΣ ΤΕΛΕΥΤΑΙΑΣ ΦΟΡΑΣ ΠΟΥ ΕΔΩΣΕ
@@ -223,7 +228,7 @@
 			<numberOfReplacements>1</numberOfReplacements>
 			<query>select flasks from users where mobile = ?
 			</query>
-			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΟΝ ΑΡΙΘΜΩ ΦΙΑΛΩΝ ΠΟΥ ΔΙΚΑΙΟΥΤΑΙ Ο ΧΡΗΣΤΗΣ
+			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΟΝ ΑΡΙΘΜΟ ΦΙΑΛΩΝ ΠΟΥ ΔΙΚΑΙΟΥΤΑΙ Ο ΧΡΗΣΤΗΣ
 			</description>
 		</message>
 		<message>

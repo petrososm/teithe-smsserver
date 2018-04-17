@@ -55,7 +55,6 @@ public class SendMessages {
     	req.setProfessor(principal.getName());
 
     	try {
-			
 			return Response.ok(mobileTerminated.sendMoodle(req)).build();
 		} catch (Exception e) {
 			e.printStackTrace();

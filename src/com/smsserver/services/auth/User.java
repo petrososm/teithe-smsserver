@@ -9,7 +9,7 @@ public class User  {
 	    private String role;
 	    private String token;
 	    private String fullname;
-	    private int ldapLogin=0;
+	    private int confirmedPhone=0;
 	    
 	    
 
@@ -54,13 +54,12 @@ public class User  {
 			this.token = token;
 		}
 
-
-		public void setLdapLogin(int ldapLogin) {
-			this.ldapLogin = ldapLogin;
+		public int getConfirmedPhone() {
+			return confirmedPhone;
 		}
 
-		public int getLdapLogin() {
-			return ldapLogin;
+		public void setConfirmedPhone(int confirmedPhone) {
+			this.confirmedPhone = confirmedPhone;
 		}
 
 		public String getFullname() {

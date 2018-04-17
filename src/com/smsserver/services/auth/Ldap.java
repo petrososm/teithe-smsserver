@@ -66,17 +66,18 @@ public class Ldap {
 						String s = Normalizer.normalize(fullname, Normalizer.Form.NFD);
 						s = s.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
 						user.setFullname(s.toUpperCase());
+						System.out.println(s);
 					}
 				}
 
-				// Properties authEnv = new Properties();
-				// authEnv.put(Context.INITIAL_CONTEXT_FACTORY,
-				// "com.sun.jndi.ldap.LdapCtxFactory");
-				// authEnv.put(Context.PROVIDER_URL, ldapUrl);
-				// authEnv.put(Context.SECURITY_PRINCIPAL, distinguishedName);
-				// authEnv.put(Context.SECURITY_CREDENTIALS,
-				// user.getRealPassword());
-				// new InitialDirContext(authEnv);
+				 Properties authEnv = new Properties();
+				 authEnv.put(Context.INITIAL_CONTEXT_FACTORY,
+				 "com.sun.jndi.ldap.LdapCtxFactory");
+				 authEnv.put(Context.PROVIDER_URL, ldapUrl);
+				 authEnv.put(Context.SECURITY_PRINCIPAL, distinguishedName);
+				 authEnv.put(Context.SECURITY_CREDENTIALS,
+				 user.getRealPassword());
+				 new InitialDirContext(authEnv);
 
 				System.out.println("Authentication successful");
 

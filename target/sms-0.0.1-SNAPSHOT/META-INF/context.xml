@@ -1,0 +1,24 @@
+<Context>
+	<Resource name="jdbc/pithia" auth="Container" type="javax.sql.DataSource"
+		username="smsservice" password="Osman2017" driverClassName="net.sourceforge.jtds.jdbc.Driver"
+		url="jdbc:jtds:sqlserver://195.251.242.117;DatabaseName=eUnicentral"
+		maxTotal="200" maxIdle="5" validationQuery="select 1" />
+
+	<Resource name="jdbc/localDb" auth="Container" type="javax.sql.DataSource"
+		maxTotal="50" maxIdle="5" maxWaitMillis="10000" driverClassName="com.mysql.jdbc.Driver"
+		url="jdbc:mysql://localhost:3306/smsserver" username="root" password="nocnoc" />
+
+	<Resource name="jdbc/nireas" auth="Container" type="javax.sql.DataSource"
+		maxTotal="100" maxIdle="5" maxWaitMillis="10000" driverClassName="com.mysql.jdbc.Driver"
+		url="jdbc:mysql://nireas.it.teithe.gr:3306/aimodosia-smsserver-db"
+		username="petros.osm" password="petros.osm" />
+
+	<Resource name="jdbc/moodle" auth="Container" type="javax.sql.DataSource"
+		maxTotal="1000" maxIdle="5" maxWaitMillis="10000" driverClassName="com.mysql.jdbc.Driver"
+		url="jdbc:mysql://moodle.teithe.gr:3306/moodle" username="smsservice"
+		password="Osman2017" />
+	<Resource name="BeanManager" auth="Container"
+		type="javax.enterprise.inject.spi.BeanManager" factory="org.jboss.weld.resources.ManagerObjectFactory" />
+
+
+</Context>

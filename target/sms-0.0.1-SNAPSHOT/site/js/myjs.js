@@ -2,7 +2,7 @@ var role=getCookie("role");
 var url = location.pathname;
 var array = url.split('/');
 var path = array[array.length-1];
-var baseurl='https://'+location.host;
+var baseurl='http://'+location.host;
 
 //sendsmsVar
 var message;
@@ -77,6 +77,11 @@ function loadNavBar(){
 	else if(role=='staff'){
 		links[2]={link:"sendsms.html",value:'ΑΠΟΣΤΟΛΗ SMS'};
 		links[3]={link:"logout.html",value:'ΑΠΟΣΥΝΔΕΣΗ'};
+	    if(getCookie('ldapLogin').length!=0){
+			$('#alert').show();
+			$('#alertMessage').html("Παρατηρήθηκε οτι κάνατε είσοδο στο σύστημα μέσω του λογαριασμού LDAP.\n" +
+					"Εαν είστε καθηγήτης και θέλετε να στείλετε μαζικά μηνύματα,θα πρέπει να κάνετε είσοδο με τα στοιχεία της πυθίας.");
+	    }
 	}
 	else if(role=='admin'){
 		links[2]={link:"sendsms.html",value:'ΑΠΟΣΤΟΛΗ SMS'};
@@ -135,6 +140,9 @@ function loadIndexDiv(){
 	}
 	$("#indexDiv").html(html);
 	
+
+
+	
 	
 }
  
@@ -180,6 +188,8 @@ function loadIndexDiv(){
 			contentType: 'application/json',
 			dataType: 'json',
 			success: function(response) {
+				if(response['ldapLogin']==1 && response['role']=='staff')
+					setCookie('ldapLogin',true,2);
 				setCookie('token',response['token'],2);
 				setCookie('role',response['role'],2);
 				var redir=getCookie('redirect');
@@ -189,6 +199,8 @@ function loadIndexDiv(){
 				}
 				else
 					location.replace("./");
+
+
 			},
 			error: function () {
 				bootbox.alert("Η ταυτοποίηση των στοιχείων σας απέτυχε");

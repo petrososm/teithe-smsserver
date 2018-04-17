@@ -4,12 +4,10 @@ public class SendReport {
 
 	private int sent;
 	private int delivered;
-	private int total;
-	public SendReport(int sent, int delivered,int total) {
+	public SendReport(int sent, int delivered) {
 		super();
 		this.sent = sent;
 		this.delivered = delivered;
-		this.total=total;
 	}
 	
 	public SendReport(){}
@@ -30,13 +28,7 @@ public class SendReport {
 		this.delivered = delivered;
 	}
 
-	public int getTotal() {
-		return total;
-	}
 
-	public void setTotal(int total) {
-		this.total = total;
-	}
 	
 	
 }

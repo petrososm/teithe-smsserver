@@ -14,6 +14,7 @@ import com.smsserver.dao.Aimodosia;
 import com.smsserver.dao.Discovery;
 import com.smsserver.dao.Pithia;
 import com.smsserver.services.gunetservices.GunetServices;
+import com.smsserver.services.mobileoriginated.GradeService;
 import com.smsserver.services.models.mobileoriginated.Message;
 import com.smsserver.services.models.mobileoriginated.MobileOriginatedService;
 
@@ -34,6 +35,8 @@ public class MobileOriginated {
 	Pithia pithiaDao;
 	@EJB
 	GunetServices gunet;
+	@EJB
+	GradeService gradeService;
 	
     private static Logger LOGGER = Logger.getLogger(Discovery.class.getName());
 
@@ -70,6 +73,10 @@ public class MobileOriginated {
 
 	private SendSmsModel prepareReply(SmsForwardModel smsRequest, MobileOriginatedService mobileOriginatedService)
 			throws Exception {
+		
+		if(smsRequest.getKeyword().equals("VATHMOS"))
+			return gradeService.prepareReply(smsRequest);
+		
 		String[] userParameters = smsRequest.getBody().split("\\s+");;
 		int extra = 0;
 		Message message = null;
@@ -79,14 +86,13 @@ public class MobileOriginated {
 					message = mes;
 					extra++;
 				}
-			}
+			}			
 		}
-		else {
+		if(message==null){
 			for (Message mes : mobileOriginatedService.getMessages())
 				if (mes.getKeyword().equals(""))
 					message = mes;
 		}
-
 		if (message == null)
 			throw new Exception("No message found with default keyword");// todo real
 																	// exception
@@ -106,7 +112,7 @@ public class MobileOriginated {
 			}
 		} catch (Exception e) {
 			message = mobileOriginatedService.getErrorMessage();
-			replacements=null;
+			replacements=new String[0];
 	        LOGGER.log(Level.INFO, "SMS forward unsuccesful reply ",e);
 		}
 

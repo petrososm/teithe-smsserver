@@ -1,2 +1,4 @@
 eclipse.preferences.version=1
+encoding//src/com/smsserver/dao/ScheduledBackupLogs.java=UTF-8
 encoding//src/com/smsserver/services/MobileOriginated.java=UTF-8
+encoding//src/com/smsserver/services/mobileoriginated/GradeService.java=UTF-8

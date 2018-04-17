@@ -64,7 +64,7 @@ public class Services {
 
 				for (com.smsserver.services.models.mobileoriginated.Message m : s.getMessages()) {
 					descriptions.add(new ServiceDescription(
-							s.getKeywords().keywordList.get(0) + " " + m.getFullKeyword(), m.getDescription()));
+							"TEITHE "+s.getKeywords().keywordList.get(0) + " " + m.getFullKeyword(), m.getDescription()));
 
 					m.computeQueryParams();
 				}

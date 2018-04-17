@@ -4,11 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
+import javax.ejb.Startup;
 import javax.ejb.Stateful;
 import javax.sql.DataSource;
 
@@ -17,38 +19,39 @@ import com.smsserver.services.Logs;
 import com.smsserver.services.models.logs.MobileOriginatedLogs;
 import com.smsserver.services.models.logs.MobileTerminatedLogs;
 
+import info.debatty.java.stringsimilarity.JaroWinkler;
+
 @Singleton
 public class ScheduledBackupLogs {
-    
-	@Resource(lookup = "jdbc/localdb")
-    DataSource localdb;
 
-    
+	@Resource(lookup = "jdbc/localdb")
+	DataSource localdb;
+
 	private ArrayList<DlrRequestModel> deliveryReports = new ArrayList<DlrRequestModel>();
 	private ArrayList<MobileOriginatedLogs> _MOLogs = new ArrayList<MobileOriginatedLogs>();
 	private ArrayList<MobileTerminatedLogs> _MTLogs = new ArrayList<MobileTerminatedLogs>();
 
-	
-    @Schedule(minute = "*/10", hour = "*")
-    @PreDestroy
+	@Schedule(minute = "*/10", hour = "*")
+	@PreDestroy
 	public void backup() {
-		System.out.println("Backing up..");	
+		System.out.println("Backing up..");
 		backupMO();
 		backupMT();
 		backupDlrs();
 
 	}
-	
+
+
 
 	private void backupMT() {
 		if (_MTLogs.isEmpty())
 			return;
 
 		try (Connection conn = localdb.getConnection();
-				PreparedStatement stmt = conn
-				.prepareStatement("INSERT INTO mobile_terminated(list,user,serviceId,messageId,replacements,sentTo,received) values (?,?,?,?,?,?,?)");){
-			
-			for ( MobileTerminatedLogs mt : _MTLogs) {
+				PreparedStatement stmt = conn.prepareStatement(
+						"INSERT INTO mobile_terminated(list,user,serviceId,messageId,replacements,sentTo,received) values (?,?,?,?,?,?,?)");) {
+
+			for (MobileTerminatedLogs mt : _MTLogs) {
 				stmt.setString(1, mt.getList());
 				stmt.setString(2, mt.getUser());
 				stmt.setString(3, mt.getServiceId());
@@ -74,10 +77,10 @@ public class ScheduledBackupLogs {
 			return;
 
 		try (Connection conn = localdb.getConnection();
-				PreparedStatement stmt = conn
-						.prepareStatement("INSERT INTO mobile_originated(mobile,keyword,body,serviceId,messageId,replacements,smsstatus) values (?,?,?,?,?,?,?)");){
-			
-			for ( MobileOriginatedLogs mo : _MOLogs) {
+				PreparedStatement stmt = conn.prepareStatement(
+						"INSERT INTO mobile_originated(mobile,keyword,body,serviceId,messageId,replacements,smsstatus) values (?,?,?,?,?,?,?)");) {
+
+			for (MobileOriginatedLogs mo : _MOLogs) {
 				stmt.setString(1, mo.getMobile());
 				stmt.setString(2, mo.getKeyword());
 				stmt.setString(3, mo.getBody());
@@ -103,8 +106,8 @@ public class ScheduledBackupLogs {
 
 		try (Connection conn = localdb.getConnection();
 				PreparedStatement stmt = conn
-						.prepareStatement("INSERT INTO DLRS(serviceId,recipient,status,error) values (?,?,?,?)");){
-			
+						.prepareStatement("INSERT INTO dlrs(serviceId,recipient,status,error) values (?,?,?,?)");) {
+
 			for (DlrRequestModel dlr : deliveryReports) {
 				stmt.setString(1, dlr.getServiceId());
 				stmt.setString(2, dlr.getRecipient());
@@ -120,14 +123,16 @@ public class ScheduledBackupLogs {
 
 	}
 
-	public void addMoLog(MobileOriginatedLogs log){
+	public void addMoLog(MobileOriginatedLogs log) {
 		_MOLogs.add(log);
 	}
-	public void addMtLog(MobileTerminatedLogs log){
+
+	public void addMtLog(MobileTerminatedLogs log) {
 		_MTLogs.add(log);
 	}
-	public void addDeliveryReport(DlrRequestModel dlr){
+
+	public void addDeliveryReport(DlrRequestModel dlr) {
 		deliveryReports.add(dlr);
 	}
-	
+
 }

@@ -16,7 +16,8 @@ import com.smsserver.services.GetPropertyValues;
 @Stateful
 public class GunetServices {
 
-
+	Client client;
+	
 	public SmsResponseModel testSend(SendSmsModel sendSms){
 		System.out.println(sendSms);
        SmsResponseModel s= new SmsResponseModel();
@@ -28,7 +29,7 @@ public class GunetServices {
 	public SmsResponseModel sendSingleSms (SendSmsModel sendSms) {
 		  try {
 		        
-				Client client = TrustAllClient.IgnoreSSLClient();
+				client = TrustAllClient.IgnoreSSLClient();
 			    WebTarget webTarget = client.target(GetPropertyValues.getProperties().getProperty("gunetUrl"));
 			  
 		        String json= new ObjectMapper().writeValueAsString(sendSms);

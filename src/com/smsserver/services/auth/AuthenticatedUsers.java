@@ -19,8 +19,6 @@ public class AuthenticatedUsers {
 				  .maxSize(300)
 				  .expiration(2, TimeUnit.DAYS)
 				  .build();
-//		put(new User("it123853","zz","STUD"));
-		put(new User("peris","doesntmatter","STAFF"));
 	}
 
 	public  void put(User u) {
@@ -34,15 +32,7 @@ public class AuthenticatedUsers {
 		return authUsers.containsKey(username);
 	}
 
-	public int getLdapLogins(String username) {
-			if(authUsers.containsKey(username)){
-				User u=authUsers.get(username);
-				u.setLdapLogin(u.getLdapLogin()+1);
-				return u.getLdapLogin() ;
-			}
-			else
-				return 0;
-	}
+
 
 //	public static <K, V> LinkedHashMap<K, V> createLRUMap(final int maxEntries) {
 //		return new LinkedHashMap<K, V>(maxEntries * 10 / 7, 0.7f, true) {

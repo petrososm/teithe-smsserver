@@ -34,7 +34,9 @@ public class Authentication {
 	public Response authenticateUser(User user) throws URISyntaxException {
 		try {
 			user.setRole(authUser(user));
+//			user.setRole("staff");
 			user.setToken(Token.issueToken(user));
+//			user.setConfirmedPhone(getPhoneStatus);
 			authUsers.put(user);
 			return Response.ok(user).build();
 
@@ -49,7 +51,6 @@ public class Authentication {
 			return pithiaLogin.performAuthentication(user);
 		} catch (Exception ex) {
 			String role= ldap.performAuthentication(user).toLowerCase();
-			user.setLdapLogin(authUsers.getLdapLogins(user.getUsername()));
 			return role;
 		}
 	}
