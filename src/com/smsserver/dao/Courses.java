@@ -12,7 +12,6 @@ import javax.sql.DataSource;
 import javax.ejb.Stateless;
 import com.smsserver.controllers.models.site.Course;
 
-import info.debatty.java.stringsimilarity.JaroWinkler;
 
 @Stateless
 public class Courses {

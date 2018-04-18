@@ -14,11 +14,9 @@ import com.smsserver.dao.Aimodosia;
 import com.smsserver.dao.Discovery;
 import com.smsserver.dao.Pithia;
 import com.smsserver.services.gunetservices.GunetServices;
-import com.smsserver.services.mobileoriginated.GradeService;
 import com.smsserver.services.models.mobileoriginated.Message;
 import com.smsserver.services.models.mobileoriginated.MobileOriginatedService;
 
-import javassist.NotFoundException;
 
 @Stateful
 public class MobileOriginated {
@@ -74,8 +72,6 @@ public class MobileOriginated {
 	private SendSmsModel prepareReply(SmsForwardModel smsRequest, MobileOriginatedService mobileOriginatedService)
 			throws Exception {
 		
-		if(smsRequest.getKeyword().equals("VATHMOS"))
-			return gradeService.prepareReply(smsRequest);
 		
 		String[] userParameters = smsRequest.getBody().split("\\s+");;
 		int extra = 0;

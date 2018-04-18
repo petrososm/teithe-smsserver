@@ -4,22 +4,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
-import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
-import javax.ejb.Startup;
-import javax.ejb.Stateful;
 import javax.sql.DataSource;
 
 import com.smsserver.controllers.models.gunetapi.DlrRequestModel;
-import com.smsserver.services.Logs;
 import com.smsserver.services.models.logs.MobileOriginatedLogs;
 import com.smsserver.services.models.logs.MobileTerminatedLogs;
 
-import info.debatty.java.stringsimilarity.JaroWinkler;
 
 @Singleton
 public class ScheduledBackupLogs {

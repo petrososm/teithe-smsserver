@@ -16,8 +16,9 @@
 				FROM
 				[eUniCentral].[dbo].[v_SMS_gradeService]
 				where username=? and
-				coursecode=?
+				ctitle LIKE ?
 			</query>
+                        <likePosition>2></likePosition>
 			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΟΝ ΒΑΘΜΟ ΤΟΥ ΧΡΗΣΤΗ ΣΤΟ ΣΥΓΚΕΚΡΙΜΕΝΟ ΜΑΘΗΜΑ
 			</description>
 			<userInput>ΚΩΔΙΚΟΣ ΜΑΘΗΜΑΤΟΣ</userInput>
@@ -90,7 +91,7 @@
 			<keyword>ΠΤΥΧΙΟ</keyword>
 			<messageId>didaktikesMonadesMsg2</messageId>
 			<numberOfReplacements>1</numberOfReplacements>
-			<query>SELECT 210-CAST(didmon AS INT)
+			<query>SELECT 240-CAST(didmon AS INT)
 				FROM
 				[eUniCentral].[dbo].[v_SMS_didaktikesMonades]
 				where username=?
@@ -119,8 +120,9 @@
 			<query>SELECT [classtitle]
 				FROM [eUniCentral].[dbo].[v_SMS_eggrafi]
 				where username=?
-				and coursecode=?
+				and classtitle LIKE ?
 			</query>
+                        <likePosition>2</likePosition>
 			<description>ΕΠΙΣΤΡΕΦΕΙ ΕΠΙΒΕΒΑΙΩΣΗ ΕΓΓΡΑΦΗΣ ΣΤΟ ΣΥΓΚΕΚΡΙΜΕΝΟ ΜΑΘΗΜΑ
 			</description>
 			<userInput>ΚΩΔΙΚΟΣ ΜΑΘΗΜΑΤΟΣ</userInput>
