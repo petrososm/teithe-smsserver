@@ -3,14 +3,12 @@ package com.smsserver.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.sql.DataSource;
 
 import com.smsserver.services.models.mobileoriginated.Message;
-import com.smsserver.services.models.mobileoriginated.MobileOriginatedService;
 
 import javassist.NotFoundException;
 
@@ -29,9 +27,9 @@ public class Pithia {
             stmt.setString(1, authenticator);
             for (int i = 1; i < message.getQueryParams(); i++)// ksekinaei apo 1
             {
-                if (message.getLikePosition()-1 == i) {											// giati mia
+                if (message.getLikePosition()-1 == i) {										
                     String titleLike = "%";
-                    for (int j = i; j <= body.length; j++) {
+                    for (int j = i+extra; j <= body.length; j++) {
                         titleLike += body[j-1] + "%";
                     }
                     stmt.setString(i + 1, titleLike);

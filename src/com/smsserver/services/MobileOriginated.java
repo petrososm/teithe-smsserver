@@ -33,8 +33,6 @@ public class MobileOriginated {
 	Pithia pithiaDao;
 	@EJB
 	GunetServices gunet;
-	@EJB
-	GradeService gradeService;
 	
     private static Logger LOGGER = Logger.getLogger(Discovery.class.getName());
 

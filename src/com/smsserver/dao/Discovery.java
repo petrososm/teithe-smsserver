@@ -83,8 +83,8 @@ public class Discovery {
 			stmtDrop=local.prepareStatement("drop table tmp");
 			stmtPithia.setString(1, course);
 
-			ResultSet rs = stmtPithia.executeQuery();
-			stmtCreate.execute();
+			ResultSet rs = stmtPithia.executeQuery();//fernei olous tous eggegramenous foitites
+			stmtCreate.execute();//ftiaxnei to proswrino table
 
 			while (rs.next()) {
 				if (!rs.getString("mobile").equals(""))
@@ -93,12 +93,13 @@ public class Discovery {
 				stmtInsert.addBatch();
 			}
 
-			stmtInsert.executeBatch();
+			stmtInsert.executeBatch();//vazei olous tous foitites poy den exoyn tilefwno
 
 
 
 
-			rs = stmtLocal.executeQuery();
+			rs = stmtLocal.executeQuery();//fernei pisw osous foitites den exoyn dilwmeno tilefwno
+                        //stin pithia, kai kanei update se osous exoyn diaforetiko
 			while (rs.next()) {
 				users.put(rs.getString("username"), rs.getString("mobNumber"));
 			}

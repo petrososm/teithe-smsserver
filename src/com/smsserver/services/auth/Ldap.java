@@ -97,7 +97,7 @@ public class Ldap {
 
 			}
 		}
-		System.err.println("Authentication failed");
+		System.out.println("Authentication failed");
 		throw new Exception();
 	}
 

@@ -1,256 +1,268 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <root>
-	<service>
-		<serviceId>gradeServiceTEITHE</serviceId>
-		<keywords>
-			<keyword>ΒΑΘ</keyword>
-			<keyword>VATHMOS</keyword>
-		</keywords>
-		<preSharedKey>F0fesFADSr223fA</preSharedKey>
-		<database>pithia</database>
-		<message>
-			<keyword></keyword>
-			<messageId>gradeServiceTEITHEMsg1</messageId>
-			<numberOfReplacements>2</numberOfReplacements>
-			<query>SELECT ctitle,CONVERT(DECIMAL(10,1),grade)
-				FROM
-				[eUniCentral].[dbo].[v_SMS_gradeService]
-				where username=? and
-				ctitle LIKE ?
-			</query>
-                        <likePosition>2></likePosition>
-			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΟΝ ΒΑΘΜΟ ΤΟΥ ΧΡΗΣΤΗ ΣΤΟ ΣΥΓΚΕΚΡΙΜΕΝΟ ΜΑΘΗΜΑ
-			</description>
-			<userInput>ΚΩΔΙΚΟΣ ΜΑΘΗΜΑΤΟΣ</userInput>
-		</message>
+    <service>
+        <serviceId>gradeServiceTEITHE</serviceId>
+        <keywords>
+            <keyword>VATHMOS</keyword>
+        </keywords>
+        <preSharedKey>F0fesFADSr223fA</preSharedKey>
+        <database>pithia</database>
+        <message>
+            <keyword></keyword>
+            <messageId>gradeServiceTEITHEMsg1</messageId>
+            <numberOfReplacements>2</numberOfReplacements>
+            <query>SELECT ctitle,CONVERT(DECIMAL(10,1),grade) as grade1
+                FROM
+                [eUniCentral].[dbo].[v_SMS_gradeService]
+                where username=? and
+                ctitle LIKE ?
+                order by grade1 desc
+            </query>
+            <likePosition>2</likePosition>
+            <description>ΕΠΙΣΤΡΕΦΕΙ ΤΟΝ ΒΑΘΜΟ ΤΟΥ ΧΡΗΣΤΗ ΣΤΟ ΣΥΓΚΕΚΡΙΜΕΝΟ ΜΑΘΗΜΑ
+            </description>
+            <userInput>ΟΝΟΜΑ ΜΑΘΗΜΑΤΟΣ</userInput>
+        </message>
 
-		<message>
-			<keyword>KSEXWR</keyword>
-			<messageId>gradeServiceTEITHEMsg2</messageId>
-			<numberOfReplacements>3</numberOfReplacements>
-			<query>
-				DECLARE @USERNAME VARCHAR(50)
-				DECLARE @CID VARCHAR(10)
-				DECLARE
-				@THEORIA VARCHAR(10)
-				DECLARE @ERGASTIRIO
-				VARCHAR(10)
-				SET @username=?
-				SET @CID=?
-				SET @THEORIA=@CID+'1'
-				SET
-				@ERGASTIRIO=@CID+'2'
+        <message>
+            <keyword>KSEXWR</keyword>
+            <messageId>gradeServiceTEITHEMsg2</messageId>
+            <numberOfReplacements>3</numberOfReplacements>
+            <query>
+				
+                DECLARE @USERNAME VARCHAR(50)
+                DECLARE @TITLE VARCHAR(50)
+                DECLARE @CID VARCHAR(10)
+                DECLARE
+                @THEORIA VARCHAR(10)
+                DECLARE @ERGASTIRIO
+                VARCHAR(10)
+                SET @username=?
+                SET @TITLE=?
+                SET @CID=
+                (SELECT TOP 1 coursecode
+                FROM [eUniCentral].[dbo].[v_SMS_gradeService]
+                where username=@username and ctitle like @TITLE
+                order by coursecode);
 
-				select
-				x.ctitle,x.grade,y.grade
-				FROM
-				(SELECT
-				ctitle,grade
-				FROM
-				[eUniCentral].[dbo].[v_SMS_gradeService]
-				where
-				username=@username and
-				coursecode=@THEORIA)as x
-				,(SELECT grade
-				FROM
-				[eUniCentral].[dbo].[v_SMS_gradeService]
-				where username=@username and
-				coursecode=@ERGASTIRIO)as y
-			</query>
-			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΟΥΣ ΒΑΘΜΟΥΣ ΤΟΥ ΧΡΗΣΤΗ ΓΙΑ ΘΕΩΡΙΑ ΚΑΙ
-				ΕΡΓΑΣΤΗΡΙΟ ΓΙΑ ΤΟ ΣΥΓΚΕΚΡΙΜΕΝΟ ΜΑΘΗΜΑ
-			</description>
-			<userInput>ΚΩΔΙΚΟΣ ΜΑΘΗΜΑΤΟΣ</userInput>
-		</message>
-		<errorMessage>
-			<messageId>gradeServiceTEITHEMsg3</messageId>
-			<numberOfReplacements>0</numberOfReplacements>
-		</errorMessage>
-	</service>
-	<service>
-		<serviceId>didaktikesMonades</serviceId>
-		<keywords>
-			<keyword>ΔΜ</keyword>
-			<keyword>DM</keyword>
-		</keywords>
-		<preSharedKey>F0fesFADSr223fA</preSharedKey>
-		<database>pithia</database>
-		<message>
-			<keyword></keyword>
-			<messageId>didaktikesMonadesMsg1</messageId>
-			<numberOfReplacements>1</numberOfReplacements>
-			<query>SELECT CAST(didmon AS INT)
-				FROM
-				[eUniCentral].[dbo].[v_SMS_didaktikesMonades]
-				where username=?
-			</query>
-			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΙΣ ΔΙΔΑΚΤΙΚΕΣ ΜΟΝΑΔΕΣ ΤΟΥ ΧΡΗΣΤΗ
-			</description>
-		</message>
-		<message>
-			<keyword>ΠΤΥΧΙΟ</keyword>
-			<messageId>didaktikesMonadesMsg2</messageId>
-			<numberOfReplacements>1</numberOfReplacements>
-			<query>SELECT 240-CAST(didmon AS INT)
-				FROM
-				[eUniCentral].[dbo].[v_SMS_didaktikesMonades]
-				where username=?
-			</query>
-			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΙΣ ΔΙΔΑΚΤΙΚΕΣ ΜΟΝΑΔΕΣ ΠΟΥ ΥΠΟΛΟΙΠΟΝΤΑΙ ΓΙΑ
-				ΠΤΥΧΙΟ
-			</description>
-		</message>
-		<errorMessage>
-			<messageId>didaktikesMonadesErrorMsg</messageId>
-			<numberOfReplacements>0</numberOfReplacements>
-		</errorMessage>
-	</service>
-	<service>
-		<serviceId>eggrafi</serviceId>
-		<keywords>
-			<keyword>ΕΓΓΡΑΦΗ</keyword>
-			<keyword>EGGRAFI</keyword>
-		</keywords>
-		<preSharedKey>F0fesFADSr223fA</preSharedKey>
-		<database>pithia</database>
-		<message>
-			<keyword></keyword>
-			<messageId>eggrafiMsg1</messageId>
-			<numberOfReplacements>1</numberOfReplacements>
-			<query>SELECT [classtitle]
-				FROM [eUniCentral].[dbo].[v_SMS_eggrafi]
-				where username=?
-				and classtitle LIKE ?
-			</query>
-                        <likePosition>2</likePosition>
-			<description>ΕΠΙΣΤΡΕΦΕΙ ΕΠΙΒΕΒΑΙΩΣΗ ΕΓΓΡΑΦΗΣ ΣΤΟ ΣΥΓΚΕΚΡΙΜΕΝΟ ΜΑΘΗΜΑ
-			</description>
-			<userInput>ΚΩΔΙΚΟΣ ΜΑΘΗΜΑΤΟΣ</userInput>
-		</message>
-		<message>
-			<keyword>ΕΡΓΑΣΤΗΡΙΟ</keyword>
-			<messageId>eggrafiMsg2</messageId>
-			<numberOfReplacements>2</numberOfReplacements>
-			<query>SELECT classtitle,section
-				FROM
-				[eUniCentral].[dbo].[v_SMS_eggrafi]
-				where username=?
-				and coursecode
-				LIKE '?%'
-				order by coursecode desc
-			</query>
-			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΟ ΕΡΓΑΣΤΗΡΙΟ ΚΑΙ ΤΙΣ ΩΡΕΣ ΠΟΥ
-				ΠΡΑΓΜΑΤΟΠΟΙΕΙΤΑΙ
-			</description>
-			<userInput>ΚΩΔΙΚΟΣ ΜΑΘΗΜΑΤΟΣ</userInput>
-		</message>
-		<errorMessage>
-			<messageId>eggrafiErrorMsg</messageId>
-			<numberOfReplacements>0</numberOfReplacements>
-		</errorMessage>
-	</service>
-	<service>
-		<serviceId>PythiaUserNamePass</serviceId>
-		<keywords>
-			<keyword>PITHIALOGIN</keyword>
-		</keywords>
-		<preSharedKey>F0fesFADSr223fA</preSharedKey>
-		<database>pithia</database>
-		<message>
-			<keyword></keyword>
-			<messageId>PythiaUserNamePassMsg</messageId>
-			<numberOfReplacements>2</numberOfReplacements>
-			<query>DECLARE @username VARCHAR(50)
-				SET @username=?
-				SELECT @username,substring([eUniCentral].[dbo].[f_Login]
-				(@username,''),5,50)
-			</query>
-			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΑ ΔΙΑΠΙΣΤΕΥΤΗΡΙΑ ΤΟΥ ΧΡΗΣΤΗ
-			</description>
-		</message>
-		<errorMessage>
-			<messageId>PythiaUserNamePassErrorMsg</messageId>
-			<numberOfReplacements>0</numberOfReplacements>
-		</errorMessage>
-	</service>
-	<service>
-		<serviceId>aimodosia</serviceId>
-		<keywords>
-			<keyword>ΑΙΜΟΔΟΣΙΑ</keyword>
-			<keyword>AIMODOSIA</keyword>
-		</keywords>
-		<preSharedKey>F0fesFADSr223fA</preSharedKey>
-		<database>nireas</database>
-		<message>
-			<keyword></keyword>
-			<messageId>aimodosiaMsg1</messageId>
-			<numberOfReplacements>1</numberOfReplacements>
-			<query>select 'TEITHE STOP' as '';
-				insert into
-				aimodosia(mobile,blacklist) values(?,0)ON DUPLICATE KEY UPDATE
-				blacklist = 0
-			</query>
-			<description>ΕΓΓΡΑΦΗ ΤΟΥ ΧΡΗΣΤΗ ΣΤΗΝ ΥΠΗΡΕΣΙΑ ΑΥΤΟΜΑΤΗΣ ΑΠΟΣΤΟΛΗΣ
-				ΜΗΝΥΜΑΤΩΝ ΑΙΜΟΔΟΣΙΑΣ
-			</description>
-			<database>localdb</database>
-		</message>
-		<message>
-			<keyword>STOP</keyword>
-			<messageId>aimodosiaMsg2</messageId>
-			<numberOfReplacements>1</numberOfReplacements>
-			<query>select 'TEITHE ΑΙΜΟΔΟΣΙΑ' as '';
-				insert into
-				aimodosia(mobile,blacklist) values(?,1)ON DUPLICATE KEY UPDATE
-				blacklist = 1
-			</query>
-			<description>ΔΙΑΚΟΠΗ ΑΥΤΟΜΑΤΩΝ ΜΗΝΥΜΑΤΩΝ ΑΠΟ ΤΗΝ ΥΠΗΡΕΣΙΑ ΤΗΣ
-				ΑΙΜΟΔΟΣΙΑΣ
-			</description>
-			<database>localdb</database>
-		</message>
-		<message>
-			<keyword>ΤΕΛΕΥΤΑΙΑ</keyword>
-			<messageId>aimodosiaMsg3</messageId>
-			<numberOfReplacements>1</numberOfReplacements>
-			<query>SELECT STR_TO_DATE(d.date, '%d-%m-%Y')as date FROM dates
-				d,donationdonor r,users u
-				where d.id=r.donationId and
-				r.donorId=u.id
-				and u.mobile=?
-				order by date desc limit 1
-			</query>
-			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΗΝ ΗΜΕΡΟΜΗΝΙΑ ΤΗΣ ΤΕΛΕΥΤΑΙΑΣ ΦΟΡΑΣ ΠΟΥ ΕΔΩΣΕ
-				ΑΙΜΑ Ο ΧΡΗΣΤΗΣ
-			</description>
-		</message>
-		<message>
-			<keyword>ΦΙΑΛ</keyword>
-			<messageId>aimodosiaMsg6</messageId>
-			<numberOfReplacements>1</numberOfReplacements>
-			<query>select flasks from users where mobile = ?
-			</query>
-			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΟΝ ΑΡΙΘΜΟ ΦΙΑΛΩΝ ΠΟΥ ΔΙΚΑΙΟΥΤΑΙ Ο ΧΡΗΣΤΗΣ
-			</description>
-		</message>
-		<message>
-			<keyword>ΦΙΑΛΚΑΤΑΝ</keyword>
-			<messageId>aimodosiaMsg7</messageId>
-			<numberOfReplacements>1</numberOfReplacements>
-			<query>SELECT r.flasks "
-				+ "from recipient r,users u "
-				+ "where
-				u.id=r.donorId and u.mobile= ?
-			</query>
-			<description>ΕΠΙΣΤΡΕΦΕΙ ΤΟΝ ΑΡΙΘΜΟ ΤΩΝ ΦΙΑΛΩΝ ΑΙΜΑΤΟΣ ΠΟΥ ΕΧΟΥΝ
-				ΚΑΤΑΝΑΛΩΘΕΙ ΑΠΟ ΤΟΝ ΧΡΗΣΤΗ
-			</description>
-		</message>
-		<errorMessage>
-			<messageId>aimodosiaMsg4</messageId>
-			<numberOfReplacements>0</numberOfReplacements>
-		</errorMessage>
-	</service>
+                SET @THEORIA=@CID+'1'
+                SET
+                @ERGASTIRIO=@CID+'2'
+                select
+                z.ctitle,x.grade1,y.grade1
+                FROM
+                (SELECT TOP 1
+                CONVERT(DECIMAL(10,1),grade)as grade1
+                FROM
+                [eUniCentral].[dbo].[v_SMS_gradeService]
+                where
+                username=@username and
+                coursecode=@THEORIA
+                order by grade1 desc)as x
+                ,(SELECT TOP 1 CONVERT(DECIMAL(10,1),grade)as grade1
+                FROM
+                [eUniCentral].[dbo].[v_SMS_gradeService]
+                where username=@username and
+                coursecode=@ERGASTIRIO
+                order by grade1 desc)as y
+                ,(SELECT ctitle
+                FROM
+                [eUniCentral].[dbo].[v_SMS_gradeService]
+                where username=@username and
+                coursecode=@CID)as z
+            </query>
+            <likePosition>2</likePosition>
+            <description>ΕΠΙΣΤΡΕΦΕΙ ΤΟΥΣ ΒΑΘΜΟΥΣ ΤΟΥ ΧΡΗΣΤΗ ΓΙΑ ΘΕΩΡΙΑ ΚΑΙ
+                ΕΡΓΑΣΤΗΡΙΟ ΓΙΑ ΤΟ ΣΥΓΚΕΚΡΙΜΕΝΟ ΜΑΘΗΜΑ
+            </description>
+            <userInput>ΟΝΟΜΑ ΜΑΘΗΜΑΤΟΣ</userInput>
+        </message>
+        <errorMessage>
+            <messageId>gradeServiceTEITHEMsg3</messageId>
+            <numberOfReplacements>0</numberOfReplacements>
+        </errorMessage>
+    </service>
+    <service>
+        <serviceId>didaktikesMonades</serviceId>
+        <keywords>
+            <keyword>DM</keyword>
+        </keywords>
+        <preSharedKey>F0fesFADSr223fA</preSharedKey>
+        <database>pithia</database>
+        <message>
+            <keyword></keyword>
+            <messageId>didaktikesMonadesMsg1</messageId>
+            <numberOfReplacements>1</numberOfReplacements>
+            <query>SELECT CAST(didmon AS INT)
+                FROM
+                [eUniCentral].[dbo].[v_SMS_didaktikesMonades]
+                where username=?
+            </query>
+            <description>ΕΠΙΣΤΡΕΦΕΙ ΤΙΣ ΔΙΔΑΚΤΙΚΕΣ ΜΟΝΑΔΕΣ ΤΟΥ ΧΡΗΣΤΗ
+            </description>
+        </message>
+        <message>
+            <keyword>PTYXIO</keyword>
+            <messageId>didaktikesMonadesMsg2</messageId>
+            <numberOfReplacements>1</numberOfReplacements>
+            <query>SELECT 240-CAST(didmon AS INT)
+                FROM
+                [eUniCentral].[dbo].[v_SMS_didaktikesMonades]
+                where username=?
+            </query>
+            <description>ΕΠΙΣΤΡΕΦΕΙ ΤΙΣ ΔΙΔΑΚΤΙΚΕΣ ΜΟΝΑΔΕΣ ΠΟΥ ΥΠΟΛΟΙΠΟΝΤΑΙ ΓΙΑ
+                ΠΤΥΧΙΟ
+            </description>
+        </message>
+        <errorMessage>
+            <messageId>didaktikesMonadesErrorMsg</messageId>
+            <numberOfReplacements>0</numberOfReplacements>
+        </errorMessage>
+    </service>
+    <service>
+        <serviceId>eggrafi</serviceId>
+        <keywords>
+            <keyword>EGGRAFI</keyword>
+        </keywords>
+        <preSharedKey>F0fesFADSr223fA</preSharedKey>
+        <database>pithia</database>
+        <message>
+            <keyword></keyword>
+            <messageId>eggrafiMsg1</messageId>
+            <numberOfReplacements>1</numberOfReplacements>
+            <query>SELECT [classtitle]
+                FROM [eUniCentral].[dbo].[v_SMS_eggrafi]
+                where username=?
+                and classtitle LIKE ?
+            </query>
+            <likePosition>2</likePosition>
+            <description>ΕΠΙΣΤΡΕΦΕΙ ΕΠΙΒΕΒΑΙΩΣΗ ΕΓΓΡΑΦΗΣ ΣΤΟ ΣΥΓΚΕΚΡΙΜΕΝΟ ΜΑΘΗΜΑ
+            </description>
+            <userInput>ΟΝΟΜΑ ΜΑΘΗΜΑΤΟΣ</userInput>
+        </message>
+        <message>
+            <keyword>ERGASTIRIO</keyword>
+            <messageId>eggrafiMsg2</messageId>
+            <numberOfReplacements>2</numberOfReplacements>
+            <query>SELECT classtitle,section
+                FROM
+                [eUniCentral].[dbo].[v_SMS_eggrafi]
+                where username=?
+                and coursecode
+                LIKE ?
+                order by coursecode desc
+            </query>
+            <likePosition>2</likePosition>
+            <description>ΕΠΙΣΤΡΕΦΕΙ ΤΟ ΕΡΓΑΣΤΗΡΙΟ ΚΑΙ ΤΙΣ ΩΡΕΣ ΠΟΥ
+                ΠΡΑΓΜΑΤΟΠΟΙΕΙΤΑΙ
+            </description>
+            <userInput>ΟΝΟΜΑ ΜΑΘΗΜΑΤΟΣ</userInput>
+        </message>
+        <errorMessage>
+            <messageId>eggrafiErrorMsg</messageId>
+            <numberOfReplacements>0</numberOfReplacements>
+        </errorMessage>
+    </service>
+    <service>
+        <serviceId>PythiaUserNamePass</serviceId>
+        <keywords>
+            <keyword>PITHIALOGIN</keyword>
+        </keywords>
+        <preSharedKey>F0fesFADSr223fA</preSharedKey>
+        <database>pithia</database>
+        <message>
+            <keyword></keyword>
+            <messageId>PythiaUserNamePassMsg</messageId>
+            <numberOfReplacements>2</numberOfReplacements>
+            <query>DECLARE @username VARCHAR(50)
+                SET @username=?
+                SELECT @username,substring([eUniCentral].[dbo].[f_Login]
+                (@username,''),5,50)
+            </query>
+            <description>ΕΠΙΣΤΡΕΦΕΙ ΤΑ ΔΙΑΠΙΣΤΕΥΤΗΡΙΑ ΤΟΥ ΧΡΗΣΤΗ
+            </description>
+        </message>
+        <errorMessage>
+            <messageId>PythiaUserNamePassErrorMsg</messageId>
+            <numberOfReplacements>0</numberOfReplacements>
+        </errorMessage>
+    </service>
+    <service>
+        <serviceId>aimodosia</serviceId>
+        <keywords>
+            <keyword>AIMODOSIA</keyword>
+        </keywords>
+        <preSharedKey>F0fesFADSr223fA</preSharedKey>
+        <database>nireas</database>
+        <message>
+            <keyword></keyword>
+            <messageId>aimodosiaMsg1</messageId>
+            <numberOfReplacements>1</numberOfReplacements>
+            <query>select 'TEITHE STOP' as '';
+                insert into
+                aimodosia(mobile,blacklist) values(?,0)ON DUPLICATE KEY UPDATE
+                blacklist = 0
+            </query>
+            <description>ΕΓΓΡΑΦΗ ΤΟΥ ΧΡΗΣΤΗ ΣΤΗΝ ΥΠΗΡΕΣΙΑ ΑΥΤΟΜΑΤΗΣ ΑΠΟΣΤΟΛΗΣ
+                ΜΗΝΥΜΑΤΩΝ ΑΙΜΟΔΟΣΙΑΣ
+            </description>
+            <database>localdb</database>
+        </message>
+        <message>
+            <keyword>STOP</keyword>
+            <messageId>aimodosiaMsg2</messageId>
+            <numberOfReplacements>1</numberOfReplacements>
+            <query>select 'TEITHE AIMODOSIA' as '';
+                insert into
+                aimodosia(mobile,blacklist) values(?,1)ON DUPLICATE KEY UPDATE
+                blacklist = 1
+            </query>
+            <description>ΔΙΑΚΟΠΗ ΑΥΤΟΜΑΤΩΝ ΜΗΝΥΜΑΤΩΝ ΑΠΟ ΤΗΝ ΥΠΗΡΕΣΙΑ ΤΗΣ
+                ΑΙΜΟΔΟΣΙΑΣ
+            </description>
+            <database>localdb</database>
+        </message>
+        <message>
+            <keyword>TELEYTAIA</keyword>
+            <messageId>aimodosiaMsg3</messageId>
+            <numberOfReplacements>1</numberOfReplacements>
+            <query>SELECT STR_TO_DATE(d.date, '%d-%m-%Y')as date FROM dates
+                d,donationdonor r,users u
+                where d.id=r.donationId and
+                r.donorId=u.id
+                and u.mobile=?
+                order by date desc limit 1
+            </query>
+            <description>ΕΠΙΣΤΡΕΦΕΙ ΤΗΝ ΗΜΕΡΟΜΗΝΙΑ ΤΗΣ ΤΕΛΕΥΤΑΙΑΣ ΦΟΡΑΣ ΠΟΥ ΕΔΩΣΕ
+                ΑΙΜΑ Ο ΧΡΗΣΤΗΣ
+            </description>
+        </message>
+        <message>
+            <keyword>FIALES</keyword>
+            <messageId>aimodosiaMsg6</messageId>
+            <numberOfReplacements>1</numberOfReplacements>
+            <query>select flasks from users where mobile = ?</query>
+            <description>ΕΠΙΣΤΡΕΦΕΙ ΤΟΝ ΑΡΙΘΜΟ ΦΙΑΛΩΝ ΠΟΥ ΔΙΚΑΙΟΥΤΑΙ Ο ΧΡΗΣΤΗΣ
+            </description>
+        </message>
+        <message>
+            <keyword>FIALKATANAL</keyword>
+            <messageId>aimodosiaMsg7</messageId>
+            <numberOfReplacements>1</numberOfReplacements>
+            <query>SELECT r.flasks "
+                + "from recipient r,users u "
+                + "where
+                u.id=r.donorId and u.mobile= ?
+            </query>
+            <description>ΕΠΙΣΤΡΕΦΕΙ ΤΟΝ ΑΡΙΘΜΟ ΤΩΝ ΦΙΑΛΩΝ ΑΙΜΑΤΟΣ ΠΟΥ ΕΧΟΥΝ
+                ΚΑΤΑΝΑΛΩΘΕΙ ΑΠΟ ΤΟΝ ΧΡΗΣΤΗ
+            </description>
+        </message>
+        <errorMessage>
+            <messageId>aimodosiaMsg4</messageId>
+            <numberOfReplacements>0</numberOfReplacements>
+        </errorMessage>
+    </service>
 
 </root>
 

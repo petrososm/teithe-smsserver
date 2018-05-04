@@ -40,15 +40,18 @@ public class MobileTerminated {
 	GunetServices gunet;
 	@EJB
 	AuthenticatedUsers authUsers;
+        
+        
+        private final boolean TEST=Boolean.parseBoolean(GetPropertyValues.getProperties().getProperty("testSend"));
 
 	private static Logger LOGGER = Logger.getLogger(Discovery.class.getName());
 
 	public SendReport sendAimodosia(String date) throws Exception {
 
-		ArrayList<String> mobileNumbers = aimodosia.getMobileNumbers();
-
+		ArrayList<String> mobileNumbers = new ArrayList<String>();
+                mobileNumbers.addAll(aimodosia.getMobileNumbers());
 		SendSmsModel sms = new SendSmsModel("aimodosia", "aimodosiaMsg5", new String[] { date });
-		int delivered = sendSmsParallel(sms, mobileNumbers, 2, false);
+		int delivered = sendSmsParallel(sms, mobileNumbers, 2, TEST);
 		logs.logMobileTerminated("AIMODOSIA", "ADMIN", sms, mobileNumbers.size(), delivered);
 		sms = null;
 		return new SendReport(mobileNumbers.size(), delivered);
@@ -62,7 +65,7 @@ public class MobileTerminated {
 		String serviceId = services.getMobileTerminatedServices().get(request.getMessageId()).getServiceId();
 
 		SendSmsModel sms = new SendSmsModel(serviceId, request.getMessageId(), request.getReplacements());
-		int delivered = sendSmsParallel(sms, mobileNumbers, 2,true);
+		int delivered = sendSmsParallel(sms, mobileNumbers, 2,TEST);
 		logs.logMobileTerminated(request.getCourse(), request.getProfessor(), sms, mobileNumbers.size(), delivered);
 		return new SendReport(mobileNumbers.size(), delivered);
 
@@ -73,7 +76,7 @@ public class MobileTerminated {
 		String serviceId = services.getMobileTerminatedServices().get(request.getMessageId()).getServiceId();
 
 		SendSmsModel sms = new SendSmsModel(serviceId, request.getMessageId(), request.getReplacements());
-		int delivered = sendSmsParallel(sms, mobileNumbers, 2, false);
+		int delivered = sendSmsParallel(sms, mobileNumbers, 2, TEST);
 		logs.logMobileTerminated(String.join(", ", request.getRecipients()), request.getSender(), sms,
 				mobileNumbers.size(), delivered);
 		return new SendReport(mobileNumbers.size(), delivered);

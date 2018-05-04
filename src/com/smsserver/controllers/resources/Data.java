@@ -47,7 +47,7 @@ public class Data {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public ArrayList<ServiceDescription> getServiceDescriptions() {
-			System.out.println(services.getDescriptions());
+//			System.out.println(services.getDescriptions());
 			return services.getDescriptions();
 		
 	}

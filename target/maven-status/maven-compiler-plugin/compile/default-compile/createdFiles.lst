@@ -38,7 +38,6 @@ com\smsserver\controllers\models\gunetapi\SmsForwardModel.class
 com\smsserver\controllers\models\gunetapi\DlrRequestModel.class
 com\smsserver\dao\Pithia.class
 com\smsserver\services\MobileTerminated.class
-com\smsserver\services\mobileoriginated\GradeService.class
 com\smsserver\services\Services.class
 com\smsserver\controllers\resources\UserInfo.class
 com\smsserver\services\auth\Ldap.class
