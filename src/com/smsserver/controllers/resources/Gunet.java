@@ -15,38 +15,28 @@ import com.smsserver.services.MobileOriginated;
 
 @Path("/")
 public class Gunet {
-	
 
-	@EJB
-	MobileOriginated mobileOriginated;
-	@EJB
-	Logs logs;
+    @EJB
+    MobileOriginated mobileOriginated;
+    @EJB
+    Logs logs;
 
-	
-	@Path("dlr/")
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	public void getDlr(DlrRequestModel dlrReq) {// methodos gia na pairnoyme
-													// plirofories meta tin
-													// apostoli
-		System.out.println(dlrReq);
-		logs.logDlr(dlrReq);
-	}
-	
-	@POST
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public SmsForwardResponseModel smsForward(SmsForwardModel smsRequest) {	
-		
-		System.out.println(smsRequest);
-		SmsForwardResponseModel smsResponse=mobileOriginated.reply(smsRequest);
-		return smsResponse;
-	}
-	
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public SmsForwardResponseModel smsForward(SmsForwardModel smsRequest) {
+        SmsForwardResponseModel smsResponse = mobileOriginated.reply(smsRequest);
+        return smsResponse;
+    }
 
-	
-
-
+    @Path("dlr/")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void getDlr(DlrRequestModel dlrReq) {// methodos gia na pairnoyme
+        // plirofories meta tin
+        // apostoli
+        System.out.println(dlrReq);
+        logs.logDlr(dlrReq);
+    }
 
 }
-

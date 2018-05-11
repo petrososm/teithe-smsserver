@@ -59,9 +59,12 @@ public class Services {
 					.unmarshal(questionXML);
 
 			for (MobileOriginatedService s : moRoot.getMobileOriginatedService()) {
-				for (String keyword : s.getKeywords().keywordList)
-					mobileOriginatedServices.put(keyword, s);
-
+				for (String keyword : s.getKeywords().keywordList){
+					mobileOriginatedServices.put(StringConverter.EnglishToGSM7(keyword), s);
+                                }
+                                for(com.smsserver.services.models.mobileoriginated.Message m:s.getMessages()){
+                                        m.setKeyword(StringConverter.EnglishToGSM7(m.getKeyword()));
+                                }
 				for (com.smsserver.services.models.mobileoriginated.Message m : s.getMessages()) {
 					descriptions.add(new ServiceDescription(
 							"TEITHE "+s.getKeywords().keywordList.get(0) + " " + m.getFullKeyword(), m.getDescription()));
@@ -110,3 +113,42 @@ public class Services {
 	}
 
 }
+class StringConverter {
+
+    static final HashMap<Character, Character> characters;
+
+    static {
+        characters = new HashMap<>();
+        characters.put('A', 'Á');
+        characters.put('B', 'Â');
+        characters.put('E', 'Å');
+        characters.put('Z', 'Æ');
+        characters.put('I', 'É');
+        characters.put('H', 'Ç');
+        characters.put('K', 'Ê');
+        characters.put('M', 'Ì');
+        characters.put('N', 'Í');
+        characters.put('O', 'Ï');
+        characters.put('P', 'Ñ');
+        characters.put('T', 'Ô');
+        characters.put('X', '×');
+        characters.put('Y', 'Õ');
+
+    }
+
+    public static String EnglishToGSM7(String s) {
+        String newString = "";
+        for (char c : s.toCharArray()) {
+            if (characters.containsKey(c)) {
+                newString += characters.get(c);
+            } else {
+                newString += c;
+            }
+        }
+        System.out.println(newString);
+        return newString;
+
+    }
+
+}
+

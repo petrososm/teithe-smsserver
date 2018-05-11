@@ -23,6 +23,7 @@ com\smsserver\controllers\models\gunetapi\SmsForwardResponseModel.class
 com\smsserver\services\models\mobileterminated\Root.class
 com\smsserver\services\gunetservices\TrustAllClient.class
 com\smsserver\dao\Courses.class
+com\smsserver\services\StringConverter.class
 com\smsserver\services\MobileChanger.class
 com\smsserver\controllers\resources\Authentication.class
 com\smsserver\dao\Discovery.class
